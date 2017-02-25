@@ -11,3 +11,4 @@ The format is based on [Keep a Changelog]() and this project adheres to
 
 - Defaut directory layout and files (INSTALL, MAKEFILE, README, BUGS, TODO).
 - Add MinUnit test framework and basic spec file.
+- Insertion sort for both full and partial sorting.
