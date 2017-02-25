@@ -8,6 +8,11 @@ void insert_sort_partial(void* arr, size_t size, int (*compare)(void*, void*), s
 
 void select_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*));
 
+/* Efficient Sorts */
+void merge_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*));
+void merge_sort_sort(void* arr, void* aux, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi);
+void merge_sort_merge(void* arr, void* aux, size_t size, int (*compare)(void*, void*), size_t lo, size_t mid, size_t hi);
+
 
 /* Helpers */
 void swap(void* a, void* b, size_t size);

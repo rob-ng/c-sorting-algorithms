@@ -13,3 +13,4 @@ The format is based on [Keep a Changelog]() and this project adheres to
 - Add MinUnit test framework and basic spec file.
 - Insertion sort for both full and partial sorting.
 - Selection sort for full sorting.
+- Merge sort for full sorting.
