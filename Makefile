@@ -1,5 +1,5 @@
 CC := gcc
-FLAGS := 
+FLAGS := -pedantic -Wpointer-arith
 # LD - Linker for bundling object files into executable.
 LD := gcc
 
@@ -28,7 +28,7 @@ vpath %.c $(SRC_DIR)
 # Define targets / dependencies dynamically.
 define make-goal
 $1/%.o: %.c
-	$(CC) $(INCLUDES) -c $$< -o $$@
+	$(CC) $(FLAGS) $(INCLUDES) -c $$< -o $$@
 endef
 
 # By default, Makefile assumes targets are files. By labeling a target as
