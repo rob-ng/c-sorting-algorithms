@@ -39,6 +39,20 @@ void insert_sort_partial(void* arr, size_t size, int (*compare)(void*, void*), s
 void select_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*));
 
 
+/*=== Bubble Sorts ===*/
+
+/**
+ * Sort array using comb sort.
+ *
+ * @param arr Array to be sorted.
+ * @param nelems Number of elements in array.
+ * @param size Size of each element in arrya.
+ * @param compare Function to be used to compare elements.
+ * @return Void.
+ */
+void comb_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*));
+
+
 /*=== Efficient Sorts ===*/
 
 /**

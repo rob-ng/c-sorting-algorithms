@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "sorting.h"
 
 /**
@@ -78,6 +79,62 @@ select_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
     }
   }
 }
+
+/**
+ * Sort array of arbitrary values using comb sort (bubble sort variant).
+ *
+ * Comb sort is an improvement over standard bubble sort. As in bubble sort,
+ * comb sort operates by repeatedly looping through an array and swapping
+ * elements until the array is sorted. What distinguishes the two is that
+ * bubble sort always compares consecutive elements, while comb sort compares
+ * elements a distance k apart. On each new iteration through the loop, the
+ * value of k is shrunk by some fixed factor. Once k becomes less then one, k's
+ * value is set to one and comb sort becomes identical to bubble sort.
+ *
+ * The primary benefit of comb sort over bubble sort is its ability to move
+ * small values away from the end of the list. Bubble sort's is least efficient
+ * when small values are at the end of the array, as comparisons are made
+ * from left to right. As such, each such element can be moved left at most 1 index
+ * per iteration. So if the smallest element where located at an index n, n - 1
+ * loop iterations would have to occur for it to be sorted.
+ *
+ * @param arr Array to be sorted.
+ * @param nelems Number of elements in array.
+ * @param size Size of each element in array.
+ * @param compare Function to be used to compare elements.
+ * @return Void.
+ */
+void
+comb_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
+{
+  char* arr_p = (char*)arr;
+  size_t gap = nelems;
+  double shrink = 1.3;
+  int sorted = 0;
+
+  while (!sorted) {
+    gap = floor(gap / shrink);
+    if (gap > 1) {
+      sorted = 0;
+    } else {
+      gap = 1;
+      sorted = 1;
+    }
+
+    int i = 0;
+    while (i + gap < nelems) {
+      if (compare(arr_p+(i*size), arr_p+((i+gap)*size)) > 0) {
+        swap(arr_p+(i*size), arr_p+((i+gap)*size), size);
+        sorted = 0;
+        i += gap;
+      }
+      i += 1;
+    }
+  }
+}
+
+
+
 
 /**
  * @brief Sort array of arbitrary values using merge sort.
