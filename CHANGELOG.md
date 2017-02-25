@@ -9,6 +9,12 @@ The format is based on [Keep a Changelog]() and this project adheres to
 
 ### Added
 
+- Comb sort for full sorting.
+
+## [2017-02-25] 0.0.1
+
+### Added
+
 - Defaut directory layout and files (INSTALL, MAKEFILE, README, BUGS, TODO).
 - Add MinUnit test framework and basic spec file.
 - Insertion sort for both full and partial sorting.

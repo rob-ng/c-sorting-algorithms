@@ -1,7 +1,9 @@
 CC := gcc
-FLAGS := -pedantic -Wpointer-arith
+CFLAGS := -pedantic -Wpointer-arith
 # LD - Linker for bundling object files into executable.
 LD := gcc
+# LDLIBS - Libraries to link with.
+LDLIBS := -lm
 
 MODULES := 
 SRC_DIR := src #$(addprefix src/,$(MODULES))
@@ -28,7 +30,7 @@ vpath %.c $(SRC_DIR)
 # Define targets / dependencies dynamically.
 define make-goal
 $1/%.o: %.c
-	$(CC) $(FLAGS) $(INCLUDES) -c $$< -o $$@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $$< -o $$@
 endef
 
 # By default, Makefile assumes targets are files. By labeling a target as
@@ -41,7 +43,7 @@ endef
 all: checkdirs build/test.exe
 
 build/test.exe: $(OBJ)
-	$(LD) $^ -o $@
+	$(LD) $^ $(LDLIBS) -o $@
 
 checkdirs: $(BUILD_DIR)
 
