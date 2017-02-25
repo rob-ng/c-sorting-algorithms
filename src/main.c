@@ -3,7 +3,7 @@
 #include <time.h>
 #include "sorting.h"
 
-#define SIZE 10
+#define SIZE 100
 
 int
 compareInts(void* a, void* b)
@@ -21,7 +21,7 @@ main(int argc, char* argv[])
   for (i = 0; i < SIZE; i++) {
     arr[i] = rand() % 10;
   }
-  insert_sort(arr, sizeof(arr)/sizeof(int), sizeof(int), compareInts);
+  select_sort(arr, sizeof(arr)/sizeof(int), sizeof(int), compareInts);
   for (i = 0; i < SIZE; i++) {
     printf("%d ", arr[i]);
   }
