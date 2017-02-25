@@ -3,7 +3,7 @@
 #include <time.h>
 #include "sorting.h"
 
-#define SIZE 100
+#define SIZE 10000
 
 int
 compareInts(void* a, void* b)
@@ -15,13 +15,17 @@ int
 main(int argc, char* argv[])
 {
   srand(time(NULL));
+  clock_t start, end;
 
   int arr[SIZE];
   int i;
   for (i = 0; i < SIZE; i++) {
     arr[i] = rand() % 10;
   }
-  select_sort(arr, sizeof(arr)/sizeof(int), sizeof(int), compareInts);
+  start = clock();
+  merge_sort(arr, sizeof(arr)/sizeof(int), sizeof(int), compareInts);
+  end = clock();
+  printf("Elapsed: %f", (double)(end - start) / CLOCKS_PER_SEC);
   for (i = 0; i < SIZE; i++) {
     printf("%d ", arr[i]);
   }
