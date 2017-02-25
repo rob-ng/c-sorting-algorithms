@@ -2,14 +2,37 @@
 #include <string.h>
 #include "sorting.h"
 
+/**
+ * @brief Specifies length at / below which more complex sorts (e.g. quicksort)
+ * should defer to simpler sorts (e.g. insertion sort).
+ */
 #define LENGTH_THRESHOLD 7
 
+/**
+ * @brief Sort array of arbitrary values using insertion sort.
+ *
+ * @param arr Array to be sorted.
+ * @param nelems Number of elements in the array.
+ * @param size Size of each element in the array.
+ * @param compare Function to be used to compare elements.
+ * @return Void.
+ */
 void
 insert_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*,void*))
 {
   insert_sort_partial(arr, size, compare, 0, nelems);
 }
 
+/**
+ * @brief Sort subarray of array using insertion sort.
+ *
+ * @param arr Array to be sorted.
+ * @param size Size of each element in the array.
+ * @param compare Function to be used to compare elements.
+ * @param lo Lower bound (inclusive).
+ * @param hi Upper bound (exclusive).
+ * @return Void.
+ */
 void
 insert_sort_partial(void* arr, size_t size, int (*compare)(void*,void*), size_t lo, size_t hi) 
 {
@@ -32,10 +55,10 @@ insert_sort_partial(void* arr, size_t size, int (*compare)(void*,void*), size_t 
 /**
  * @brief Sort array of arbitrary values using selection sort.
  *
- * @param arr The array to be sorted.
- * @param nelems The number of elemenets in the array.
- * @param size The size of each element in the array.
- * @param compare The function to be used to compare elements.
+ * @param arr Array to be sorted.
+ * @param nelems Number of elemenets in the array.
+ * @param size Size of each element in the array.
+ * @param compare Function to be used to compare elements.
  * @return Void.
  */
 void
@@ -74,9 +97,9 @@ select_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
  * with the main and auxillary arrays swapped. This is so that the first merge
  * involves copying values into the main array from the auxillary array.
  *
- * @param arr The array to be sorted.
- * @param nelems The number of elements in the array.
- * @param compare The function to be used to compare elements.
+ * @param arr Array to be sorted.
+ * @param nelems Number of elements in the array.
+ * @param compare Function to be used to compare elements.
  * @return Void.
  */
 void
@@ -107,12 +130,12 @@ merge_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
  * Note: we use lo + (hi - lo) / 2 rather than (hi + lo) / 2 to guard against
  * overflow.
  *
- * @param arr The array from which values will be copied.
- * @param aux The array into which values will be copied.
- * @param size The size of each element in either array.
- * @param compare The function to be used to compare elements.
- * @param lo The lower subarray index bound.
- * @param hi The upper subarray index bound.
+ * @param arr Array from which values will be copied.
+ * @param aux Array into which values will be copied.
+ * @param size Size of each element in either array.
+ * @param compare Function to be used to compare elements.
+ * @param lo Lower bound of subarray (inclusive).
+ * @param hi Upper bound of subarray (inclusive).
  * @return Void.
  */
 void
@@ -131,15 +154,15 @@ merge_sort_sort(void* arr, void* aux, size_t size, int (*compare)(void*, void*),
 }
 
 /**
- * @brief Helper (merge_sort): Update aux subarray with sorted values.
+ * @brief Helper (merge_sort): "Merge" subarrays by updating aux with sorted values taken from arr.
  *
- * @param arr The array from which values are copied.
- * @param aux The array to which sorted values are copied.
- * @param size The size of each element in either array.
- * @param compare The function to be used to compare elements.
- * @param lo The lower bound of the sub array.
- * @param mid The midpoint of the subarray.
- * @param hi The higher bound of the subarry.
+ * @param arr Array from which values are copied.
+ * @param aux Array to which sorted values are copied.
+ * @param size Size of each element in either array.
+ * @param compare Function to be used to compare elements.
+ * @param lo Lower bound of the sub array.
+ * @param mid Midpoint of the subarray.
+ * @param hi Higher bound of the subarry.
  * @return Void.
  */
 void
@@ -165,10 +188,10 @@ merge_sort_merge(void* arr, void* aux, size_t size, int (*compare)(void*, void*)
  *
  * If array is small enough, function defers to insertion sort instead.
  *
- * @param arr The array to be sorted.
- * @param nelems The number of elements in the array.
- * @param size The size of each element in the array.
- * @param compare The function to be used to compare elements.
+ * @param arr Array to be sorted.
+ * @param nelems Number of elements in the array.
+ * @param size Size of each element in the array.
+ * @param compare Function to be used to compare elements.
  * @return Void.
  */
 void
@@ -184,14 +207,14 @@ quick_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
 /**
  * @brief Helper (quick_sort): Recursively perform quicksort.
  *
- * Quicksort is not efficient for small arays. As such, insertion sort is used
+ * Quicksort is not efficient for small arrays. As such, insertion sort is used
  * when subarray is small.
  *
- * @param arr The array to be sorted.
- * @param size The size of each element in the array.
- * @param compare The function to be used to compare elements.
- * @param lo The lower index bound of the current subarray.
- * @param hi The upper index bound of the current subarray.
+ * @param arr Array to be sorted.
+ * @param size Size of each element in the array.
+ * @param compare Function to be used to compare elements.
+ * @param lo Lower index bound of current subarray (inclusive).
+ * @param hi Upper index bound of the current subarray (invclusive).
  * @return Void.
  */
 void
@@ -211,18 +234,19 @@ quick_sort_sort(void* arr, size_t size, int (*compare)(void*, void*), size_t lo,
 /**
  * @brief Helper (quick_sort): Partition subarray around pivot element.
  *
+ * Smaller elements are moved to left of pivot, larger to right of pivot.
  * The pivot index is set to the median of the lower, middle, and upper bounds
  * of the subarray. Choosing the median element results in a faster sort than
  * always using one of lo, mid, and hi.
  *
  * Aside from choice of pivot, this is the Hoare partition scheme.
  *
- * @param arr The array containing the subarray.
- * @param size The size of each element in the array.
- * @param compare The function to be used to compare elements.
- * @param lo The lower index bound of the subarray.
- * @param hi The upper index bound of the subarray.
- * @return The final index of the pivot element.
+ * @param arr Array containing the subarray.
+ * @param size Size of each element in the array.
+ * @param compare Function to be used to compare elements.
+ * @param lo Lower index bound of the subarray (inclusive).
+ * @param hi Upper index bound of the subarray (inclusive).
+ * @return Final index of the pivot element.
  */
 size_t
 quick_sort_partition(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi)
@@ -252,6 +276,9 @@ quick_sort_partition(void* arr, size_t size, int (*compare)(void*, void*), size_
   }
 }
 
+/**
+ * @brief Swap the values referenced by two pointers.
+ */
 void
 swap(void* a, void* b, size_t size)
 {
@@ -270,13 +297,13 @@ swap(void* a, void* b, size_t size)
  * Choosing median of lo, mid, and hi during quicksort gives a better pivot
  * point than using either a fixed position or the midpoint of hi and lo.
  *
- * @param arr The array containing the elements.
- * @param size The size of each element.
- * @param a The first element.
- * @param b The second element.
- * @param c The third element.
- * @param compare The function to be used to compare elements.
- * @return The index of the median element.
+ * @param arr Array containing the elements.
+ * @param size Size of each element.
+ * @param a First element.
+ * @param b Second element.
+ * @param c Third element.
+ * @param compare Function to be used to compare elements.
+ * @return Index of the median element.
  */
 size_t
 median_three(void* arr, size_t size, size_t a, size_t b, size_t c, int (*compare)(void*, void*))
