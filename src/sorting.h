@@ -128,6 +128,39 @@ void quick_sort_sort(void* arr, size_t size, int (*compare)(void*, void*), size_
 size_t quick_sort_partition(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi);
 
 
+/*=== Hybrid Sorts ===*/
+
+/**
+ * @brief Sort array using Timsort.
+ */
+void timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*));
+/**
+ * @brief Calculate minimum run size to be used in sort.
+ *
+ * The minimum run size is given by the 6 most significant bits of the array's
+ * length. Consequently, minrun will range between 32 and 64 inclusive, and 
+ * any array with length < 64 will have minimum run size equal to their entire 
+ * length.
+ *
+ * @param nelems Number of elements in the array.
+ * @return Size of minimum run.
+ */
+size_t timsort_minrun(size_t nelems);
+/**
+ * @brief Helper (timesort): Find runs within array and merge them.
+ *
+ * Finding runs and merging them are done concurrently.
+ *
+ * A run consists of at least 2 elements that are either non-descending or
+ * strictly descending.
+ */
+void timsort_merge(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*), size_t minrun);
+
+typedef struct TimsortRun {
+  size_t start;
+  size_t len;
+} TimsortRun;
+
 /*=== Helpers ===*/
 
 /**

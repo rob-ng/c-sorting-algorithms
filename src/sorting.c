@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include <math.h>
 #include "sorting.h"
 
@@ -331,6 +332,74 @@ quick_sort_partition(void* arr, size_t size, int (*compare)(void*, void*), size_
       pivot = (left == pivot) ? right : left;
     }
   }
+}
+/**
+ * @brief Sort array of arbitrary values using Timsort.
+ */
+void 
+timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
+{
+  size_t minrun = timsort_minrun(nelems);
+  if (nelems > minrun) {
+    insert_sort(arr, nelems, size, compare);
+  } else {
+
+  }
+}
+
+/**
+ * @brief Find runs in array and merge them.
+ */
+void
+timsort_merge(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*), size_t minrun)
+{
+  const size_t MAX_RUNS = nelems / minrun;
+  TimsortRun run_stack[MAX_RUNS];
+
+  size_t i;
+  // Iterate through the array and look for runs. If a run is found (and the
+  // run is larger than minrun), push it onto run_stack.
+  for (i = 0; i < nelems; i++) {
+
+  }
+
+}
+/**
+ * @brief Find minimum run size to use in timsort.
+ *
+ * The minimum run size is given by the 6 most significant bits of the array's
+ * length. Consequently, minrun will range between 32 and 64 inclusive, and 
+ * any array with length < 64 will have minimum run size equal to their entire 
+ * length.
+ *
+ * @param nelems Number of elements in array.
+ * @return Size of minimum run.
+ */
+size_t
+timsort_minrun(size_t nelems)
+{
+	const size_t SIZE_T_SIZE = sizeof(nelems);
+	const size_t MAX_BITS = SIZE_T_SIZE * CHAR_BIT;
+	int lead_zeros;
+	if (MAX_BITS == 32) {
+		lead_zeros = __builtin_clzl(nelems);
+	} else if (MAX_BITS == 64) {
+		lead_zeros = __builtin_clzll(nelems);
+	}
+	// Indicates number of bits which will be shifted.
+	int shifts = (MAX_BITS - lead_zeros) - 6;
+	int i, pad = 0;
+	for (i = 0; i < shifts; i++) {
+			// If any bits not in 6 most significant are set, pad final result by 1.
+			// The & operator selects only bits that share the same 'index'.
+			// As such, this operation returns 1 iff the bit and index i in nelems is
+			// set.
+			if (nelems & (1 << i)) {
+					pad = 1;
+			}
+			nelems = nelems >> 1;
+	}
+	return nelems + pad;
 }
 
 /**
