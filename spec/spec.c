@@ -34,7 +34,7 @@ static char* test_stack_pop_empty_stack() {
   return 0;
 }
 
-static char* test_stack_pop_stack_one_element() {
+static char* test_stack_pop_nonempty_stack() {
   Stack* stack = stack_init();
   int a = 3;
   int b = 4;
@@ -60,7 +60,7 @@ static char* all_tests() {
   mu_run_test(test_stack_push_empty_stack);
   mu_run_test(test_stack_push_nonempty_stack);
   mu_run_test(test_stack_pop_empty_stack);
-  mu_run_test(test_stack_pop_stack_one_element);
+  mu_run_test(test_stack_pop_nonempty_stack);
   mu_run_test(test_stack_free);
   return 0;
 }

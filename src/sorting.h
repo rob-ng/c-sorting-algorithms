@@ -131,6 +131,16 @@ size_t quick_sort_partition(void* arr, size_t size, int (*compare)(void*, void*)
 /*=== Hybrid Sorts ===*/
 
 /**
+ * @brief Struct representation of a run.
+ *
+ * start - index where run began.
+ * len - length of run (start index to end index).
+ */
+typedef struct TimsortRun {
+  size_t start;
+  size_t len;
+} TimsortRun;
+/**
  * @brief Sort array using Timsort.
  */
 void timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*));
@@ -154,12 +164,14 @@ size_t timsort_minrun(size_t nelems);
  * A run consists of at least 2 elements that are either non-descending or
  * strictly descending.
  */
-void timsort_merge(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*), size_t minrun);
+void timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*), size_t minrun);
+/**
+ * @brief Merge two runs together and return result.
+ *
+ * @return TimsortRun representing the merged runs.
+ */
+TimsortRun* timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortRun* a, TimsortRun* b);
 
-typedef struct TimsortRun {
-  size_t start;
-  size_t len;
-} TimsortRun;
 
 /*=== Helpers ===*/
 

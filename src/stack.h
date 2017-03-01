@@ -55,6 +55,7 @@ void stack_push(Stack* stack, void* data);
  * @return Topmost value in stack.
  */
 void* stack_peek(Stack* stack);
+
 /**
  * @brief Remove topmost value from stack.
  *

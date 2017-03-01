@@ -3,6 +3,7 @@
 #include <limits.h>
 #include <math.h>
 #include "sorting.h"
+#include "stack.h"
 
 /**
  * @brief Specifies length at / below which more complex sorts (e.g. quicksort)
@@ -333,6 +334,7 @@ quick_sort_partition(void* arr, size_t size, int (*compare)(void*, void*), size_
     }
   }
 }
+
 /**
  * @brief Sort array of arbitrary values using Timsort.
  */
@@ -343,27 +345,198 @@ timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
   if (nelems > minrun) {
     insert_sort(arr, nelems, size, compare);
   } else {
+    timsort_find_runs(arr, nelems, size, compare, minrun);
+  }
+}
+/**
+ * @brief Find runs in array and merge them.
+ *
+ * BE VERY VERY VERY CAREFUL ABOUT BOUNDS FOR RUNS!!!!!!!!!!!!!!!
+ */
+void
+timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*), size_t minrun)
+{
+  char* arr_p = (char*)arr;
 
+  // As all runs must be at least minrun long, max runs occurs when every run
+  // is exactly minrun elements long.
+  const size_t MAX_RUNS = nelems / minrun;
+
+  // Array to contain runs. 
+  TimsortRun runs[MAX_RUNS];
+
+  // Initialize runs.
+  size_t run_ind;
+  for (run_ind = 0; run_ind < MAX_RUNS; run_ind++) {
+    TimsortRun run;
+    run.start = 0;
+    run.len = 0;
+    runs[run_ind] = run;
+  }
+
+  // Create stack for holding completed runs.
+  Stack* runs_stack = stack_init();
+
+  // The curr_run value is the index of the run in 'runs' array. When a run
+  // terminates, this value is incremented and the next run begins.
+  size_t i, curr_run = 0;
+  int descending = 1;
+
+  // Iterate through the array and look for runs. Runs occur either when
+  // consecutive values are strictly descending (i+1 < i) or non-descending
+  // (i+1 >= i). Because one of these relationships must always be true, a run
+  // is always occuring. 
+  // While a run is happening, we only increment its end index.
+  // When a run terminates, we must do a few things:
+  // 1. Set 'descending' to either 1 or 0 depending on what the new
+  //    relationship is.
+  // 2. Check end index of the run. If the length of the run is less than the
+  //    minimum run, we extend its len to minrun.
+  //    To ensure that the new run is sorted, with use insert_sort_partial() on
+  //    the new elements.
+  //    We then reassign i to the end index of the run.
+  // 3. Push current completed run onto runs stack.
+  // 4. Increment curr_run and update its start and len values.
+  for (i = 0; i < nelems-1; i++) {
+    if (compare(arr_p+((i+1)*size), arr_p+((i)*size)) < 0) {
+      if (descending) {
+        runs[curr_run].len++;
+      } else {
+        descending = 1;
+        if (runs[curr_run].len < minrun) {
+          runs[curr_run].len = minrun;
+          insert_sort_partial(arr, size, compare, i, (runs[curr_run].start + runs[curr_run].len));
+          i = runs[curr_run].start + runs[curr_run].len;
+        }
+        stack_push(runs_stack, &runs[curr_run]);
+        curr_run++;
+        runs[curr_run].start = i;
+        runs[curr_run].len = 1;
+      }
+    } else {
+      if (descending) {
+        descending = 0;
+        if (runs[curr_run].len < minrun) {
+          runs[curr_run].len = minrun;
+          insert_sort_partial(arr, size, compare, i, (runs[curr_run].start + runs[curr_run].len));
+          i = runs[curr_run].start + runs[curr_run].len;
+        }
+        stack_push(runs_stack, &runs[curr_run]);
+        curr_run++;
+        runs[curr_run].start = i;
+        runs[curr_run].len = 1;
+      } else {
+        runs[curr_run].len++;
+      }
+    }
+
+    // Check if runs_stack contains at least 3 runs.
+    // If it does, check that for top 3 runs X, Y, and Z, the following
+    // invariants hold:
+    // 1. |X| > |Y| + |Z|
+    // 2. |Y| > |Z|
+    // If either invariant fails to hold, merge Y with smaller of X and Z and
+    // push new merged value onto stack.
+    while (1) {
+      if (runs_stack->len > 3) {
+        TimsortRun* x = (TimsortRun*)stack_peek(runs_stack);
+        stack_pop(runs_stack);
+        TimsortRun* y = (TimsortRun*)stack_peek(runs_stack);
+        stack_pop(runs_stack);
+        TimsortRun* z = (TimsortRun*)stack_peek(runs_stack);
+        stack_pop(runs_stack);
+
+        if (x->len < y->len + z->len || y->len < z->len) {
+          TimsortRun* merged_run;
+          if (x->len < z->len) {
+            // PUSH Z BACK ONTO STACK
+            stack_push(runs_stack, z);
+            // MERGE AND PUSH X AND Y
+            merged_run = timsort_merge_runs(arr, size, compare, x, y);
+            stack_push(runs_stack, merged_run);
+          } else {
+            // PUSH X BACK ONTO STACK
+            stack_push(runs_stack, x);
+            // MERGE AND PUSH Y AND Z
+            merged_run = timsort_merge_runs(arr, size, compare, y, z);
+            stack_push(runs_stack, merged_run);
+          }
+        } else {
+          stack_push(runs_stack, z);
+          stack_push(runs_stack, y);
+          stack_push(runs_stack, x);
+          return;
+        }
+      } else {
+        return;
+      }
+    }
+
+  }
+
+  while (runs_stack->len > 1) {
+    // Merge top 2 arrays until runs_stack contains just the sorted array.
+    TimsortRun* a = stack_peek(runs_stack);
+    stack_pop(runs_stack);
+    TimsortRun* b = stack_peek(runs_stack);
+    stack_pop(runs_stack);
+    TimsortRun* merged_run = timsort_merge_runs(arr, size, compare, a, b);
+    stack_push(runs_stack, merged_run);
   }
 }
 
 /**
- * @brief Find runs in array and merge them.
+ * @brief Merge 2 consecutive runs.
  */
-void
-timsort_merge(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*), size_t minrun)
+TimsortRun*
+timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortRun* a, TimsortRun* b)
 {
-  const size_t MAX_RUNS = nelems / minrun;
-  TimsortRun run_stack[MAX_RUNS];
-
-  size_t i;
-  // Iterate through the array and look for runs. If a run is found (and the
-  // run is larger than minrun), push it onto run_stack.
-  for (i = 0; i < nelems; i++) {
-
+  char* arr_p = (char*)arr;
+  TimsortRun* sml;
+  TimsortRun* lrg;
+  if (a->len < b->len) {
+    sml = a;
+    lrg = b;
+  } else {
+    sml = a;
+    lrg = b;
+  }
+  size_t sml_end = sml->start + sml->len - 1;
+  size_t lrg_end = sml->start + sml->len - 1;
+  void* temp = malloc(sizeof(size * sml->len));
+  memcpy(temp, arr+(sml->start*size), size*sml->len);
+  size_t i, j, k;
+  if (sml->start < lrg->start) {
+    i = sml->start, j = lrg->start;
+    for (k = sml->start; k <= lrg_end; k++) {
+      if (i <= sml_end && (j >= lrg_end || compare(arr_p+(i*size), arr_p+(j*size)) < 0)) {
+        memcpy(arr+(k*size), temp+(i*size), size);
+        i++;
+      } else {
+        memcpy(arr+(k*size), arr+(j*size), size);
+        j++;
+      }
+    }
+  } else {
+    i = sml_end, j = lrg_end;
+    for (k = lrg_end + 1; k --> sml->start;) {
+      if (i >= sml->start && (j >= lrg->start && compare(arr_p+(i*size), arr_p+(j*size)) > 0)) {
+        memcpy(arr+(k*size), temp+(i*size), size);
+        i--;
+      } else {
+        memcpy(arr+(k*size), arr+(j*size), size);
+        j--;
+      }
+    }
   }
 
+  free(temp);
+  lrg->start = sml->start < lrg->start ? sml->start : lrg->start;
+  lrg->len = sml->len + lrg->len;
+  return lrg;
 }
+
+
 /**
  * @brief Find minimum run size to use in timsort.
  *
