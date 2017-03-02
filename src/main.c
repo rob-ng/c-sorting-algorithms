@@ -26,9 +26,9 @@ main(int argc, char* argv[])
   timsort(arr, sizeof(arr)/sizeof(int), sizeof(int), compareInts);
   end = clock();
   printf("\nElapsed: %f\n", (double)(end - start) / CLOCKS_PER_SEC);
-  /*for (i = 0; i < SIZE; i++) {
+  for (i = 0; i < SIZE; i++) {
     printf("%d ", arr[i]);
-  }*/
+  }
   return 0;
 }
 

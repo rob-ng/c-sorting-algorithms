@@ -199,5 +199,12 @@ size_t median_three(void* arr, size_t size, size_t a, size_t b, size_t c, int (*
  * @brief Reverse given array.
  */
 void reverse_array(void* arr, size_t start, size_t end, size_t size);
+/**
+ * @brief Find index of value within an array using binary search.
+ *
+ * @return If found, returns index of element within array. If not, returns -1.
+ */
+int bin_search(void* arr, size_t nelems, size_t size, void* target, int (*compare)(void*, void*));
+
 
 #endif /* MY_SORTING_ALGORITHMS_ */
