@@ -679,10 +679,10 @@ reverse_array(void* arr, size_t start, size_t end, size_t size)
  * @brief Find index of value within an array using binary search.
  */
 int
-bin_search(void* arr, size_t nelems, size_t size, void* target, int (*compare)(void*, void*))
+bin_search(void* arr, size_t lo, size_t hi, size_t size, void* target, int (*compare)(void*, void*))
 {
   char* arr_p = (char*)arr;
-  size_t l = 0, r = nelems - 1, m;
+  size_t m, l = lo, r = hi;
   while (1) {
     if (l > r) {
       return -1;
