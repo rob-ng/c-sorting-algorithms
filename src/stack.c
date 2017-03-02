@@ -35,9 +35,10 @@ stack_frame_free(StackFrame* frame)
 Stack*
 stack_init()
 {
-  Stack* stack = malloc(sizeof(stack));
+  Stack* stack = malloc(sizeof(Stack));
   stack->head = NULL;
   stack->len = 0;
+  return stack;
 }
 /**
  * @brief Push data onto stack.
@@ -101,5 +102,6 @@ stack_free(Stack* stack)
   while (stack_pop(stack) != 0) {
     continue;
   }
+  free(stack);
 }
 

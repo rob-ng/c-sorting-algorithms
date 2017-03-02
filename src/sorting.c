@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include <limits.h>
 #include <math.h>
 #include "sorting.h"
@@ -341,10 +342,11 @@ quick_sort_partition(void* arr, size_t size, int (*compare)(void*, void*), size_
 void 
 timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
 {
-  size_t minrun = timsort_minrun(nelems);
-  if (nelems > minrun) {
+  const size_t MIN_NELEMS = 64;
+  if (nelems < MIN_NELEMS) {
     insert_sort(arr, nelems, size, compare);
   } else {
+    size_t minrun = timsort_minrun(nelems);
     timsort_find_runs(arr, nelems, size, compare, minrun);
   }
 }
@@ -367,7 +369,7 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
 
   // Initialize runs.
   size_t run_ind;
-  for (run_ind = 0; run_ind < MAX_RUNS; run_ind++) {
+  for (run_ind = 0; run_ind <= MAX_RUNS; run_ind++) {
     TimsortRun run;
     run.start = 0;
     run.len = 0;
@@ -380,7 +382,7 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
   // The curr_run value is the index of the run in 'runs' array. When a run
   // terminates, this value is incremented and the next run begins.
   size_t i, curr_run = 0;
-  int descending = 1;
+  int run_change = 0;
 
   // Iterate through the array and look for runs. Runs occur either when
   // consecutive values are strictly descending (i+1 < i) or non-descending
@@ -397,36 +399,57 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
   //    We then reassign i to the end index of the run.
   // 3. Push current completed run onto runs stack.
   // 4. Increment curr_run and update its start and len values.
+  int new_run = 1;
   for (i = 0; i < nelems-1; i++) {
-    if (compare(arr_p+((i+1)*size), arr_p+((i)*size)) < 0) {
-      if (descending) {
+    // Descending
+    if (compare(arr_p+(i*size), arr_p+((i+1)*size)) > 0) {
+      // If just starting or continuing strict descent.
+      if (new_run || compare(arr_p+((i-1)*size), arr_p+(i*size)) > 0) {
+        if (new_run) {
+          runs[curr_run].start = i;
+        }
         runs[curr_run].len++;
+        new_run = 0;
       } else {
-        descending = 1;
         if (runs[curr_run].len < minrun) {
           runs[curr_run].len = minrun;
-          insert_sort_partial(arr, size, compare, i, (runs[curr_run].start + runs[curr_run].len));
-          i = runs[curr_run].start + runs[curr_run].len;
+          if (runs[curr_run].start + runs[curr_run].len - 1 >= nelems) {
+            runs[curr_run].len = nelems - runs[curr_run].start;
+            i = nelems - 1;
+          } else {
+            i = runs[curr_run].start + runs[curr_run].len - 1;
+          }
+          insert_sort_partial(arr, size, compare, runs[curr_run].start, (runs[curr_run].start + runs[curr_run].len));
         }
         stack_push(runs_stack, &runs[curr_run]);
         curr_run++;
-        runs[curr_run].start = i;
-        runs[curr_run].len = 1;
+        if (curr_run > MAX_RUNS) { break; }
+        new_run = 1;
       }
     } else {
-      if (descending) {
-        descending = 0;
+      // If just starting or continuing non-descent.
+      if (new_run || compare(arr_p+((i-1)*size), arr_p+(i*size)) <= 0) {
+        if (new_run) {
+          runs[curr_run].start = i;
+        }
+        runs[curr_run].len++;
+        new_run = 0;
+      } else {
         if (runs[curr_run].len < minrun) {
+          reverse_array(arr, runs[curr_run].start, runs[curr_run].start + runs[curr_run].len - 1, size);
           runs[curr_run].len = minrun;
-          insert_sort_partial(arr, size, compare, i, (runs[curr_run].start + runs[curr_run].len));
-          i = runs[curr_run].start + runs[curr_run].len;
+          if (runs[curr_run].start + runs[curr_run].len - 1 >= nelems) {
+            runs[curr_run].len = nelems - runs[curr_run].start;
+            i = nelems - 1;
+          } else {
+            i = runs[curr_run].start + runs[curr_run].len - 1;
+          }
+          insert_sort_partial(arr, size, compare, runs[curr_run].start, (runs[curr_run].start + runs[curr_run].len));
         }
         stack_push(runs_stack, &runs[curr_run]);
         curr_run++;
-        runs[curr_run].start = i;
-        runs[curr_run].len = 1;
-      } else {
-        runs[curr_run].len++;
+        if (curr_run > MAX_RUNS) { break; }
+        new_run = 1;
       }
     }
 
@@ -438,7 +461,7 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
     // If either invariant fails to hold, merge Y with smaller of X and Z and
     // push new merged value onto stack.
     while (1) {
-      if (runs_stack->len > 3) {
+      if (runs_stack->len >= 3) {
         TimsortRun* x = (TimsortRun*)stack_peek(runs_stack);
         stack_pop(runs_stack);
         TimsortRun* y = (TimsortRun*)stack_peek(runs_stack);
@@ -446,7 +469,7 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
         TimsortRun* z = (TimsortRun*)stack_peek(runs_stack);
         stack_pop(runs_stack);
 
-        if (x->len < y->len + z->len || y->len < z->len) {
+        if ((x->len < y->len + z->len) || (y->len < z->len)) {
           TimsortRun* merged_run;
           if (x->len < z->len) {
             // PUSH Z BACK ONTO STACK
@@ -455,23 +478,22 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
             merged_run = timsort_merge_runs(arr, size, compare, x, y);
             stack_push(runs_stack, merged_run);
           } else {
-            // PUSH X BACK ONTO STACK
-            stack_push(runs_stack, x);
             // MERGE AND PUSH Y AND Z
             merged_run = timsort_merge_runs(arr, size, compare, y, z);
             stack_push(runs_stack, merged_run);
+            // PUSH X BACK ONTO STACK
+            stack_push(runs_stack, x);
           }
         } else {
           stack_push(runs_stack, z);
           stack_push(runs_stack, y);
           stack_push(runs_stack, x);
-          return;
+          break;
         }
       } else {
-        return;
+        break;
       }
     }
-
   }
 
   while (runs_stack->len > 1) {
@@ -483,6 +505,8 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
     TimsortRun* merged_run = timsort_merge_runs(arr, size, compare, a, b);
     stack_push(runs_stack, merged_run);
   }
+
+  stack_free(runs_stack);
 }
 
 /**
@@ -498,34 +522,40 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
     sml = a;
     lrg = b;
   } else {
-    sml = a;
-    lrg = b;
+    sml = b;
+    lrg = a;
   }
   size_t sml_end = sml->start + sml->len - 1;
-  size_t lrg_end = sml->start + sml->len - 1;
-  void* temp = malloc(sizeof(size * sml->len));
-  memcpy(temp, arr+(sml->start*size), size*sml->len);
+  size_t lrg_end = lrg->start + lrg->len - 1;
+  void* temp_p = malloc(size * (sml->len));
+  memcpy(temp_p, arr_p + (size*(sml->start)), size * (sml->len));
+  char* temp = (char*)temp_p;
+
   size_t i, j, k;
   if (sml->start < lrg->start) {
-    i = sml->start, j = lrg->start;
+    i = 0, j = lrg->start;
     for (k = sml->start; k <= lrg_end; k++) {
-      if (i <= sml_end && (j >= lrg_end || compare(arr_p+(i*size), arr_p+(j*size)) < 0)) {
-        memcpy(arr+(k*size), temp+(i*size), size);
+      if (i < sml->len && (j > lrg_end || compare(temp+(i*size), arr_p+(j*size)) < 0)) {
+        memcpy(arr_p+(k*size), temp+(i*size), size);
         i++;
       } else {
-        memcpy(arr+(k*size), arr+(j*size), size);
+        memcpy(arr_p+(k*size), arr_p+(j*size), size);
         j++;
       }
     }
   } else {
-    i = sml_end, j = lrg_end;
-    for (k = lrg_end + 1; k --> sml->start;) {
-      if (i >= sml->start && (j >= lrg->start && compare(arr_p+(i*size), arr_p+(j*size)) > 0)) {
-        memcpy(arr+(k*size), temp+(i*size), size);
-        i--;
+    i = sml->len-1, j = lrg_end;
+    for (k = sml_end + 1; k --> lrg->start;) {
+      if (i >= 0 && (j < lrg->start || compare(temp+(i*size), arr_p+(j*size)) > 0)) {
+        memcpy(arr_p+(k*size), temp+(i*size), size);
+        if (i != 0) { 
+          i--; 
+        }
       } else {
-        memcpy(arr+(k*size), arr+(j*size), size);
-        j--;
+        memcpy(arr_p+(k*size), arr_p+(j*size), size);
+        if (j != 0) {
+          j--;
+        }
       }
     }
   }
@@ -534,6 +564,7 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
   lrg->start = sml->start < lrg->start ? sml->start : lrg->start;
   lrg->len = sml->len + lrg->len;
   return lrg;
+ 
 }
 
 
@@ -624,5 +655,22 @@ median_three(void* arr, size_t size, size_t a, size_t b, size_t c, int (*compare
     } else {
       return b;
     }
+  }
+}
+
+/**
+ * @brief Reverse given array.
+ */
+void
+reverse_array(void* arr, size_t start, size_t end, size_t size)
+{
+  if (start >= end) { 
+    return;
+  }
+  char* arr_p = (char*)arr;
+  while (start < end) {
+    swap(arr_p+(start*size), arr_p+(end*size), size);
+    start++;
+    end--;
   }
 }

@@ -195,5 +195,9 @@ void swap(void* a, void* b, size_t size);
  * @param compare Function to be used to compare elements.
  */
 size_t median_three(void* arr, size_t size, size_t a, size_t b, size_t c, int (*compare)(void*, void*));
+/**
+ * @brief Reverse given array.
+ */
+void reverse_array(void* arr, size_t start, size_t end, size_t size);
 
 #endif /* MY_SORTING_ALGORITHMS_ */

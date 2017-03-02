@@ -23,12 +23,12 @@ main(int argc, char* argv[])
     arr[i] = rand() % 10;
   }
   start = clock();
-  comb_sort(arr, sizeof(arr)/sizeof(int), sizeof(int), compareInts);
+  timsort(arr, sizeof(arr)/sizeof(int), sizeof(int), compareInts);
   end = clock();
-  printf("Elapsed: %f", (double)(end - start) / CLOCKS_PER_SEC);
-  for (i = 0; i < SIZE; i++) {
+  printf("\nElapsed: %f\n", (double)(end - start) / CLOCKS_PER_SEC);
+  /*for (i = 0; i < SIZE; i++) {
     printf("%d ", arr[i]);
-  }
+  }*/
   return 0;
 }
 

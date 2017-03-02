@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog]() and this project adheres to
 
 ## [Unreleased]
 
+## [2017-02-28]
+
+### Added
+
+- Nearly working Timsort for full sorting.
+
+## [2017-02-26]
+
 ### Added
 
 - Comb sort for full sorting.
