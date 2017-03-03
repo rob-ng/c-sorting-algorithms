@@ -29,7 +29,7 @@ void insert_sort_partial(void* arr, size_t size, int (*compare)(void*, void*), s
 /**
  * @brief Sort subarray of array using insertion sort which uses binary search.
  */
-void insert_sort_bin_partial(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi);
+void binary_insert_sort(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi);
 
 /**
  * @brief Sort array using selection sort
@@ -204,9 +204,15 @@ size_t median_three(void* arr, size_t size, size_t a, size_t b, size_t c, int (*
  */
 void reverse_array(void* arr, size_t start, size_t end, size_t size);
 /**
- * @brief Find index of value within an array using binary search.
+ * @brief Use binary search to find index of value within subarray of an array.
  *
- * @return If found, returns index of element within array. If not, returns -1.
+ * @param arr Array to be searched.
+ * @param size Size of each element in array.
+ * @param compare Function to be used to compare elements.
+ * @param lo Lower bound of subarray.
+ * @param hi Upper bound of subarray.
+ * @param target Item to search for in subarray.
+ * @return Index of item if found, else -1.
  */
 int bin_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target);
 

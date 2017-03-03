@@ -58,19 +58,41 @@ insert_sort_partial(void* arr, size_t size, int (*compare)(void*,void*), size_t 
 
 /**
  * @brief Sort subarray of array using insertion sort which uses binary search.
+ *
+ * @param arr The array to be sorted.
+ * @param size Size of each element in array.
+ * @param compare Function to be used to compare elements.
+ * @param lo Lower bound of subarray.
+ * @param hi Upper bound of subarray.
+ * @return Void.
  */
 void
-insert_sort_bin_partial(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi)
+binary_insert_sort(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi)
 {
   char* arr_p = (char*)arr;
-  int i, j, loc;
+  int i, j, l, r, m, loc;
   void *slctd = malloc(size);
 
   for (i = lo + 1; i <= hi; i++) {
     j = i - 1;
     memcpy(slctd, arr_p+(i*size), size);
 
-    loc = bin_search(arr, size, compare, lo, j, slctd);
+    l = lo, r = j;
+    while (1) {
+      if (r <= l) {
+        loc = (compare(slctd, arr_p+(l*size)) > 0) ? (l + 1) : l;
+        break;
+      }
+      m = floor(l + ((r - l) / 2));
+      if (compare(arr_p+(m*size), slctd) < 0) {
+        l = m + 1;
+      } else if (compare(arr_p+(m*size), slctd) > 0) {
+        r = m - 1;
+      } else {
+        loc = m + 1;
+        break;
+      }
+    }
 
     while (j >= loc) {
       memcpy(arr_p+((j+1)*size), arr_p+(j*size), size);
@@ -160,9 +182,6 @@ comb_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
     }
   }
 }
-
-
-
 
 /**
  * @brief Sort array of arbitrary values using merge sort.
@@ -369,7 +388,8 @@ timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
 {
   const size_t MIN_NELEMS = 64;
   if (nelems < MIN_NELEMS) {
-    insert_sort(arr, nelems, size, compare);
+    //insert_sort(arr, nelems, size, compare);
+    binary_insert_sort(arr, size, compare, 0, nelems - 1);
   } else {
     size_t minrun = timsort_minrun(nelems);
     timsort_find_runs(arr, nelems, size, compare, minrun);
@@ -444,7 +464,8 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
           } else {
             i = runs[curr_run].start + runs[curr_run].len - 1;
           }
-          insert_sort_partial(arr, size, compare, runs[curr_run].start, (runs[curr_run].start + runs[curr_run].len));
+          //insert_sort_partial(arr, size, compare, runs[curr_run].start, (runs[curr_run].start + runs[curr_run].len));
+          binary_insert_sort(arr, size, compare, runs[curr_run].start, (runs[curr_run].start + runs[curr_run].len - 1));
         }
         stack_push(runs_stack, &runs[curr_run]);
         curr_run++;
@@ -469,7 +490,8 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
           } else {
             i = runs[curr_run].start + runs[curr_run].len - 1;
           }
-          insert_sort_partial(arr, size, compare, runs[curr_run].start, (runs[curr_run].start + runs[curr_run].len));
+          //insert_sort_partial(arr, size, compare, runs[curr_run].start, (runs[curr_run].start + runs[curr_run].len));
+          binary_insert_sort(arr, size, compare, runs[curr_run].start, (runs[curr_run].start + runs[curr_run].len - 1));
         }
         stack_push(runs_stack, &runs[curr_run]);
         curr_run++;
@@ -574,8 +596,8 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
     for (k = hi + 1; k --> lo;) {
       if (i >= 0 && (j < lo || compare(temp+(i*size), arr_p+(j*size)) > 0)) {
         memcpy(arr_p+(k*size), temp+(i*size), size);
-        if (i != 0) { 
-          i--; 
+        if (i != 0) {
+          i--;
         }
       } else {
         memcpy(arr_p+(k*size), arr_p+(j*size), size);
@@ -589,113 +611,6 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
   free(temp);
   frst->len = frst->len + scnd->len;
   return frst;
-   
-/*
-
-  TimsortRun* sml;
-  TimsortRun* lrg;
-  if (a->len < b->len) {
-    sml = a;
-    lrg = b;
-  } else {
-    sml = b;
-    lrg = a;
-  }
-  size_t sml_end = sml->start + sml->len - 1;
-  size_t lrg_end = lrg->start + lrg->len - 1;
-  size_t sml_adj_len, lrg_adj_len;
-
-  int lo, hi;
-  if (sml->start < lrg->start) {
-    // Location of first element of lrg in sml
-    lo = bin_search(arr, sml->start, sml_end, size, arr_p+(lrg->start*size), compare);
-    // Location of last element of sml in lrg
-    hi = bin_search(arr, lrg->start, lrg_end, size, arr_p+(sml_end*size), compare);
-    if (lo == -1) { lo = sml->start; }
-    if (hi == -1) { hi = lrg_end; }
-    sml_adj_len = sml->len - (lo - sml->start);
-    lrg_adj_len = lrg->len - (hi - lrg->start);
-  } else {
-    // Location of first element of sml in lrg
-    lo = bin_search(arr, lrg->start, lrg_end, size, arr_p+(sml->start*size), compare);
-    // Location of last element of lrg in sml
-    hi = bin_search(arr, sml->start, sml_end, size, arr_p+(lrg_end*size), compare);
-    if (lo == -1) { lo = lrg->start; }
-    if (hi == -1) { hi = sml_end; }
-    sml_adj_len = sml->len - (hi - sml->start);
-    lrg_adj_len = lrg->len - (lo - lrg->start);
-  }
-
-  //void* temp_p = malloc(size * (sml->len));
-  //memcpy(temp_p, arr_p + (size*(sml->start)), size * (sml->len));
-  //char* temp = (char*)temp_p;
-  char* temp = malloc(size * sml_adj_len);
-  if (sml->start < lrg->start) {
-    memcpy(temp, arr_p + (size *  lo), size * sml_adj_len);
-  } else {
-    memcpy(temp, arr_p + (size *  hi), size * sml_adj_len);
-  }
-
-  size_t i, j, k;
-  if (sml->start < lrg->start) {
-    i = 0, j = lrg->start;
-    for (k = sml->start; k <= lrg_end; k++) {
-      if (i < sml->len && (j > lrg_end || compare(temp+(i*size), arr_p+(j*size)) < 0)) {
-        memcpy(arr_p+(k*size), temp+(i*size), size);
-        i++;
-      } else {
-        memcpy(arr_p+(k*size), arr_p+(j*size), size);
-        j++;
-      }
-    }
-
-    i = 0, j = lrg->start;
-    for (k = lo; k < hi; k++) {
-      if (i < sml_adj_len && (j > hi || compare(temp+(i*size), arr_p+(j*size)) < 0)) {
-        memcpy(arr_p+(k*size), temp+(i*size), size);
-        i++;
-      } else {
-        memcpy(arr_p+(k*size), arr_p+(j*size), size);
-        j++;
-      }
-    }
-  } else {
-    i = hi, j = lrg_end;
-    for (k = hi; k --> lo;) {
-      if (i >= 0 && (j < lo || compare(temp+(i*size), arr_p+(j*size)) > 0)) {
-        memcpy(arr_p+(k*size), temp+(i*size), size);
-        if (i != 0) { 
-          i--; 
-        }
-      } else {
-        memcpy(arr_p+(k*size), arr_p+(j*size), size);
-        if (j != 0) {
-          j--;
-        }
-      }
-    }
-    i = sml->len-1, j = lrg_end;
-    for (k = sml_end + 1; k --> lrg->start;) {
-      if (i >= 0 && (j < lrg->start || compare(temp+(i*size), arr_p+(j*size)) > 0)) {
-        memcpy(arr_p+(k*size), temp+(i*size), size);
-        if (i != 0) { 
-          i--; 
-        }
-      } else {
-        memcpy(arr_p+(k*size), arr_p+(j*size), size);
-        if (j != 0) {
-          j--;
-        }
-      }
-    }
-  }
-
-  free(temp);
-  lrg->start = sml->start < lrg->start ? sml->start : lrg->start;
-  lrg->len = sml->len + lrg->len;
-  return lrg;
- 
-  */
 }
 
 
@@ -807,7 +722,15 @@ reverse_array(void* arr, size_t start, size_t end, size_t size)
 }
 
 /**
- * @brief Find index of value within an array using binary search.
+ * @brief Use binary search to find index of value within subarray of an array.
+ *
+ * @param arr Array to be searched.
+ * @param size Size of each element in array.
+ * @param compare Function to be used to compare elements.
+ * @param lo Lower bound of subarray.
+ * @param hi Upper bound of subarray.
+ * @param target Item to search for in subarray.
+ * @return Index of item if found, else -1.
  */
 int
 bin_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target)
@@ -815,18 +738,17 @@ bin_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size
   char* arr_p = (char*)arr;
   int m, l = lo, r = hi;
   while (1) {
-    if (r <= l) {
-      return (compare(target, arr_p+(l*size)) > 0) ? (l + 1) : l;
-    }
-
-    m = floor(l + ((r - l) / 2));
-
-    if (compare(arr_p+(m*size), target) < 0) {
-      l = m + 1;
-    } else if (compare(arr_p+(m*size), target) > 0) {
-      r = m - 1;
+    if (r < l || (r < 0 || l < 0)) {
+      return -1;
     } else {
-      return m + 1;
+      m = floor(l + ((r - l) / 2));
+      if (compare(arr_p+(m*size), target) > 0) {
+        l = m + 1;
+      } else if (compare(arr_p+(m*size), target) < 0) {
+        r = m - 1;
+      } else {
+        return m;
+      }
     }
   }
 }
