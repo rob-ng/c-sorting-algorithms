@@ -57,6 +57,31 @@ insert_sort_partial(void* arr, size_t size, int (*compare)(void*,void*), size_t 
 }
 
 /**
+ * @brief Sort subarray of array using insertion sort which uses binary search.
+ */
+void
+insert_sort_bin_partial(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi)
+{
+  char* arr_p = (char*)arr;
+  int i, j, loc;
+  void *slctd = malloc(size);
+
+  for (i = lo + 1; i <= hi; i++) {
+    j = i - 1;
+    memcpy(slctd, arr_p+(i*size), size);
+
+    loc = bin_search(arr, size, compare, lo, j, slctd);
+
+    while (j >= loc) {
+      memcpy(arr_p+((j+1)*size), arr_p+(j*size), size);
+      j--;
+    }
+    memcpy(arr_p+((j+1)*size), slctd, size);
+  }
+  free(slctd);
+}
+
+/**
  * @brief Sort array of arbitrary values using selection sort.
  *
  * @param arr Array to be sorted.
@@ -790,19 +815,18 @@ bin_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size
   char* arr_p = (char*)arr;
   int m, l = lo, r = hi;
   while (1) {
-    if (l < r) {
-      return -1;
-    } else if (l < 0 || r < 0) {
-      return -1;
+    if (r <= l) {
+      return (compare(target, arr_p+(l*size)) > 0) ? (l + 1) : l;
+    }
+
+    m = floor(l + ((r - l) / 2));
+
+    if (compare(arr_p+(m*size), target) < 0) {
+      l = m + 1;
+    } else if (compare(arr_p+(m*size), target) > 0) {
+      r = m - 1;
     } else {
-      m = floor((l + r)/2);
-      if (compare(arr_p+(m*size), target) < 0) {
-        l = m + 1;
-      } else if (compare(arr_p+(m*size), target) > 0) {
-        r = m - 1;
-      } else {
-        return m;
-      }
+      return m + 1;
     }
   }
 }

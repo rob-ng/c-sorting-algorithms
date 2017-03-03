@@ -26,6 +26,10 @@ void insert_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, vo
  * @return Void.
  */
 void insert_sort_partial(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi);
+/**
+ * @brief Sort subarray of array using insertion sort which uses binary search.
+ */
+void insert_sort_bin_partial(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi);
 
 /**
  * @brief Sort array using selection sort
