@@ -466,7 +466,7 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
           TimsortRun* z = (TimsortRun*)stack_peek(runs_stack);
           stack_pop(runs_stack);
 
-          if ((x->len < y->len + z->len) || (y->len < z->len)) {
+          if ((x->len <= y->len + z->len) || (y->len <= z->len)) {
             if (x->len < z->len) {
               // PUSH Z BACK ONTO STACK
               stack_push(runs_stack, z);
@@ -524,35 +524,9 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
   char* temp = NULL;
   size_t i, j, k;
   if (frst_len_adj < scnd_len_adj) {
-    temp = malloc(size * frst_len_adj);
-    memcpy(temp, arr_p+(lo*size), frst_len_adj*size);
-    i = 0, j = scnd->start;
-    for (k = lo; k <= hi; k++) {
-      if (i < frst_len_adj && (j > hi || compare(temp+(i*size), arr_p+(j*size)) < 0)) {
-        memcpy(arr_p+(k*size), temp+(i*size), size);
-        i++;
-      } else {
-        memcpy(arr_p+(k*size), arr_p+(j*size), size);
-        j++;
-      }
-    }
+    timsort_merge_runs_lo(arr, size, compare, lo, frst_len_adj, hi, scnd_len_adj);
   } else {
-    temp = malloc(size * scnd_len_adj);
-    memcpy(temp, arr_p+(scnd->start*size), scnd_len_adj*size);
-    i = scnd_len_adj - 1, j = frst->start + frst->len - 1;
-    for (k = hi + 1; k --> lo;) {
-      if (i >= 0 && (j < lo || compare(temp+(i*size), arr_p+(j*size)) > 0)) {
-        memcpy(arr_p+(k*size), temp+(i*size), size);
-        if (i != 0) {
-          i--;
-        }
-      } else {
-        memcpy(arr_p+(k*size), arr_p+(j*size), size);
-        if (j != 0) {
-          j--;
-        }
-      }
-    }
+    timsort_merge_runs_hi(arr, size, compare, lo, frst_len_adj, hi, scnd_len_adj);
   }
 
   free(temp);
@@ -560,6 +534,49 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
   return frst;
 }
 
+void
+timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len) {
+  char* arr_p = (char*)arr;
+  char* temp = malloc(size * lo_len);
+  memcpy(temp, arr_p+(lo*size), lo_len);
+
+  size_t k, l = 0, r = hi - hi_len + 1;
+  for (k = lo; k <= hi; k++) {
+    if (l < lo_len && (r > hi || compare(temp+(l * size), arr_p+(r * size)) < 0)) {
+      memcpy(arr_p+(k * size), temp+(l * size), size);
+      l++;
+    } else {
+      memcpy(arr_p+(k * size), arr_p+(r * size), size);
+      r++;
+    }
+  }
+
+  free(temp);
+}
+
+void
+timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len) {
+  char* arr_p = (char*)arr;
+  char* temp = malloc(size * hi_len);
+  memcpy(temp, arr_p+((hi - hi_len + 1) * size), hi_len);
+
+  size_t k, l = lo + lo_len - 1, r = hi_len - 1;
+  for (k = hi + 1; k --> lo;) {
+    if (r >= 0 && (l < lo || compare(temp+(r * size), arr_p+(l * size)) > 0)) {
+      memcpy(arr_p+(k * size), temp+(r * size), size);
+      if (r > 0) {
+        r--;
+      }
+    } else {
+      memcpy(arr_p+(k * size), arr_p+(l * size), size);
+      if (l > 0) {
+        l--;
+      }
+    }
+  }
+
+  free(temp);
+}
 
 /**
  * @brief Find minimum run size to use in timsort.

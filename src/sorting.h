@@ -175,6 +175,14 @@ void timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(voi
  * @return TimsortRun representing the merged runs.
  */
 TimsortRun* timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortRun* a, TimsortRun* b);
+/**
+ * @brief Merge runs from left to right.
+ */
+void timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len); 
+/**
+ * @brief Merge runs from right to left.
+ */
+void timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len);
 
 
 /*=== Helpers ===*/
