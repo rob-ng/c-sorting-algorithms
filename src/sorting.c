@@ -388,7 +388,6 @@ timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
 {
   const size_t MIN_NELEMS = 64;
   if (nelems < MIN_NELEMS) {
-    //insert_sort(arr, nelems, size, compare);
     binary_insert_sort(arr, size, compare, 0, nelems - 1);
   } else {
     size_t minrun = timsort_minrun(nelems);
@@ -404,100 +403,50 @@ void
 timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*), size_t minrun)
 {
   char* arr_p = (char*)arr;
-
   // As all runs must be at least minrun long, max runs occurs when every run
   // is exactly minrun elements long.
   const size_t MAX_RUNS = nelems / minrun;
-
   // Array to contain runs. 
   TimsortRun runs[MAX_RUNS];
-
   // Initialize runs.
   size_t run_ind;
   for (run_ind = 0; run_ind <= MAX_RUNS; run_ind++) {
-    TimsortRun run;
-    run.start = 0;
-    run.len = 0;
+    TimsortRun run = { 0, 0 };
     runs[run_ind] = run;
   }
-
   // Create stack for holding completed runs.
   Stack* runs_stack = stack_init();
-
   // The curr_run value is the index of the run in 'runs' array. When a run
   // terminates, this value is incremented and the next run begins.
   size_t i, curr_run = 0;
-  int run_change = 0;
-
+  int check_runs = 0;
   // Iterate through the array and look for runs. Runs occur either when
   // consecutive values are strictly descending (i+1 < i) or non-descending
   // (i+1 >= i). Because one of these relationships must always be true, a run
   // is always occuring. 
-  // While a run is happening, we only increment its end index.
-  // When a run terminates, we must do a few things:
-  // 1. Set 'descending' to either 1 or 0 depending on what the new
-  //    relationship is.
-  // 2. Check end index of the run. If the length of the run is less than the
-  //    minimum run, we extend its len to minrun.
-  //    To ensure that the new run is sorted, with use insert_sort_partial() on
-  //    the new elements.
-  //    We then reassign i to the end index of the run.
-  // 3. Push current completed run onto runs stack.
-  // 4. Increment curr_run and update its start and len values.
   int new_run = 1;
   for (i = 0; i < nelems-1; i++) {
-    // Descending
-    if (compare(arr_p+(i*size), arr_p+((i+1)*size)) > 0) {
-      // If just starting or continuing strict descent.
-      if (new_run || compare(arr_p+((i-1)*size), arr_p+(i*size)) > 0) {
-        if (new_run) {
-          runs[curr_run].start = i;
-        }
-        runs[curr_run].len++;
-        new_run = 0;
-      } else {
-        if (runs[curr_run].len < minrun) {
-          runs[curr_run].len = minrun;
-          if (runs[curr_run].start + runs[curr_run].len - 1 >= nelems) {
-            runs[curr_run].len = nelems - runs[curr_run].start;
-            i = nelems - 1;
-          } else {
-            i = runs[curr_run].start + runs[curr_run].len - 1;
-          }
-          //insert_sort_partial(arr, size, compare, runs[curr_run].start, (runs[curr_run].start + runs[curr_run].len));
-          binary_insert_sort(arr, size, compare, runs[curr_run].start, (runs[curr_run].start + runs[curr_run].len - 1));
-        }
-        stack_push(runs_stack, &runs[curr_run]);
-        curr_run++;
-        if (curr_run > MAX_RUNS) { break; }
-        new_run = 1;
+    if (new_run || (compare(arr_p+(i*size), arr_p+((i+1)*size)) == compare(arr_p+((i-1)*size), arr_p+(i*size)))) {
+      if (new_run) {
+        runs[curr_run].start = i;
       }
+      runs[curr_run].len++;
+      new_run = 0;
+      check_runs = 0;
     } else {
-      // If just starting or continuing non-descent.
-      if (new_run || compare(arr_p+((i-1)*size), arr_p+(i*size)) <= 0) {
-        if (new_run) {
-          runs[curr_run].start = i;
-        }
-        runs[curr_run].len++;
-        new_run = 0;
-      } else {
-        if (runs[curr_run].len < minrun) {
-          reverse_array(arr, runs[curr_run].start, runs[curr_run].start + runs[curr_run].len - 1, size);
-          runs[curr_run].len = minrun;
-          if (runs[curr_run].start + runs[curr_run].len - 1 >= nelems) {
-            runs[curr_run].len = nelems - runs[curr_run].start;
-            i = nelems - 1;
-          } else {
-            i = runs[curr_run].start + runs[curr_run].len - 1;
-          }
-          //insert_sort_partial(arr, size, compare, runs[curr_run].start, (runs[curr_run].start + runs[curr_run].len));
-          binary_insert_sort(arr, size, compare, runs[curr_run].start, (runs[curr_run].start + runs[curr_run].len - 1));
-        }
-        stack_push(runs_stack, &runs[curr_run]);
-        curr_run++;
-        if (curr_run > MAX_RUNS) { break; }
-        new_run = 1;
+      if (compare(arr_p+((i-1)*size), arr_p+(i*size)) < 0) {
+        reverse_array(arr, runs[curr_run].start, runs[curr_run].start + runs[curr_run].len - 1, size);
       }
+      if (runs[curr_run].len < minrun) {
+        runs[curr_run].len = runs[curr_run].start + minrun - 1 >= nelems ? nelems - runs[curr_run].start : minrun;
+        i = runs[curr_run].start + runs[curr_run].len - 1;
+        binary_insert_sort(arr, size, compare, runs[curr_run].start, (runs[curr_run].start + runs[curr_run].len - 1));
+      }
+      stack_push(runs_stack, &runs[curr_run]);
+      curr_run++;
+      if (curr_run > MAX_RUNS) { break; }
+      new_run = 1;
+      check_runs = 1;
     }
 
     // Check if runs_stack contains at least 3 runs.
@@ -506,45 +455,47 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
     // 1. |X| > |Y| + |Z|
     // 2. |Y| > |Z|
     // If either invariant fails to hold, merge Y with smaller of X and Z and
-    // push new merged value onto stack.
-    while (1) {
-      if (runs_stack->len >= 3) {
-        TimsortRun* x = (TimsortRun*)stack_peek(runs_stack);
-        stack_pop(runs_stack);
-        TimsortRun* y = (TimsortRun*)stack_peek(runs_stack);
-        stack_pop(runs_stack);
-        TimsortRun* z = (TimsortRun*)stack_peek(runs_stack);
-        stack_pop(runs_stack);
+    // push new merged value onto stack, maintaing order.
+    if (check_runs) {
+      while (1) {
+        if (runs_stack->len >= 3) {
+          TimsortRun* x = (TimsortRun*)stack_peek(runs_stack);
+          stack_pop(runs_stack);
+          TimsortRun* y = (TimsortRun*)stack_peek(runs_stack);
+          stack_pop(runs_stack);
+          TimsortRun* z = (TimsortRun*)stack_peek(runs_stack);
+          stack_pop(runs_stack);
 
-        if ((x->len < y->len + z->len) || (y->len < z->len)) {
-          TimsortRun* merged_run;
-          if (x->len < z->len) {
-            // PUSH Z BACK ONTO STACK
-            stack_push(runs_stack, z);
-            // MERGE AND PUSH X AND Y
-            merged_run = timsort_merge_runs(arr, size, compare, y, x);
-            stack_push(runs_stack, merged_run);
+          if ((x->len < y->len + z->len) || (y->len < z->len)) {
+            TimsortRun* merged_run;
+            if (x->len < z->len) {
+              // PUSH Z BACK ONTO STACK
+              stack_push(runs_stack, z);
+              // MERGE AND PUSH X AND Y
+              merged_run = timsort_merge_runs(arr, size, compare, y, x);
+              stack_push(runs_stack, merged_run);
+            } else {
+              // MERGE AND PUSH Y AND Z
+              merged_run = timsort_merge_runs(arr, size, compare, z, y);
+              stack_push(runs_stack, merged_run);
+              // PUSH X BACK ONTO STACK
+              stack_push(runs_stack, x);
+            }
           } else {
-            // MERGE AND PUSH Y AND Z
-            merged_run = timsort_merge_runs(arr, size, compare, z, y);
-            stack_push(runs_stack, merged_run);
-            // PUSH X BACK ONTO STACK
+            stack_push(runs_stack, z);
+            stack_push(runs_stack, y);
             stack_push(runs_stack, x);
+            break;
           }
         } else {
-          stack_push(runs_stack, z);
-          stack_push(runs_stack, y);
-          stack_push(runs_stack, x);
           break;
         }
-      } else {
-        break;
       }
     }
   }
 
+  // Merge top 2 arrays until runs_stack contains just the sorted array.
   while (runs_stack->len > 1) {
-    // Merge top 2 arrays until runs_stack contains just the sorted array.
     TimsortRun* second = stack_peek(runs_stack);
     stack_pop(runs_stack);
     TimsortRun* first = stack_peek(runs_stack);
