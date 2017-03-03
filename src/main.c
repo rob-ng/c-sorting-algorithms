@@ -4,7 +4,7 @@
 #include <string.h>
 #include "sorting.h"
 
-#define SIZE 10000
+#define SIZE 100000
 
 int
 compareInts(void* a, void* b)

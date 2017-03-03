@@ -467,17 +467,14 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
           stack_pop(runs_stack);
 
           if ((x->len < y->len + z->len) || (y->len < z->len)) {
-            TimsortRun* merged_run;
             if (x->len < z->len) {
               // PUSH Z BACK ONTO STACK
               stack_push(runs_stack, z);
               // MERGE AND PUSH X AND Y
-              merged_run = timsort_merge_runs(arr, size, compare, y, x);
-              stack_push(runs_stack, merged_run);
+              stack_push(runs_stack, timsort_merge_runs(arr, size, compare, y, x));
             } else {
               // MERGE AND PUSH Y AND Z
-              merged_run = timsort_merge_runs(arr, size, compare, z, y);
-              stack_push(runs_stack, merged_run);
+              stack_push(runs_stack, timsort_merge_runs(arr, size, compare, z, y));
               // PUSH X BACK ONTO STACK
               stack_push(runs_stack, x);
             }
@@ -500,8 +497,7 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
     stack_pop(runs_stack);
     TimsortRun* first = stack_peek(runs_stack);
     stack_pop(runs_stack);
-    TimsortRun* merged_run = timsort_merge_runs(arr, size, compare, first, second);
-    stack_push(runs_stack, merged_run);
+    stack_push(runs_stack, timsort_merge_runs(arr, size, compare, first, second));
   }
 
   stack_free(runs_stack);
