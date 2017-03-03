@@ -204,7 +204,7 @@ void reverse_array(void* arr, size_t start, size_t end, size_t size);
  *
  * @return If found, returns index of element within array. If not, returns -1.
  */
-int bin_search(void* arr, size_t lo, size_t hi, size_t size, void* target, int (*compare)(void*, void*));
+int bin_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target);
 
 
 #endif /* MY_SORTING_ALGORITHMS_ */

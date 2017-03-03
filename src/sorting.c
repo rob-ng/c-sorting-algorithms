@@ -475,11 +475,11 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
             // PUSH Z BACK ONTO STACK
             stack_push(runs_stack, z);
             // MERGE AND PUSH X AND Y
-            merged_run = timsort_merge_runs(arr, size, compare, x, y);
+            merged_run = timsort_merge_runs(arr, size, compare, y, x);
             stack_push(runs_stack, merged_run);
           } else {
             // MERGE AND PUSH Y AND Z
-            merged_run = timsort_merge_runs(arr, size, compare, y, z);
+            merged_run = timsort_merge_runs(arr, size, compare, z, y);
             stack_push(runs_stack, merged_run);
             // PUSH X BACK ONTO STACK
             stack_push(runs_stack, x);
@@ -498,11 +498,11 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
 
   while (runs_stack->len > 1) {
     // Merge top 2 arrays until runs_stack contains just the sorted array.
-    TimsortRun* a = stack_peek(runs_stack);
+    TimsortRun* second = stack_peek(runs_stack);
     stack_pop(runs_stack);
-    TimsortRun* b = stack_peek(runs_stack);
+    TimsortRun* first = stack_peek(runs_stack);
     stack_pop(runs_stack);
-    TimsortRun* merged_run = timsort_merge_runs(arr, size, compare, a, b);
+    TimsortRun* merged_run = timsort_merge_runs(arr, size, compare, first, second);
     stack_push(runs_stack, merged_run);
   }
 
@@ -513,9 +513,60 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
  * @brief Merge 2 consecutive runs.
  */
 TimsortRun*
-timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortRun* a, TimsortRun* b)
+timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortRun* frst, TimsortRun* scnd)
 {
   char* arr_p = (char*)arr;
+  if (frst->start > scnd->start) { 
+    swap(frst, scnd, sizeof(TimsortRun)); 
+  }
+
+  int lo = bin_search(arr, size, compare, frst->start, frst->start + frst->len - 1, arr_p+(scnd->start*size));
+  int hi = bin_search(arr, size, compare, scnd->start, scnd->start + scnd->len - 1, arr_p+((frst->start + frst->len - 1)*size));
+  lo = lo >= 0 ? lo : frst->start;
+  hi = hi >= 0 ? hi : scnd->start + scnd->len - 1;
+  size_t frst_len_adj = frst->len - (lo - frst->start);
+  size_t scnd_len_adj = hi - scnd->start + 1;
+
+  char* temp = NULL;
+  size_t i, j, k;
+  if (frst_len_adj < scnd_len_adj) {
+    temp = malloc(size * frst_len_adj);
+    memcpy(temp, arr_p+(lo*size), frst_len_adj*size);
+    i = 0, j = scnd->start;
+    for (k = lo; k <= hi; k++) {
+      if (i < frst_len_adj && (j > hi || compare(temp+(i*size), arr_p+(j*size)) < 0)) {
+        memcpy(arr_p+(k*size), temp+(i*size), size);
+        i++;
+      } else {
+        memcpy(arr_p+(k*size), arr_p+(j*size), size);
+        j++;
+      }
+    }
+  } else {
+    temp = malloc(size * scnd_len_adj);
+    memcpy(temp, arr_p+(scnd->start*size), scnd_len_adj*size);
+    i = scnd_len_adj - 1, j = frst->start + frst->len - 1;
+    for (k = hi + 1; k --> lo;) {
+      if (i >= 0 && (j < lo || compare(temp+(i*size), arr_p+(j*size)) > 0)) {
+        memcpy(arr_p+(k*size), temp+(i*size), size);
+        if (i != 0) { 
+          i--; 
+        }
+      } else {
+        memcpy(arr_p+(k*size), arr_p+(j*size), size);
+        if (j != 0) {
+          j--;
+        }
+      }
+    }
+  }
+
+  free(temp);
+  frst->len = frst->len + scnd->len;
+  return frst;
+   
+/*
+
   TimsortRun* sml;
   TimsortRun* lrg;
   if (a->len < b->len) {
@@ -527,9 +578,38 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
   }
   size_t sml_end = sml->start + sml->len - 1;
   size_t lrg_end = lrg->start + lrg->len - 1;
-  void* temp_p = malloc(size * (sml->len));
-  memcpy(temp_p, arr_p + (size*(sml->start)), size * (sml->len));
-  char* temp = (char*)temp_p;
+  size_t sml_adj_len, lrg_adj_len;
+
+  int lo, hi;
+  if (sml->start < lrg->start) {
+    // Location of first element of lrg in sml
+    lo = bin_search(arr, sml->start, sml_end, size, arr_p+(lrg->start*size), compare);
+    // Location of last element of sml in lrg
+    hi = bin_search(arr, lrg->start, lrg_end, size, arr_p+(sml_end*size), compare);
+    if (lo == -1) { lo = sml->start; }
+    if (hi == -1) { hi = lrg_end; }
+    sml_adj_len = sml->len - (lo - sml->start);
+    lrg_adj_len = lrg->len - (hi - lrg->start);
+  } else {
+    // Location of first element of sml in lrg
+    lo = bin_search(arr, lrg->start, lrg_end, size, arr_p+(sml->start*size), compare);
+    // Location of last element of lrg in sml
+    hi = bin_search(arr, sml->start, sml_end, size, arr_p+(lrg_end*size), compare);
+    if (lo == -1) { lo = lrg->start; }
+    if (hi == -1) { hi = sml_end; }
+    sml_adj_len = sml->len - (hi - sml->start);
+    lrg_adj_len = lrg->len - (lo - lrg->start);
+  }
+
+  //void* temp_p = malloc(size * (sml->len));
+  //memcpy(temp_p, arr_p + (size*(sml->start)), size * (sml->len));
+  //char* temp = (char*)temp_p;
+  char* temp = malloc(size * sml_adj_len);
+  if (sml->start < lrg->start) {
+    memcpy(temp, arr_p + (size *  lo), size * sml_adj_len);
+  } else {
+    memcpy(temp, arr_p + (size *  hi), size * sml_adj_len);
+  }
 
   size_t i, j, k;
   if (sml->start < lrg->start) {
@@ -543,7 +623,32 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
         j++;
       }
     }
+
+    i = 0, j = lrg->start;
+    for (k = lo; k < hi; k++) {
+      if (i < sml_adj_len && (j > hi || compare(temp+(i*size), arr_p+(j*size)) < 0)) {
+        memcpy(arr_p+(k*size), temp+(i*size), size);
+        i++;
+      } else {
+        memcpy(arr_p+(k*size), arr_p+(j*size), size);
+        j++;
+      }
+    }
   } else {
+    i = hi, j = lrg_end;
+    for (k = hi; k --> lo;) {
+      if (i >= 0 && (j < lo || compare(temp+(i*size), arr_p+(j*size)) > 0)) {
+        memcpy(arr_p+(k*size), temp+(i*size), size);
+        if (i != 0) { 
+          i--; 
+        }
+      } else {
+        memcpy(arr_p+(k*size), arr_p+(j*size), size);
+        if (j != 0) {
+          j--;
+        }
+      }
+    }
     i = sml->len-1, j = lrg_end;
     for (k = sml_end + 1; k --> lrg->start;) {
       if (i >= 0 && (j < lrg->start || compare(temp+(i*size), arr_p+(j*size)) > 0)) {
@@ -565,6 +670,7 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
   lrg->len = sml->len + lrg->len;
   return lrg;
  
+  */
 }
 
 
@@ -679,12 +785,14 @@ reverse_array(void* arr, size_t start, size_t end, size_t size)
  * @brief Find index of value within an array using binary search.
  */
 int
-bin_search(void* arr, size_t lo, size_t hi, size_t size, void* target, int (*compare)(void*, void*))
+bin_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target)
 {
   char* arr_p = (char*)arr;
-  size_t m, l = lo, r = hi;
+  int m, l = lo, r = hi;
   while (1) {
-    if (l > r) {
+    if (l < r) {
+      return -1;
+    } else if (l < 0 || r < 0) {
       return -1;
     } else {
       m = floor((l + r)/2);
