@@ -42,7 +42,7 @@ main(int argc, char* argv[])
   }*/
   start = clock();
   //insert_sort_bin_partial(arr, sizeof(char), compareChars, 0, (sizeof(arr)/sizeof(char)) - 1);
-  //quick_sort(arr, sizeof(arr)/sizeof(char), sizeof(char), compareChars);
+  // quick_sort(arr, sizeof(arr)/sizeof(char), sizeof(char), compareChars);
   timsort(arr, sizeof(arr)/sizeof(char), sizeof(char), compareChars);
   //timsort(arr, sizeof(arr)/sizeof(int), sizeof(int), compareInts);
   end = clock();

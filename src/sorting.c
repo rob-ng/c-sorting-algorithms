@@ -424,7 +424,6 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
   // The curr_run value is the index of the run in 'runs' array. When a run
   // terminates, this value is incremented and the next run begins.
   size_t i, curr_run = 0;
-  int check_runs = 0;
   // Iterate through the array and look for runs. Runs occur either when
   // consecutive values are strictly descending (i+1 < i) or non-descending
   // (i+1 >= i). Because one of these relationships must always be true, a run
@@ -437,7 +436,6 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
       }
       runs[curr_run].len++;
       new_run = 0;
-      check_runs = 0;
     } else {
       if (compare(arr_p+((i-1)*size), arr_p+(i*size)) < 0) {
         reverse_array(arr, runs[curr_run].start, runs[curr_run].start + runs[curr_run].len - 1, size);
@@ -451,9 +449,7 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
       curr_run++;
       if (curr_run > MAX_RUNS) { break; }
       new_run = 1;
-      check_runs = 1;
     }
-
     // Check if runs_stack contains at least 3 runs.
     // If it does, check that for top 3 runs X, Y, and Z, the following
     // invariants hold:
@@ -461,7 +457,7 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
     // 2. |Y| > |Z|
     // If either invariant fails to hold, merge Y with smaller of X and Z and
     // push new merged value onto stack, maintaing order.
-    if (check_runs) {
+    if (new_run) {
       while (1) {
         if (runs_stack->len >= 3) {
           TimsortRun* x = (TimsortRun*)stack_peek(runs_stack);
@@ -556,21 +552,11 @@ timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size
   int base_pow = 1, target_ind = -1;
   for (k = lo; k <= hi; k++) {
     if (l < lo_len && (r > hi || compare(temp+(l * size), arr_p+(r * size)) < 0)) {
-      if (r > hi) {
-        memcpy(arr_p+(k * size), temp+(l * size), (lo_len - l) * size);
-        break;
-      } else {
-        memcpy(arr_p+(k * size), temp+(l * size), size);
-        l++;
-      }
+      memcpy(arr_p+(k * size), temp+(l * size), size);
+      l++;
     } else {
-      if (l >= lo_len) {
-        memcpy(arr_p+(k * size), arr_p+(r*size), (hi - r + 1) * size);
-        break;
-      } else {
-        memcpy(arr_p+(k * size), arr_p+(r * size), size);
-        r++;
-      }
+      memcpy(arr_p+(k * size), arr_p+(r * size), size);
+      r++;
     }
   }
 
@@ -593,24 +579,14 @@ timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size
   size_t k, l = lo + lo_len - 1, r = hi_len - 1;
   for (k = hi + 1; k --> lo;) {
     if (r >= 0 && (l < lo || compare(temp+(r * size), arr_p+(l * size)) > 0)) {
-      if (l < lo) {
-        memcpy(arr_p+(k*size), temp+(0 * size), (r + 1) * size);
-        break;
-      } else {
-        memcpy(arr_p+(k * size), temp+(r * size), size);
-        if (r > 0) {
-          r--;
-        }
+      memcpy(arr_p+(k * size), temp+(r * size), size);
+      if (r > 0) {
+        r--;
       }
     } else {
-      if (r < 0) {
-        memcpy(arr_p+(k * size), arr_p+(lo * size), (l - lo + 1) * size);
-        break;
-      } else {
-        memcpy(arr_p+(k * size), arr_p+(l * size), size);
-        if (l > 0) {
-          l--;
-        }
+      memcpy(arr_p+(k * size), arr_p+(l * size), size);
+      if (l > 0) {
+        l--;
       }
     }
   }
