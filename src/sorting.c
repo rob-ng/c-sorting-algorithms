@@ -13,6 +13,11 @@
 #define LENGTH_THRESHOLD 7
 
 /**
+ * @brief Default length at which gallop mode should begin in Timsort.
+ */
+#define MIN_GALLOP 7
+
+/**
  * @brief Sort array of arbitrary values using insertion sort.
  *
  * @param arr Array to be sorted.
@@ -534,28 +539,53 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
   return frst;
 }
 
+/**
+ * @brief Merge subarrays from left to right.
+ *
+ * Once one of the arrays has been fully merged, the remaining elements of the
+ * other are merged in bulk.
+ */
 void
-timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len) {
+timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len) 
+{
   char* arr_p = (char*)arr;
   char* temp = malloc(size * lo_len);
   memcpy(temp, arr_p+(lo*size), lo_len);
 
   size_t k, l = 0, r = hi - hi_len + 1;
+  int base_pow = 1, target_ind = -1;
   for (k = lo; k <= hi; k++) {
     if (l < lo_len && (r > hi || compare(temp+(l * size), arr_p+(r * size)) < 0)) {
-      memcpy(arr_p+(k * size), temp+(l * size), size);
-      l++;
+      if (r > hi) {
+        memcpy(arr_p+(k * size), temp+(l * size), (lo_len - l) * size);
+        break;
+      } else {
+        memcpy(arr_p+(k * size), temp+(l * size), size);
+        l++;
+      }
     } else {
-      memcpy(arr_p+(k * size), arr_p+(r * size), size);
-      r++;
+      if (l >= lo_len) {
+        memcpy(arr_p+(k * size), arr_p+(r*size), (hi - r + 1) * size);
+        break;
+      } else {
+        memcpy(arr_p+(k * size), arr_p+(r * size), size);
+        r++;
+      }
     }
   }
 
   free(temp);
 }
 
+/**
+ * @brief Merge subarrays from right to left.
+ *
+ * Once one of the arrays has been fully merged, the remaining elements of the
+ * other are merged in bulk.
+ */
 void
-timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len) {
+timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len) 
+{
   char* arr_p = (char*)arr;
   char* temp = malloc(size * hi_len);
   memcpy(temp, arr_p+((hi - hi_len + 1) * size), hi_len);
@@ -563,14 +593,24 @@ timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size
   size_t k, l = lo + lo_len - 1, r = hi_len - 1;
   for (k = hi + 1; k --> lo;) {
     if (r >= 0 && (l < lo || compare(temp+(r * size), arr_p+(l * size)) > 0)) {
-      memcpy(arr_p+(k * size), temp+(r * size), size);
-      if (r > 0) {
-        r--;
+      if (l < lo) {
+        memcpy(arr_p+(k*size), temp+(0 * size), (r + 1) * size);
+        break;
+      } else {
+        memcpy(arr_p+(k * size), temp+(r * size), size);
+        if (r > 0) {
+          r--;
+        }
       }
     } else {
-      memcpy(arr_p+(k * size), arr_p+(l * size), size);
-      if (l > 0) {
-        l--;
+      if (r < 0) {
+        memcpy(arr_p+(k * size), arr_p+(lo * size), (l - lo + 1) * size);
+        break;
+      } else {
+        memcpy(arr_p+(k * size), arr_p+(l * size), size);
+        if (l > 0) {
+          l--;
+        }
       }
     }
   }

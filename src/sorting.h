@@ -145,6 +145,12 @@ typedef struct TimsortRun {
   size_t len;
 } TimsortRun;
 /**
+ * @brief Struct to preserve merge state between merges.
+ */
+typedef struct TimsortMergeState {
+  int min_gallop;
+} TimsortMergeState;
+/**
  * @brief Sort array using Timsort.
  */
 void timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*));
