@@ -32,7 +32,7 @@ StackFrame* stack_frame_init(void* data);
  * @param frame Frame to free.
  * @return Void.
  */
-void stack_frame_free(StackFrame* frame);
+void stack_frame_free(StackFrame** frame);
 
 /**
  * @brief Initialize new stack.
@@ -59,16 +59,23 @@ void* stack_peek(Stack* stack);
 /**
  * @brief Remove topmost value from stack.
  *
- * @param stack The target stack.
+ * @param stack Target stack.
  * @return Returns 0 if unable to pop else 1.
  */
 int stack_pop(Stack* stack);
+/**
+ * @brief Remove topmost value from stack and return its value.
+ *
+ * @param stack Target stack.
+ * @return Previous value at top of stack.
+ */
+void* stack_pop_return(Stack* stack);
 /**
  * @brief Free stack.
  *
  * @param stack The stack to free.
  * @return Void.
  */
-void stack_free(Stack* stack);
+void stack_free(Stack** stack);
 
 #endif /* MY_STACK_ */

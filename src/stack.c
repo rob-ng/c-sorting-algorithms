@@ -22,9 +22,10 @@ stack_frame_init(void* data)
  * @return Void.
  */
 void
-stack_frame_free(StackFrame* frame)
+stack_frame_free(StackFrame** frame)
 {
-  free(frame);
+  free(*frame);
+  *frame = NULL;
 }
 
 /**
@@ -73,7 +74,7 @@ stack_peek(Stack* stack)
 /**
  * @brief Remove topmost value from stack.
  *
- * @param stack The target stack.
+ * @param stack Target stack.
  * @return Returns 0 if unable to pop else 1.
  */
 int
@@ -83,11 +84,30 @@ stack_pop(Stack* stack)
     return 0;
   } else {
     StackFrame* old_head = stack->head;
-    void* old_data = &(old_head->data);
     stack->head = stack->head->next;
-    stack_frame_free(old_head);
+    stack_frame_free(&old_head);
     stack->len--;
     return 1;
+  }
+}
+/**
+ * @brief Remove topmost value from stack and return it.
+ *
+ * @param stack Target stack.
+ * @return Previous top of stack.
+ */
+void*
+stack_pop_return(Stack* stack)
+{
+  if (stack->len == 0) {
+    return NULL;
+  } else {
+    StackFrame* old_head = stack->head;
+    void* old_data = stack_peek(stack);
+    stack->head = stack->head->next;
+    stack_frame_free(&old_head);
+    stack->len--;
+    return old_data;
   }
 }
 /**
@@ -97,11 +117,12 @@ stack_pop(Stack* stack)
  * @return Void.
  */
 void
-stack_free(Stack* stack)
+stack_free(Stack** stack)
 {
-  while (stack_pop(stack) != 0) {
+  while (stack_pop(*stack) != 0) {
     continue;
   }
-  free(stack);
+  free(*stack);
+  *stack = NULL;
 }
 

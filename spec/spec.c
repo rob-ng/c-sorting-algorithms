@@ -44,14 +44,25 @@ static char* test_stack_pop_nonempty_stack() {
   return 0;
 }
 
+static char* test_stack_pop_return_nonempty_stack() {
+  Stack* stack = stack_init();
+  int a = 3;
+  int b = 4;
+  stack_push(stack, &a);
+  stack_push(stack, &b);
+  mu_assert("stack_pop_return: should update head and return 1", stack_pop_return(stack) == &b && stack->head->data == &a);
+  return 0;
+}
+
+
 static char* test_stack_free() {
   Stack* stack = stack_init();
   int a = 3;
   int b = 4;
   stack_push(stack, &a);
   stack_push(stack, &b);
-  stack_free(stack);
-  mu_assert("stack_free: should have len 0 and head should be NULL", stack->head == NULL && stack->len == 0);
+  stack_free(&stack);
+  mu_assert("stack_free: stack pointer should be NULL", stack == NULL);
   return 0;
 }
 
@@ -61,6 +72,7 @@ static char* all_tests() {
   mu_run_test(test_stack_push_nonempty_stack);
   mu_run_test(test_stack_pop_empty_stack);
   mu_run_test(test_stack_pop_nonempty_stack);
+  mu_run_test(test_stack_pop_return_nonempty_stack);
   mu_run_test(test_stack_free);
   return 0;
 }

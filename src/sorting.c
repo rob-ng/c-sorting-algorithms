@@ -460,12 +460,9 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
     if (new_run) {
       while (1) {
         if (runs_stack->len >= 3) {
-          TimsortRun* x = (TimsortRun*)stack_peek(runs_stack);
-          stack_pop(runs_stack);
-          TimsortRun* y = (TimsortRun*)stack_peek(runs_stack);
-          stack_pop(runs_stack);
-          TimsortRun* z = (TimsortRun*)stack_peek(runs_stack);
-          stack_pop(runs_stack);
+          TimsortRun* x = (TimsortRun*)stack_pop_return(runs_stack);
+          TimsortRun* y = (TimsortRun*)stack_pop_return(runs_stack);
+          TimsortRun* z = (TimsortRun*)stack_pop_return(runs_stack);
 
           if ((x->len <= y->len + z->len) || (y->len <= z->len)) {
             if (x->len < z->len) {
@@ -494,14 +491,12 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
 
   // Merge top 2 arrays until runs_stack contains just the sorted array.
   while (runs_stack->len > 1) {
-    TimsortRun* second = stack_peek(runs_stack);
-    stack_pop(runs_stack);
-    TimsortRun* first = stack_peek(runs_stack);
-    stack_pop(runs_stack);
+    TimsortRun* second = (TimsortRun*)stack_pop_return(runs_stack);
+    TimsortRun* first = (TimsortRun*)stack_pop_return(runs_stack);
     stack_push(runs_stack, timsort_merge_runs(arr, size, compare, first, second));
   }
 
-  stack_free(runs_stack);
+  stack_free(&runs_stack);
 }
 
 /**
