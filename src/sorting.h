@@ -165,7 +165,7 @@ void timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*)
  * @param nelems Number of elements in the array.
  * @return Size of minimum run.
  */
-size_t timsort_minrun(size_t nelems);
+static size_t timsort_minrun(size_t nelems);
 /**
  * @brief Helper (timesort): Find runs within array and merge them.
  *
@@ -174,21 +174,21 @@ size_t timsort_minrun(size_t nelems);
  * A run consists of at least 2 elements that are either non-descending or
  * strictly descending.
  */
-void timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*), size_t minrun);
+static void timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*), size_t minrun);
 /**
  * @brief Merge two runs together and return result.
  *
  * @return TimsortRun representing the merged runs.
  */
-TimsortRun* timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortRun* a, TimsortRun* b);
+static TimsortRun* timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortRun* a, TimsortRun* b);
 /**
  * @brief Merge runs from left to right.
  */
-void timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len); 
+static void timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len); 
 /**
  * @brief Merge runs from right to left.
  */
-void timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len);
+static void timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len);
 
 
 /*=== Helpers ===*/
@@ -216,7 +216,7 @@ size_t median_three(void* arr, size_t size, size_t a, size_t b, size_t c, int (*
 /**
  * @brief Reverse given array.
  */
-void reverse_array(void* arr, size_t start, size_t end, size_t size);
+static void reverse_array(void* arr, size_t start, size_t end, size_t size);
 /**
  * @brief Use binary search to find index of value within subarray of an array.
  *
@@ -228,7 +228,7 @@ void reverse_array(void* arr, size_t start, size_t end, size_t size);
  * @param target Item to search for in subarray.
  * @return Index of item if found, else -1.
  */
-int bin_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target);
+static int bin_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target);
 
 
 #endif /* MY_SORTING_ALGORITHMS_ */
