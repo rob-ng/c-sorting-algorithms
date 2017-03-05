@@ -76,7 +76,7 @@ binary_insert_sort(void* arr, size_t size, int (*compare)(void*, void*), size_t 
 {
   char* arr_p = (char*)arr;
   int i, j, l, r, m, loc;
-  void *slctd = malloc(size);
+  void* slctd = malloc(size);
 
   for (i = lo + 1; i <= hi; i++) {
     j = i - 1;
@@ -450,6 +450,7 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
       if (curr_run > MAX_RUNS) { break; }
       new_run = 1;
     }
+    
     // Check if runs_stack contains at least 3 runs.
     // If it does, check that for top 3 runs X, Y, and Z, the following
     // invariants hold:
@@ -495,7 +496,6 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
     TimsortRun* first = (TimsortRun*)stack_pop_return(runs_stack);
     stack_push(runs_stack, timsort_merge_runs(arr, size, compare, first, second));
   }
-
   stack_free(&runs_stack);
 }
 
@@ -517,7 +517,6 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
   size_t frst_len_adj = frst->len - (lo - frst->start);
   size_t scnd_len_adj = hi - scnd->start + 1;
 
-  char* temp = NULL;
   size_t i, j, k;
   if (frst_len_adj < scnd_len_adj) {
     timsort_merge_runs_lo(arr, size, compare, lo, frst_len_adj, hi, scnd_len_adj);
@@ -525,7 +524,6 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
     timsort_merge_runs_hi(arr, size, compare, lo, frst_len_adj, hi, scnd_len_adj);
   }
 
-  free(temp);
   frst->len = frst->len + scnd->len;
   return frst;
 }
@@ -541,7 +539,7 @@ timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size
 {
   char* arr_p = (char*)arr;
   char* temp = malloc(size * lo_len);
-  memcpy(temp, arr_p+(lo*size), lo_len);
+  memcpy(temp, arr_p+(lo*size), lo_len * size);
 
   size_t k, l = 0, r = hi - hi_len + 1;
   int base_pow = 1, target_ind = -1;
@@ -569,7 +567,7 @@ timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size
 {
   char* arr_p = (char*)arr;
   char* temp = malloc(size * hi_len);
-  memcpy(temp, arr_p+((hi - hi_len + 1) * size), hi_len);
+  memcpy(temp, arr_p+((hi - hi_len + 1) * size), hi_len * size);
 
   size_t k, l = lo + lo_len - 1, r = hi_len - 1;
   for (k = hi + 1; k --> lo;) {
