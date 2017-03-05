@@ -1,6 +1,7 @@
 #ifndef MY_SORTING_ALGORITHMS_
 #define MY_SORTING_ALGORITHMS_
 #include <stdlib.h>
+#include "stack.h"
 
 /*=== Simple Sorts ===*/
 
@@ -148,6 +149,7 @@ typedef struct TimsortRun {
  * @brief Struct to preserve merge state between merges.
  */
 typedef struct TimsortMergeState {
+  Stack* runs_stack;
   int min_gallop;
 } TimsortMergeState;
 /**
@@ -174,7 +176,7 @@ static size_t timsort_minrun(size_t nelems);
  * A run consists of at least 2 elements that are either non-descending or
  * strictly descending.
  */
-static void timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*), size_t minrun);
+static void timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*), size_t minrun, TimsortMergeState* merge_state);
 /**
  * @brief Merge two runs together and return result.
  *
@@ -189,6 +191,14 @@ static void timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, 
  * @brief Merge runs from right to left.
  */
 static void timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len);
+/**
+ * @brief Check if run invariants hold and correct them if not.
+ */
+static void timsort_check_invariants(void* arr, size_t size, int (*compare)(void*, void*), TimsortMergeState* merge_state);
+/**
+ * @brief Merge runs into single run.
+ */
+static void timsort_collapse_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortMergeState* merge_state);
 
 
 /*=== Helpers ===*/

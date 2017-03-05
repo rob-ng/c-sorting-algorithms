@@ -396,7 +396,10 @@ timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
     binary_insert_sort(arr, size, compare, 0, nelems - 1);
   } else {
     size_t minrun = timsort_minrun(nelems);
-    timsort_find_runs(arr, nelems, size, compare, minrun);
+    TimsortMergeState merge_state = { stack_init(), MIN_GALLOP };
+    timsort_find_runs(arr, nelems, size, compare, minrun, &merge_state);
+    timsort_collapse_runs(arr, size, compare, &merge_state);
+    stack_free(&merge_state.runs_stack);
   }
 }
 /**
@@ -405,7 +408,7 @@ timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
  * BE VERY VERY VERY CAREFUL ABOUT BOUNDS FOR RUNS!!!!!!!!!!!!!!!
  */
 void
-timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*), size_t minrun)
+timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*), size_t minrun, TimsortMergeState* merge_state)
 {
   char* arr_p = (char*)arr;
   // As all runs must be at least minrun long, max runs occurs when every run
@@ -419,8 +422,6 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
     TimsortRun run = { 0, 0 };
     runs[run_ind] = run;
   }
-  // Create stack for holding completed runs.
-  Stack* runs_stack = stack_init();
   // The curr_run value is the index of the run in 'runs' array. When a run
   // terminates, this value is incremented and the next run begins.
   size_t i, curr_run = 0;
@@ -445,58 +446,74 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
         i = runs[curr_run].start + runs[curr_run].len - 1;
         binary_insert_sort(arr, size, compare, runs[curr_run].start, (runs[curr_run].start + runs[curr_run].len - 1));
       }
-      stack_push(runs_stack, &runs[curr_run]);
+      stack_push(merge_state->runs_stack, &runs[curr_run]);
       curr_run++;
       if (curr_run > MAX_RUNS) { break; }
       new_run = 1;
     }
     
-    // Check if runs_stack contains at least 3 runs.
-    // If it does, check that for top 3 runs X, Y, and Z, the following
-    // invariants hold:
-    // 1. |X| > |Y| + |Z|
-    // 2. |Y| > |Z|
-    // If either invariant fails to hold, merge Y with smaller of X and Z and
-    // push new merged value onto stack, maintaing order.
     if (new_run) {
-      while (1) {
-        if (runs_stack->len >= 3) {
-          TimsortRun* x = (TimsortRun*)stack_pop_return(runs_stack);
-          TimsortRun* y = (TimsortRun*)stack_pop_return(runs_stack);
-          TimsortRun* z = (TimsortRun*)stack_pop_return(runs_stack);
+      timsort_check_invariants(arr, size, compare, merge_state);
+    }
+  }
+}
 
-          if ((x->len <= y->len + z->len) || (y->len <= z->len)) {
-            if (x->len < z->len) {
-              // PUSH Z BACK ONTO STACK
-              stack_push(runs_stack, z);
-              // MERGE AND PUSH X AND Y
-              stack_push(runs_stack, timsort_merge_runs(arr, size, compare, y, x));
-            } else {
-              // MERGE AND PUSH Y AND Z
-              stack_push(runs_stack, timsort_merge_runs(arr, size, compare, z, y));
-              // PUSH X BACK ONTO STACK
-              stack_push(runs_stack, x);
-            }
-          } else {
-            stack_push(runs_stack, z);
-            stack_push(runs_stack, y);
-            stack_push(runs_stack, x);
-            break;
-          }
+/**
+ * @brief Check that run invariants hold and fix them if they do not.
+ * 
+ * Check if runs_stack contains at least 3 runs.
+ * If it does, check that for top 3 runs X, Y, and Z, the following
+ * invariants hold:
+ * 1. |X| > |Y| + |Z|
+ * 2. |Y| > |Z|
+ * If either invariant fails to hold, merge Y with smaller of X and Z and
+ * push new merged value onto stack, maintaing order.
+ */
+void
+timsort_check_invariants(void* arr, size_t size, int (*compare)(void*, void*), TimsortMergeState* merge_state)
+{
+  while (1) {
+    if (merge_state->runs_stack->len >= 3) {
+      TimsortRun* x = (TimsortRun*)stack_pop_return(merge_state->runs_stack);
+      TimsortRun* y = (TimsortRun*)stack_pop_return(merge_state->runs_stack);
+      TimsortRun* z = (TimsortRun*)stack_pop_return(merge_state->runs_stack);
+
+      if ((x->len <= y->len + z->len) || (y->len <= z->len)) {
+        if (x->len < z->len) {
+          // PUSH Z BACK ONTO STACK
+          stack_push(merge_state->runs_stack, z);
+          // MERGE AND PUSH X AND Y
+          stack_push(merge_state->runs_stack, timsort_merge_runs(arr, size, compare, y, x));
         } else {
-          break;
+          // MERGE AND PUSH Y AND Z
+          stack_push(merge_state->runs_stack, timsort_merge_runs(arr, size, compare, z, y));
+          // PUSH X BACK ONTO STACK
+          stack_push(merge_state->runs_stack, x);
         }
+      } else {
+        stack_push(merge_state->runs_stack, z);
+        stack_push(merge_state->runs_stack, y);
+        stack_push(merge_state->runs_stack, x);
+        return;
       }
+    } else {
+      return;
     }
   }
 
-  // Merge top 2 arrays until runs_stack contains just the sorted array.
-  while (runs_stack->len > 1) {
-    TimsortRun* second = (TimsortRun*)stack_pop_return(runs_stack);
-    TimsortRun* first = (TimsortRun*)stack_pop_return(runs_stack);
-    stack_push(runs_stack, timsort_merge_runs(arr, size, compare, first, second));
+}
+
+/**
+ * @brief Merge top two runs in run stack until only one run remains.
+ */
+void
+timsort_collapse_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortMergeState* merge_state)
+{
+  while (merge_state->runs_stack->len > 1) {
+    TimsortRun* second = (TimsortRun*)stack_pop_return(merge_state->runs_stack);
+    TimsortRun* first = (TimsortRun*)stack_pop_return(merge_state->runs_stack);
+    stack_push(merge_state->runs_stack, timsort_merge_runs(arr, size, compare, first, second));
   }
-  stack_free(&runs_stack);
 }
 
 /**
@@ -542,7 +559,6 @@ timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size
   memcpy(temp, arr_p+(lo*size), lo_len * size);
 
   size_t k, l = 0, r = hi - hi_len + 1;
-  int base_pow = 1, target_ind = -1;
   for (k = lo; k <= hi; k++) {
     if (l < lo_len && (r > hi || compare(temp+(l * size), arr_p+(r * size)) < 0)) {
       memcpy(arr_p+(k * size), temp+(l * size), size);
