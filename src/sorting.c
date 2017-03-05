@@ -483,10 +483,10 @@ timsort_check_invariants(void* arr, size_t size, int (*compare)(void*, void*), T
           // PUSH Z BACK ONTO STACK
           stack_push(merge_state->runs_stack, z);
           // MERGE AND PUSH X AND Y
-          stack_push(merge_state->runs_stack, timsort_merge_runs(arr, size, compare, y, x));
+          stack_push(merge_state->runs_stack, timsort_merge_runs(arr, size, compare, y, x, merge_state));
         } else {
           // MERGE AND PUSH Y AND Z
-          stack_push(merge_state->runs_stack, timsort_merge_runs(arr, size, compare, z, y));
+          stack_push(merge_state->runs_stack, timsort_merge_runs(arr, size, compare, z, y, merge_state));
           // PUSH X BACK ONTO STACK
           stack_push(merge_state->runs_stack, x);
         }
@@ -512,7 +512,7 @@ timsort_collapse_runs(void* arr, size_t size, int (*compare)(void*, void*), Tims
   while (merge_state->runs_stack->len > 1) {
     TimsortRun* second = (TimsortRun*)stack_pop_return(merge_state->runs_stack);
     TimsortRun* first = (TimsortRun*)stack_pop_return(merge_state->runs_stack);
-    stack_push(merge_state->runs_stack, timsort_merge_runs(arr, size, compare, first, second));
+    stack_push(merge_state->runs_stack, timsort_merge_runs(arr, size, compare, first, second, merge_state));
   }
 }
 
@@ -520,7 +520,7 @@ timsort_collapse_runs(void* arr, size_t size, int (*compare)(void*, void*), Tims
  * @brief Merge 2 consecutive runs.
  */
 TimsortRun*
-timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortRun* frst, TimsortRun* scnd)
+timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortRun* frst, TimsortRun* scnd, TimsortMergeState* merge_state)
 {
   char* arr_p = (char*)arr;
   if (frst->start > scnd->start) { 
@@ -536,9 +536,9 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
 
   size_t i, j, k;
   if (frst_len_adj < scnd_len_adj) {
-    timsort_merge_runs_lo(arr, size, compare, lo, frst_len_adj, hi, scnd_len_adj);
+    timsort_merge_runs_lo(arr, size, compare, lo, frst_len_adj, hi, scnd_len_adj, merge_state);
   } else {
-    timsort_merge_runs_hi(arr, size, compare, lo, frst_len_adj, hi, scnd_len_adj);
+    timsort_merge_runs_hi(arr, size, compare, lo, frst_len_adj, hi, scnd_len_adj, merge_state);
   }
 
   frst->len = frst->len + scnd->len;
@@ -552,7 +552,7 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
  * other are merged in bulk.
  */
 void
-timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len) 
+timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len, TimsortMergeState* merge_state) 
 {
   char* arr_p = (char*)arr;
   char* temp = malloc(size * lo_len);
@@ -579,7 +579,7 @@ timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size
  * other are merged in bulk.
  */
 void
-timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len) 
+timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len, TimsortMergeState* merge_state) 
 {
   char* arr_p = (char*)arr;
   char* temp = malloc(size * hi_len);

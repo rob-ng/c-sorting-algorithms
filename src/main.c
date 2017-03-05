@@ -44,17 +44,17 @@ main(int argc, char* argv[])
   //insert_sort_bin_partial(arr, sizeof(char), compareChars, 0, (sizeof(arr)/sizeof(char)) - 1);
   // quick_sort(arr, sizeof(arr)/sizeof(char), sizeof(char), compareChars);
   //timsort(arr, sizeof(arr)/sizeof(char), sizeof(char), compareChars);
-  //timsort(arr_char, sizeof(arr_char)/sizeof(char), sizeof(char), compareChars);
+  timsort(arr_char, sizeof(arr_char)/sizeof(char), sizeof(char), compareChars);
   timsort(arr_int, sizeof(arr_int)/sizeof(int), sizeof(int), compareInts);
   end = clock();
   printf("\nElapsed: %f\n", (double)(end - start) / CLOCKS_PER_SEC);
   for (i = 0; i < SIZE; i++) {
     printf("%d ", arr_int[i]);
-  }/*
+  }
   printf("\n");
   for (i = 0; i < SIZE; i++) {
     printf("%c ", arr_char[i]);
-  }*/
+  }
   return 0;
 }
 

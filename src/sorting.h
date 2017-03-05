@@ -182,15 +182,15 @@ static void timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compa
  *
  * @return TimsortRun representing the merged runs.
  */
-static TimsortRun* timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortRun* a, TimsortRun* b);
+static TimsortRun* timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortRun* a, TimsortRun* b, TimsortMergeState* merge_state);
 /**
  * @brief Merge runs from left to right.
  */
-static void timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len); 
+static void timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len, TimsortMergeState* merge_state); 
 /**
  * @brief Merge runs from right to left.
  */
-static void timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len);
+static void timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len, TimsortMergeState* merge_state);
 /**
  * @brief Check if run invariants hold and correct them if not.
  */
