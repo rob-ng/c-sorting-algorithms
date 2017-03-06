@@ -387,6 +387,35 @@ quick_sort_partition(void* arr, size_t size, int (*compare)(void*, void*), size_
 
 /**
  * @brief Sort array of arbitrary values using Timsort.
+ *
+ * Timsort (developed by Tim Peters) is a hybrid stable sorting algorithm.
+ * Timsort uses a combination of insertion sort and merge sort to first
+ * organize the array into roughly equal length runs of ascending elements and
+ * then merge those runs into a single sorted run.
+ * The algorithm proceeds through the following steps:
+ *
+ * If array to sort is shorter than 64 elements:
+ *   1. Defer to insertion sort.
+ * Otherwise:
+ *   1. Calculate the minimum run length.
+ *   2. Initialize a struct to represent merge state for the duration of the
+ *      sort.
+ *   3. Find (or create if necessary) runs of at least minrun length. All runs
+ *      are sorted to be ascending if they aren't already. On finding a run, 
+ *      push it onto the runs stack and check to see if run invariants still 
+ *      hold. Merge runs if they do not.
+ *   4. Collapse the remaining runs in the runs stack into a single sorted run.
+ *
+ * @param arr Array to be sorted.
+ * @param nelems Number of elements in array.
+ * @param size Size of each element in array.
+ * @param compare Function to be used to compare elements.
+ * @return Void.
+ *
+ * @see timsort_minrun
+ * @see timsort_find_runs
+ * @see timsort_check_invariants
+ * @see timsort_collapse_runs
  */
 void 
 timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
@@ -411,9 +440,30 @@ timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
   }
 }
 /**
- * @brief Find runs in array and merge them.
+ * @brief Find runs of either strictly descending or non-descending elements.
  *
- * BE VERY VERY VERY CAREFUL ABOUT BOUNDS FOR RUNS!!!!!!!!!!!!!!!
+ * Runs must be at least minrun elements long. If a run is shorter than this,
+ * it is extended using consecutive elements. There is one exception; the last
+ * run may be shorter if there are not enough elements to pad out its length.
+ * 
+ * Importantly, all runs must be non-descending before they can be pushed onto
+ * the runs stack - runs which are descending are reveresed before they are
+ * pushed.
+ * 
+ * Once a new run has been found and pushed on the runs stack, the function
+ * calls timsort_check_invariants() to ensure that the run invariants still
+ * hold.
+ *
+ * @param arr Target array.
+ * @param nelems Number of elements in array.
+ * @param size Size of each element in array.
+ * @param compare Function to be used to compare elements.
+ * @param minrun Minimum acceptable run length.
+ * @param merge_state Struct containing information about merges and runs.
+ * @return Void.
+ *
+ * @see timsort
+ * @see timsort_check_invariants
  */
 void
 timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*), size_t minrun, TimsortMergeState* merge_state)
@@ -456,15 +506,23 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
 }
 
 /**
- * @brief Check that run invariants hold and fix them if they do not.
+ * @brief Check that run invariants hold and update runs stack if they do not.
  * 
- * Check if runs_stack contains at least 3 runs.
- * If it does, check that for top 3 runs X, Y, and Z, the following
- * invariants hold:
+ * Suppose the runs stack has at least 3 runs and let X, Y and Z be the top 3 
+ * runs, ordered from right to left. Then the following must hold:
  * 1. |X| > |Y| + |Z|
  * 2. |Y| > |Z|
  * If either invariant fails to hold, merge Y with smaller of X and Z and
  * push new merged value onto stack, maintaing order.
+ *
+ * @param arr Target array.
+ * @param size Size of each element in array.
+ * @param compare Function to be used to compare elements.
+ * @param merge_state Struct containing information about merges and runs.
+ * @return Void.
+ *
+ * @see timsort
+ * @see timsort_check_invariants
  */
 void
 timsort_check_invariants(void* arr, size_t size, int (*compare)(void*, void*), TimsortMergeState* merge_state)
@@ -502,6 +560,16 @@ timsort_check_invariants(void* arr, size_t size, int (*compare)(void*, void*), T
 
 /**
  * @brief Merge top two runs in run stack until only one run remains.
+ *
+ * Once all the runs have been merged, the array will be fully sorted.
+ *
+ * @param arr Target array.
+ * @param size Size of each element in array.
+ * @param compare Function to be used to compare elements.
+ * @param merge_state Struct containing information about merges and runs.
+ * @return Void.
+ *
+ * @see timsort
  */
 void
 timsort_collapse_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortMergeState* merge_state)
@@ -515,6 +583,18 @@ timsort_collapse_runs(void* arr, size_t size, int (*compare)(void*, void*), Tims
 
 /**
  * @brief Merge 2 consecutive runs.
+ *
+ * @param arr Target array.
+ * @param size Size of each element in array.
+ * @param compare Function to be used to compare elements.
+ * @param frst Leftmost run. 
+ * @param scnd Rightmost run.
+ * @param merge_state Struct containing information about merges and runs.
+ * @return Pointer to first run, now with length updated to include second.
+ *
+ * @see timsort
+ * @see timsort_check_invariants
+ * @see timsort_collapse_runs
  */
 TimsortRun*
 timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortRun* frst, TimsortRun* scnd, TimsortMergeState* merge_state)
@@ -543,10 +623,22 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
 }
 
 /**
- * @brief Merge subarrays from left to right.
+ * @brief Merge runs from left to right.
  *
- * Once one of the arrays has been fully merged, the remaining elements of the
- * other are merged in bulk.
+ * Called when the leftmost run is smaller than the rightmost run.
+ *
+ * @param arr Target array.
+ * @param size Size of each element in array.
+ * @param compare Function to be used to compare elements.
+ * @param lo Lower index bound of merge.
+ * @param lo_len Length of smaller leftmost run.
+ * @param hi Upper index bound of merge.
+ * @param hi_len Length of larger rightmost run.
+ * @param merge_state Struct containing information about merges and runs.
+ * @retun Void.
+ *
+ * @see timsort
+ * @see timsort_merge_runs
  */
 void
 timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len, TimsortMergeState* merge_state) 
@@ -570,10 +662,22 @@ timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size
 }
 
 /**
- * @brief Merge subarrays from right to left.
+ * @brief Merge runs from right to left.
  *
- * Once one of the arrays has been fully merged, the remaining elements of the
- * other are merged in bulk.
+ * Called when the rightmost run is smaller than the leftmost run.
+ *
+ * @param arr Target array.
+ * @param size Size of each element in array.
+ * @param compare Function to be used to compare elements.
+ * @param lo Lower index bound of merge.
+ * @param lo_len Length of larger leftmost run.
+ * @param hi Upper index bound of merge.
+ * @param hi_len Length of smaller rightmost run.
+ * @param merge_state Struct containing information about merges and runs.
+ * @retun Void.
+ *
+ * @see timsort
+ * @see timsort_merge_runs
  */
 void
 timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len, TimsortMergeState* merge_state) 
@@ -610,6 +714,8 @@ timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size
  *
  * @param nelems Number of elements in array.
  * @return Size of minimum run.
+ *
+ * @see timsort
  */
 size_t
 timsort_minrun(size_t nelems)
@@ -692,6 +798,12 @@ median_three(void* arr, size_t size, size_t a, size_t b, size_t c, int (*compare
 
 /**
  * @brief Reverse given array.
+ *
+ * @param arr Target array.
+ * @param start Lower index bound.
+ * @param end Upper index bound.
+ * @param size Size of each element in array.
+ * @return Void.
  */
 void
 reverse_array(void* arr, size_t start, size_t end, size_t size)
@@ -717,6 +829,7 @@ reverse_array(void* arr, size_t start, size_t end, size_t size)
  * @param hi Upper bound of subarray.
  * @param target Item to search for in subarray.
  * @return Index of item if found, else -1.
+ *
  */
 int
 bin_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target)
