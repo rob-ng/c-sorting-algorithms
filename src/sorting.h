@@ -150,7 +150,10 @@ typedef struct TimsortRun {
  */
 typedef struct TimsortMergeState {
   Stack* runs_stack;
+  TimsortRun* runs;
+  size_t max_runs;
   int min_gallop;
+  int galloping;
 } TimsortMergeState;
 /**
  * @brief Sort array using Timsort.

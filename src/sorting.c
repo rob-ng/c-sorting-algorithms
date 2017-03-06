@@ -396,7 +396,15 @@ timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
     binary_insert_sort(arr, size, compare, 0, nelems - 1);
   } else {
     size_t minrun = timsort_minrun(nelems);
-    TimsortMergeState merge_state = { stack_init(), MIN_GALLOP };
+    const size_t MAX_RUNS = nelems / minrun;
+    TimsortRun runs[MAX_RUNS];
+    size_t run_ind;
+    for (run_ind = 0; run_ind <= MAX_RUNS; run_ind++) {
+      TimsortRun run = { 0, 0 };
+      runs[run_ind] = run;
+    }
+    TimsortMergeState merge_state = { stack_init(), runs, MAX_RUNS, MIN_GALLOP, 0 };
+
     timsort_find_runs(arr, nelems, size, compare, minrun, &merge_state);
     timsort_collapse_runs(arr, size, compare, &merge_state);
     stack_free(&merge_state.runs_stack);
@@ -411,17 +419,6 @@ void
 timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*), size_t minrun, TimsortMergeState* merge_state)
 {
   char* arr_p = (char*)arr;
-  // As all runs must be at least minrun long, max runs occurs when every run
-  // is exactly minrun elements long.
-  const size_t MAX_RUNS = nelems / minrun;
-  // Array to contain runs. 
-  TimsortRun runs[MAX_RUNS];
-  // Initialize runs.
-  size_t run_ind;
-  for (run_ind = 0; run_ind <= MAX_RUNS; run_ind++) {
-    TimsortRun run = { 0, 0 };
-    runs[run_ind] = run;
-  }
   // The curr_run value is the index of the run in 'runs' array. When a run
   // terminates, this value is incremented and the next run begins.
   size_t i, curr_run = 0;
@@ -433,22 +430,22 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
   for (i = 0; i < nelems-1; i++) {
     if (new_run || (compare(arr_p+(i*size), arr_p+((i+1)*size)) == compare(arr_p+((i-1)*size), arr_p+(i*size)))) {
       if (new_run) {
-        runs[curr_run].start = i;
+        merge_state->runs[curr_run].start = i;
       }
-      runs[curr_run].len++;
+      merge_state->runs[curr_run].len++;
       new_run = 0;
     } else {
       if (compare(arr_p+((i-1)*size), arr_p+(i*size)) < 0) {
-        reverse_array(arr, runs[curr_run].start, runs[curr_run].start + runs[curr_run].len - 1, size);
+        reverse_array(arr, merge_state->runs[curr_run].start, merge_state->runs[curr_run].start + merge_state->runs[curr_run].len - 1, size);
       }
-      if (runs[curr_run].len < minrun) {
-        runs[curr_run].len = runs[curr_run].start + minrun - 1 >= nelems ? nelems - runs[curr_run].start : minrun;
-        i = runs[curr_run].start + runs[curr_run].len - 1;
-        binary_insert_sort(arr, size, compare, runs[curr_run].start, (runs[curr_run].start + runs[curr_run].len - 1));
+      if (merge_state->runs[curr_run].len < minrun) {
+        merge_state->runs[curr_run].len = merge_state->runs[curr_run].start + minrun - 1 >= nelems ? nelems - merge_state->runs[curr_run].start : minrun;
+        i = merge_state->runs[curr_run].start + merge_state->runs[curr_run].len - 1;
+        binary_insert_sort(arr, size, compare, merge_state->runs[curr_run].start, (merge_state->runs[curr_run].start + merge_state->runs[curr_run].len - 1));
       }
-      stack_push(merge_state->runs_stack, &runs[curr_run]);
+      stack_push(merge_state->runs_stack, &merge_state->runs[curr_run]);
       curr_run++;
-      if (curr_run > MAX_RUNS) { break; }
+      if (curr_run > merge_state->max_runs) { break; }
       new_run = 1;
     }
     
