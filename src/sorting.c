@@ -626,7 +626,29 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
  * @brief Merge runs from left to right.
  *
  * Called when the leftmost run is smaller than the rightmost run.
+ * There are two modes in which merges can be performed:
  *
+ * Standard mode:
+ * Standard merge sort where elements are compared one-to-one.
+ * During this mode, we keep track of the "winning" array. If an array has
+ * "won" more than the merge_state->min_gallop, we enter galloping mode.
+ *
+ * Galloping Mode:
+ * Let A and B be two runs, A the smaller run.
+ * Let k be the index to merge into in the main array, l be the initial index
+ * of A, and r the initial index of B.
+ * We first find the location of A[l] in B. We then merge
+ * values from B up to this index into the main array (the number of elements
+ * is slice1). We then merge A[l]. We then increment k, l, and r to account 
+ * for the merged elements. Next, we find the location of B[r] in A and 
+ * perform a similar operation (number of elements from A is slice2). 
+ * Again, we increment k, l and r to account  for the merged elements. 
+ * After all of this, we check that slice1 and slice2 are both >=
+ * merge_state->min_run. If so, we decrement merge_state->min_run to make
+ * entering into galloping mode easier. If not, we increment
+ * merge_state->min_run to make entering galloping mode harder and we exit out
+ * of galloping mode.
+ * 
  * @param arr Target array.
  * @param size Size of each element in array.
  * @param compare Function to be used to compare elements.
@@ -647,14 +669,101 @@ timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size
   char* temp = malloc(size * lo_len);
   memcpy(temp, arr_p+(lo*size), lo_len * size);
 
+  int winner = -1, prev_winner = -1, count = 0;
+  size_t srch_lo, srch_hi;
+  size_t slice1, slice2, gallop_ind, gallop_exp;
+
   size_t k, l = 0, r = hi - hi_len + 1;
   for (k = lo; k <= hi; k++) {
-    if (l < lo_len && (r > hi || compare(temp+(l * size), arr_p+(r * size)) < 0)) {
-      memcpy(arr_p+(k * size), temp+(l * size), size);
-      l++;
+    if ((l < lo_len && r <= hi) && merge_state->galloping) {
+      gallop_exp = 1, gallop_ind = 0;
+      if (compare(temp+(l * size), arr_p+(r * size)) <= 0) {
+        slice1 = 0;
+      } else {
+        while (1) {
+          srch_lo = r + (int)pow(2, gallop_exp - 1) - 1;
+          srch_hi = r + (int)pow(2, gallop_exp) - 1;
+          if (srch_lo > hi || srch_hi > hi) {
+            srch_lo = srch_lo > hi ? hi : srch_lo;
+            srch_hi = hi;
+            break;
+          }
+          if (!(compare(temp+(l * size), arr_p+(srch_lo * size)) > 0 && compare(temp+(l * size), arr_p+(srch_hi * size)) <= 0)) {
+            gallop_exp++;
+          } else {
+            break;
+          }
+        }
+        gallop_ind = binary_search(arr, size, compare, srch_lo, srch_hi, temp+(l * size));
+        slice1 = gallop_ind - r;
+      }
+      memcpy(arr_p+(k * size), arr_p+(r * size), (slice1) * size);
+      memcpy(arr_p+((k + slice1) * size), temp+(l * size), size);
+      k += slice1 + 1;
+      l += 1;
+      r += slice1;
+
+      if (k > hi || r > hi || l >= lo_len) {
+        merge_state->galloping = 0;
+        merge_state->min_gallop++;
+        continue;
+      }
+
+      gallop_exp = 1, gallop_ind = 0;
+      if (compare(arr_p+(r * size), temp+(l * size)) <= 0) {
+        slice2 = 0;
+      } else {
+        while (1) {
+          srch_lo = l + (int)pow(2, gallop_exp - 1) - 1;
+          srch_hi = l + (int)pow(2, gallop_exp) - 1;
+          if (srch_lo >= lo_len || srch_hi >= lo_len) {
+            srch_lo = srch_lo >= lo_len ? lo_len - 1 : srch_lo;
+            srch_hi = lo_len - 1;
+            break;
+          }
+          if (!(compare(arr_p+(r * size), temp+(srch_lo * size)) > 0 && compare(arr_p+(r * size), temp+(srch_hi * size)) <= 0)) {
+            gallop_exp++;
+          } else {
+            break;
+          }
+        }
+        gallop_ind = binary_search(temp, size, compare, srch_lo, srch_hi, arr_p+(r * size));
+        slice2 = gallop_ind - l;
+      }
+      memcpy(arr_p+(k * size), temp+(l * size), (slice2) * size);
+      memcpy(arr_p+((k + slice2) * size), arr_p+(r * size), size);
+      k += slice2;
+      r += 1;
+      l += slice2;
+
+      if (slice1 < merge_state->min_gallop || slice2 < merge_state->min_gallop) {
+        merge_state->galloping = 0;
+        merge_state->min_gallop++;
+      } else {
+        merge_state->min_gallop--;
+      }
     } else {
-      memcpy(arr_p+(k * size), arr_p+(r * size), size);
-      r++;
+      if (l < lo_len && (r > hi || compare(temp+(l * size), arr_p+(r * size)) < 0)) {
+        memcpy(arr_p+(k * size), temp+(l * size), size);
+        l++;
+        winner = 0;
+      } else {
+        memcpy(arr_p+(k * size), arr_p+(r * size), size);
+        r++;
+        winner = 1;
+      }
+
+      if (prev_winner == -1 || prev_winner == winner) {
+        count++;
+        if (count >= merge_state->min_gallop) {
+          merge_state->galloping = 1;
+          count = 0;
+          prev_winner = winner = -1;
+        }
+      } else {
+        count = 0;
+      }
+      prev_winner = winner;
     }
   }
 
@@ -850,4 +959,25 @@ bin_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size
       }
     }
   }
+}
+
+size_t
+binary_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target)
+{
+  char* arr_p = (char*)arr;
+  int m, l = lo, r = hi;
+  while (1) {
+    if (r <= l) {
+      return (compare(target, arr_p+(l*size)) > 0) ? (l + 1) : l;
+    }
+    m = floor(l + ((r - l) / 2));
+    if (compare(arr_p+(m*size), target) < 0) {
+      l = m + 1;
+    } else if (compare(arr_p+(m*size), target) > 0) {
+      r = m - 1;
+    } else {
+      return m + 1;
+    }
+  }
+
 }

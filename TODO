@@ -1,65 +1,20 @@
-1. Implement Galloping mode for mergin.
-Here is the beginning of an implementation:
+1. Implement Galloping mode for merging.
 
-// While in gallop mode, we perform two sets of operations:
-// 1. Find the location of the current smallest element of the left
-// subarray in the right subarray. Once this location is found, copy all
-// elements from the right up to (but not including) that index into the
-// merge area. Then copy the smallest element of the left subarray into the
-// merge area and set k to this new value (the target location).
-// 2. Then, we find the location of the current smallest element of the
-// right subarray in the left subarray (current smallest element's index is
-// given by k). We then copy all values from left subarray up to (but not
-// including) this index and then copy the smallest value from the right
-// subarray.
-// 3. Once both sets of operations have been performed, we check to see
-// what index was given as the location. If too small, we stop gallop.
-/*if (gallop_mode) {
-  while (1) {
-    if (!((compare(arr_p+((r + (int)pow(2, base_pow - 1) - 1) * size), temp+(l * size)) < 0) && 
-      (compare(temp+(l * size), arr_p+((r + (int)pow(2, base_pow) - 1) * size)) <= 0))) {
-      base_pow++;
-      continue;
-    } else {
-      target_ind = bin_search(arr, size, compare, r + (int)pow(2, base_pow - 1) - 1, r + (int)pow(2, base_pow) - 1, temp+(l * size));
-      memcpy(arr_p+(k * size), arr_p+(r * size), ((target_ind - r) * size));
-      memcpy(arr_p+(target_ind * size), temp+(l * size), size);
-      k = target_ind;
-    }
-  }
-  while (1) {
-    if (!((compare(temp+((l + (int)pow(2, base_pow - 1) - 1) * size), arr_p+(r * size)) < 0) && 
-      (compare(arr_p+(r * size), temp+((l + (int)pow(2, base_pow) - 1) * size)) <= 0))) {
-      base_pow++;
-      continue;
-    } else {
-      target_ind = bin_search(temp, size, compare, l + (int)pow(2, base_pow - 1) - 1, l + (int)pow(2, base_pow) - 1, arr_p+(r * size));
-      memcpy(arr_p+(k * size), temp+(l * size), ((target_ind - l) * size));
-      memcpy(arr_p+(target_ind * size), temp+(r * size), size);
-      k = target_ind;
-    }
-  }
-} else {*/ ## Use normal mode
+An attempt at galloping mode has been made for merge_runs_lo.
+There are still (of course) issues:
 
-## Variables 
-int min_gallop = MIN_GALLOP, gallop_mode = 0, chngd = 0, prv_chngd = -1, count = 0;
+- What to do during galloping mode if one or other or both or l and r are out
+  of bounds?
+  A: Don't enter galloping mode. This should be a condition for using
+  galloping.
+- How to increment l and r after successful gallop?
+  A: Should increment by corresponding slice BETWEEN OPERATIONS.
+- How to increment k?
+  A: k should be incremented after each slice is found by slice.
+- What to do if binary_search grows outside bounds of run?
+  A: set srch_lo and srch_hi to hi bound.
+- How should program react if after first gallop operation, one of the bounds
+  has grown too large?
 
-## Tracking gallops
-/*if (prv_chngd < 0 || prv_chngd == chngd) {
-  if (count >= min_gallop) {
-    if (!gallop_mode) {
-      gallop_mode = 1;
-    } else {
-      min_gallop--;
-    }
-  }
-  count++;
-} else {
-  if (gallop_mode) {
-    gallop_mode = 0;
-    min_gallop++;
-  }
-  count = 0;
-}
-prv_chngd = chngd;
-}*/
+Galloping for merge_runs_lo ALMOST works, but you'll notice certain things
+aren't sorted correctly.

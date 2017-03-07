@@ -243,5 +243,10 @@ static void reverse_array(void* arr, size_t start, size_t end, size_t size);
  */
 static int bin_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target);
 
+/**
+ * @brief Alternative binary search.
+ */
+static size_t binary_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target);
+
 
 #endif /* MY_SORTING_ALGORITHMS_ */
