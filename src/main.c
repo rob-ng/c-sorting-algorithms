@@ -47,13 +47,13 @@ main(int argc, char* argv[])
   timsort(arr_int, sizeof(arr_int)/sizeof(int), sizeof(int), compare_ints);
   end = clock();
   printf("\nElapsed: %f\n", (double)(end - start) / CLOCKS_PER_SEC);
-  /*for (i = 0; i < SIZE; i++) {
+  for (i = 0; i < SIZE; i++) {
     printf("%d ", arr_int[i]);
   }
-  printf("\n");*/
-  /*for (i = 0; i < SIZE; i++) {
+  printf("\n");
+  for (i = 0; i < SIZE; i++) {
     printf("%c ", arr_char[i]);
-  }*/
+  }
   int j;
   for (i = 0; i < SIZE - 1; i++) {
     for (j = i+1; j < SIZE; j++) {

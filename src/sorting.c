@@ -795,18 +795,14 @@ timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size
   char* temp = malloc(size * hi_len);
   memcpy(temp, arr_p+((hi - hi_len + 1) * size), hi_len * size);
 
-  size_t k, l = lo + lo_len - 1, r = hi_len - 1;
+  int k, l = lo + lo_len - 1, r = hi_len - 1;
   for (k = hi + 1; k --> lo;) {
-    if (r >= 0 && (l < lo || compare(temp+(r * size), arr_p+(l * size)) > 0)) {
+    if (r >= 0 && ((l < 0 || l < lo) || compare(temp+(r * size), arr_p+(l * size)) > 0)) {
       memcpy(arr_p+(k * size), temp+(r * size), size);
-      if (r > 0) {
-        r--;
-      }
+      r--;
     } else {
       memcpy(arr_p+(k * size), arr_p+(l * size), size);
-      if (l > 0) {
-        l--;
-      }
+      l--;
     }
   }
 
