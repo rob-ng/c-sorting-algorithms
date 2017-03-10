@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog]() and this project adheres to
 
 ## [Unreleased]
 
+## [2017-03-10] 0.0.5
+
+### Added
+
+- Galloping mode to Timsort.
+
 ## [2017-03-02] 0.0.4
 
 ### Added

@@ -195,6 +195,14 @@ static void timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, 
  */
 static void timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len, TimsortMergeState* merge_state);
 /**
+ * @brief Gallop left->right to find number of elements in source array less than element.
+ */
+static int timsort_gallop_right(void* src, size_t size, int (*compare)(void*, void*), int base, int limit, void* target);
+/**
+ * @brief Gallop right->left to find number of elements in source array greater than element.
+ */
+static int timsort_gallop_left(void* src, size_t size, int (*compare)(void*, void*), int base, int limit, void* target);
+/**
  * @brief Check if run invariants hold and correct them if not.
  */
 static void timsort_check_invariants(void* arr, size_t size, int (*compare)(void*, void*), TimsortMergeState* merge_state);
@@ -202,6 +210,10 @@ static void timsort_check_invariants(void* arr, size_t size, int (*compare)(void
  * @brief Merge runs into single run.
  */
 static void timsort_collapse_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortMergeState* merge_state);
+/**
+ * @brief Version of binary search for Timsort to be used when galloping.
+ */
+static int timsort_binary_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target);
 
 
 /*=== Helpers ===*/
@@ -242,11 +254,5 @@ static void reverse_array(void* arr, size_t start, size_t end, size_t size);
  * @return Index of item if found, else -1.
  */
 static int bin_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target);
-
-/**
- * @brief Alternative binary search.
- */
-static size_t binary_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target);
-
 
 #endif /* MY_SORTING_ALGORITHMS_ */

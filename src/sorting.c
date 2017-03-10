@@ -570,6 +570,7 @@ timsort_check_invariants(void* arr, size_t size, int (*compare)(void*, void*), T
  * @return Void.
  *
  * @see timsort
+ * @see timsort_merge_runs
  */
 void
 timsort_collapse_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortMergeState* merge_state)
@@ -595,6 +596,8 @@ timsort_collapse_runs(void* arr, size_t size, int (*compare)(void*, void*), Tims
  * @see timsort
  * @see timsort_check_invariants
  * @see timsort_collapse_runs
+ * @see timsort_merge_runs_lo
+ * @see timsort_merge_runs_hi
  */
 TimsortRun*
 timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortRun* frst, TimsortRun* scnd, TimsortMergeState* merge_state)
@@ -661,6 +664,7 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
  *
  * @see timsort
  * @see timsort_merge_runs
+ * @see timsort_gallop_right
  */
 void
 timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len, TimsortMergeState* merge_state) 
@@ -676,60 +680,22 @@ timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size
   size_t k, l = 0, r = hi - hi_len + 1;
   for (k = lo; k <= hi; k++) {
     if ((l < lo_len && r <= hi) && merge_state->galloping) {
-      gallop_exp = 1, gallop_ind = 0;
-      if (compare(temp+(l * size), arr_p+(r * size)) <= 0) {
-        slice1 = 0;
-      } else {
-        while (1) {
-          srch_lo = r + (int)pow(2, gallop_exp - 1) - 1;
-          srch_hi = r + (int)pow(2, gallop_exp) - 1;
-          if (srch_lo > hi || srch_hi > hi) {
-            srch_lo = srch_lo > hi ? hi : srch_lo;
-            srch_hi = hi;
-            break;
-          }
-          if (!(compare(temp+(l * size), arr_p+(srch_lo * size)) > 0 && compare(temp+(l * size), arr_p+(srch_hi * size)) <= 0)) {
-            gallop_exp++;
-          } else {
-            break;
-          }
-        }
-        gallop_ind = binary_search(arr, size, compare, srch_lo, srch_hi, temp+(l * size));
-        slice1 = gallop_ind - r;
-      }
+      slice1 = timsort_gallop_right(arr, size, compare, r, hi, temp+(l * size));
       memcpy(arr_p+(k * size), arr_p+(r * size), (slice1) * size);
       memcpy(arr_p+((k + slice1) * size), temp+(l * size), size);
-      k += slice1 + 1;
+      k += slice1;
       l += 1;
       r += slice1;
 
-      if (k > hi || r > hi || l >= lo_len) {
+      if (k >= hi || r > hi || l >= lo_len) {
         merge_state->galloping = 0;
         merge_state->min_gallop++;
         continue;
       }
 
-      gallop_exp = 1, gallop_ind = 0;
-      if (compare(arr_p+(r * size), temp+(l * size)) <= 0) {
-        slice2 = 0;
-      } else {
-        while (1) {
-          srch_lo = l + (int)pow(2, gallop_exp - 1) - 1;
-          srch_hi = l + (int)pow(2, gallop_exp) - 1;
-          if (srch_lo >= lo_len || srch_hi >= lo_len) {
-            srch_lo = srch_lo >= lo_len ? lo_len - 1 : srch_lo;
-            srch_hi = lo_len - 1;
-            break;
-          }
-          if (!(compare(arr_p+(r * size), temp+(srch_lo * size)) > 0 && compare(arr_p+(r * size), temp+(srch_hi * size)) <= 0)) {
-            gallop_exp++;
-          } else {
-            break;
-          }
-        }
-        gallop_ind = binary_search(temp, size, compare, srch_lo, srch_hi, arr_p+(r * size));
-        slice2 = gallop_ind - l;
-      }
+      k++;
+
+      slice2 = timsort_gallop_right(temp, size, compare, l, lo_len, arr_p+(r * size));
       memcpy(arr_p+(k * size), temp+(l * size), (slice2) * size);
       memcpy(arr_p+((k + slice2) * size), arr_p+(r * size), size);
       k += slice2;
@@ -759,6 +725,7 @@ timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size
           merge_state->galloping = 1;
           count = 0;
           prev_winner = winner = -1;
+          continue;
         }
       } else {
         count = 0;
@@ -768,6 +735,52 @@ timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size
   }
 
   free(temp);
+}
+
+/**
+ * @brief Gallop left->right to find number of elements in source array less
+ * than target.
+ *
+ * @param src Array to gallop over.
+ * @param size Size of each element in array.
+ * @param compare Function to compare elements.
+ * @param base Index to begin gallop.
+ * @param limit Index limit for galloping.
+ * @param target Target element.
+ * @return Number of elements in slice.
+ *
+ * @see timsort
+ * @see timsort_merge_runs_lo
+ */
+int
+timsort_gallop_right(void* src, size_t size, int (*compare)(void*, void*), int base, int limit, void* target)
+{
+  char* src_p = (char*)src;
+  int srch_lo = 0, srch_hi = 0, gallop_exp = 1, gallop_ind = 0, slice = 0;
+  if (compare(target, src_p+(base * size)) <= 0) {
+    slice = 0;
+  } else {
+    while (1) {
+      srch_lo = base + ((int)pow(2, gallop_exp - 1) - 1);
+      srch_hi = base + ((int)pow(2, gallop_exp) - 1);
+      if (srch_lo > limit || srch_hi > limit) {
+        srch_lo = srch_lo > limit ? limit : srch_lo;
+        srch_hi = limit;
+        break;
+      }
+      if (!((compare(target, src_p+(srch_lo * size)) > 0) && (compare(target, src_p+(srch_hi * size)) <= 0))) {
+        gallop_exp++;
+      } else {
+        break;
+      }
+    }
+    gallop_ind = timsort_binary_search(src, size, compare, srch_lo, srch_hi, target);
+    slice = gallop_ind - base;
+    if (compare(target, src_p+(gallop_ind * size)) > 0) {
+      slice++;
+    }
+  }
+  return slice;
 }
 
 /**
@@ -787,6 +800,7 @@ timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size
  *
  * @see timsort
  * @see timsort_merge_runs
+ * @see timsort_gallop_left
  */
 void
 timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len, TimsortMergeState* merge_state) 
@@ -795,18 +809,115 @@ timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size
   char* temp = malloc(size * hi_len);
   memcpy(temp, arr_p+((hi - hi_len + 1) * size), hi_len * size);
 
+  int winner = -1, prev_winner = -1, count = 0;
+  int srch_lo, srch_hi;
+  int slice1, slice2, gallop_ind, gallop_exp;
+
   int k, l = lo + lo_len - 1, r = hi_len - 1;
   for (k = hi + 1; k --> lo;) {
-    if (r >= 0 && ((l < 0 || l < lo) || compare(temp+(r * size), arr_p+(l * size)) > 0)) {
-      memcpy(arr_p+(k * size), temp+(r * size), size);
-      r--;
+    if ((r >= 0 && (l >= 0 && l >= lo)) && merge_state->galloping) {
+      slice1 = timsort_gallop_left(arr, size, compare, l, lo, temp+(r * size));
+      if (slice1 > 0) {
+        memcpy(arr_p+((k - slice1 + 1) * size), arr_p+((l - slice1 + 1) * size), slice1 * size);
+      }
+      memcpy(arr_p+((k - slice1) * size), temp+(r * size), size);
+      k -= slice1;
+      r -= 1;
+      l -= slice1;
+
+      if (k <= lo || r < 0 || (l < 0 || l < lo)) {
+        merge_state->galloping = 0;
+        merge_state->min_gallop++;
+        continue;
+      }
+
+      k--;
+
+      slice2 = timsort_gallop_left(temp, size, compare, r, 0, arr_p+(l * size));
+      if (slice2 > 0) {
+        memcpy(arr_p+((k - slice2 + 1) * size), temp+((r - slice2 + 1) * size), slice2 * size);
+      }
+      memcpy(arr_p+((k - slice2) * size), arr_p+(l * size), size);
+      k -= slice2;
+      l -= 1;
+      r -= slice2;
+
+      if (slice1 < merge_state->min_gallop || slice2 < merge_state->min_gallop) {
+        merge_state->galloping = 0;
+        merge_state->min_gallop++;
+      } else {
+        merge_state->min_gallop--;
+      }
     } else {
-      memcpy(arr_p+(k * size), arr_p+(l * size), size);
-      l--;
+      if (r >= 0 && ((l < 0 || l < lo) || compare(temp+(r * size), arr_p+(l * size)) > 0)) {
+        memcpy(arr_p+(k * size), temp+(r * size), size);
+        r--;
+        winner = 0;
+      } else {
+        memcpy(arr_p+(k * size), arr_p+(l * size), size);
+        l--;
+        winner = 1;
+      }
+      if (prev_winner == -1 || prev_winner == winner) {
+        count++;
+        if (count >= merge_state->min_gallop) {
+          merge_state->galloping = 1;
+          count = 0;
+          prev_winner = winner = -1;
+          continue;
+        }
+      } else {
+        count = 0;
+      }
+      prev_winner = winner;
     }
   }
 
   free(temp);
+}
+
+/**
+ * @brief Gallop right->left to find number of elements in source array greater than element.
+ *
+ * @param src Array to gallop over.
+ * @param size Size of each element in array.
+ * @param compare Function to compare elements.
+ * @param base Index to begin gallop.
+ * @param limit Index limit for galloping.
+ * @param target Target element.
+ * @return Number of elements in slice.
+ *
+ * @see timsort
+ * @see timsort_merge_runs_hi
+ */
+int 
+timsort_gallop_left(void* src, size_t size, int (*compare)(void*, void*), int base, int limit, void* target) {
+  char* src_p = (char*)src;
+  int srch_lo = 0, srch_hi = 0, gallop_exp = 1, gallop_ind = 0, slice = 0;
+  if (compare(target, src_p+(base * size)) >= 0) { 
+    slice = 0;
+  } else {
+    while (1) {
+      srch_lo = base - ((int)pow(2, gallop_exp) - 1);
+      srch_hi = base - ((int)pow(2, gallop_exp - 1) - 1);
+      if ((srch_lo < 0 || srch_lo < limit) || (srch_hi < 0 || srch_hi < limit)) {
+        srch_lo = limit;
+        srch_hi = (srch_hi < 0 || srch_hi < limit) ? limit : srch_hi;
+        break;
+      }
+      if (!((compare(target, src_p+(srch_lo * size)) > 0) && (compare(target, src_p+(srch_hi * size)) <= 0))) {
+        gallop_exp++;
+      } else {
+        break;
+      }
+    }
+    gallop_ind = timsort_binary_search(src, size, compare, srch_lo, srch_hi, target);
+    slice = base - gallop_ind;
+    if (compare(target, src_p+(gallop_ind * size)) < 0) {
+      slice++;
+    }
+  }
+  return slice;
 }
 
 /**
@@ -847,6 +958,41 @@ timsort_minrun(size_t nelems)
 			nelems = nelems >> 1;
 	}
 	return nelems + pad;
+}
+
+/**
+ * @brief Version of binary search for Timsort to be used when galloping.
+ *
+ * @param arr Array to be searched.
+ * @param size Size of each element in array.
+ * @param compare Function for comparing elements.
+ * @param lo Lower index bound for searching.
+ * @param hi Upper index bound for searching.
+ * @param target Element to search for.
+ * @return Index where element either is, or should be, located in the array.
+ *
+ * @see timsort
+ * @see timsort_gallop_left
+ * @see timsort_gallop_right
+ */
+int
+timsort_binary_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target)
+{
+  char* arr_p = (char*)arr;
+  int m, l = lo, r = hi;
+  while (1) {
+    if (r <= l) {
+      return l;
+    }
+    m = floor(l + ((r - l) / 2));
+    if (compare(target, arr_p+(m * size)) > 0) {
+      l = m + 1;
+    } else if (compare(target, arr_p+(m * size)) < 0) {
+      r = m - 1;
+    } else {
+      return m + 1;
+    }
+  }
 }
 
 /**
@@ -955,25 +1101,4 @@ bin_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size
       }
     }
   }
-}
-
-size_t
-binary_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target)
-{
-  char* arr_p = (char*)arr;
-  int m, l = lo, r = hi;
-  while (1) {
-    if (r <= l) {
-      return (compare(target, arr_p+(l*size)) > 0) ? (l + 1) : l;
-    }
-    m = floor(l + ((r - l) / 2));
-    if (compare(arr_p+(m*size), target) < 0) {
-      l = m + 1;
-    } else if (compare(arr_p+(m*size), target) > 0) {
-      r = m - 1;
-    } else {
-      return m + 1;
-    }
-  }
-
 }

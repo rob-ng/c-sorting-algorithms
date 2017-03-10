@@ -1,20 +1,6 @@
 1. Implement Galloping mode for merging.
 
-An attempt at galloping mode has been made for merge_runs_lo.
-There are still (of course) issues:
-
-- What to do during galloping mode if one or other or both or l and r are out
-  of bounds?
-  A: Don't enter galloping mode. This should be a condition for using
-  galloping.
-- How to increment l and r after successful gallop?
-  A: Should increment by corresponding slice BETWEEN OPERATIONS.
-- How to increment k?
-  A: k should be incremented after each slice is found by slice.
-- What to do if binary_search grows outside bounds of run?
-  A: set srch_lo and srch_hi to hi bound.
-- How should program react if after first gallop operation, one of the bounds
-  has grown too large?
-
-Galloping for merge_runs_lo ALMOST works, but you'll notice certain things
-aren't sorted correctly.
+Working version of galloping mode added. However, want to add tests to make
+sure everything is absolutely correct. In particular, check that indices given
+by binary search are correct - conditionals in merge_lo don't ever seem to
+succeed.
