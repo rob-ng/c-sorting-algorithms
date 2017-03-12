@@ -111,9 +111,12 @@ stack_pop_return(Stack* stack)
   }
 }
 /**
- * @brief Free stack.
+ * @brief Free stack and its stack frames.
  *
- * @param stack The stack to free.
+ * NOTE: Does not free data stored in stack frames. Data is assumed to be
+ * stored in memory stack.
+ *
+ * @param stack Target stack.
  * @return Void.
  */
 void
