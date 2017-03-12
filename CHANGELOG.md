@@ -7,6 +7,26 @@ The format is based on [Keep a Changelog]() and this project adheres to
 
 ## [Unreleased]
 
+## [2017-03-10] 0.0.5
+
+### Added
+
+- Galloping mode to Timsort.
+
+## [2017-03-02] 0.0.4
+
+### Added
+
+- Working (but unoptimized) Timsort for full sorting.
+
+## [2017-02-28] 0.0.3
+
+### Added
+
+- Nearly working Timsort for full sorting.
+
+## [2017-02-26] 0.0.2
+
 ### Added
 
 - Comb sort for full sorting.

@@ -1,6 +1,7 @@
 #ifndef MY_SORTING_ALGORITHMS_
 #define MY_SORTING_ALGORITHMS_
 #include <stdlib.h>
+#include "stack.h"
 
 /*=== Simple Sorts ===*/
 
@@ -26,6 +27,10 @@ void insert_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, vo
  * @return Void.
  */
 void insert_sort_partial(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi);
+/**
+ * @brief Sort subarray of array using insertion sort which uses binary search.
+ */
+void binary_insert_sort(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi);
 
 /**
  * @brief Sort array using selection sort
@@ -128,6 +133,89 @@ void quick_sort_sort(void* arr, size_t size, int (*compare)(void*, void*), size_
 size_t quick_sort_partition(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi);
 
 
+/*=== Hybrid Sorts ===*/
+
+/**
+ * @brief Struct representation of a run.
+ *
+ * start - index where run began.
+ * len - length of run (start index to end index).
+ */
+typedef struct TimsortRun {
+  size_t start;
+  size_t len;
+} TimsortRun;
+/**
+ * @brief Struct to preserve merge state between merges.
+ */
+typedef struct TimsortMergeState {
+  Stack* runs_stack;
+  TimsortRun* runs;
+  size_t max_runs;
+  int min_gallop;
+  int galloping;
+} TimsortMergeState;
+/**
+ * @brief Sort array using Timsort.
+ */
+void timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*));
+/**
+ * @brief Calculate minimum run size to be used in sort.
+ *
+ * The minimum run size is given by the 6 most significant bits of the array's
+ * length. Consequently, minrun will range between 32 and 64 inclusive, and 
+ * any array with length < 64 will have minimum run size equal to their entire 
+ * length.
+ *
+ * @param nelems Number of elements in the array.
+ * @return Size of minimum run.
+ */
+static size_t timsort_minrun(size_t nelems);
+/**
+ * @brief Helper (timesort): Find runs within array and merge them.
+ *
+ * Finding runs and merging them are done concurrently.
+ *
+ * A run consists of at least 2 elements that are either non-descending or
+ * strictly descending.
+ */
+static void timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*), size_t minrun, TimsortMergeState* merge_state);
+/**
+ * @brief Merge two runs together and return result.
+ *
+ * @return TimsortRun representing the merged runs.
+ */
+static TimsortRun* timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortRun* a, TimsortRun* b, TimsortMergeState* merge_state);
+/**
+ * @brief Merge runs from left to right.
+ */
+static void timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len, TimsortMergeState* merge_state); 
+/**
+ * @brief Merge runs from right to left.
+ */
+static void timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len, TimsortMergeState* merge_state);
+/**
+ * @brief Gallop left->right to find number of elements in source array less than element.
+ */
+static int timsort_gallop_right(void* src, size_t size, int (*compare)(void*, void*), int base, int limit, void* target);
+/**
+ * @brief Gallop right->left to find number of elements in source array greater than element.
+ */
+static int timsort_gallop_left(void* src, size_t size, int (*compare)(void*, void*), int base, int limit, void* target);
+/**
+ * @brief Check if run invariants hold and correct them if not.
+ */
+static void timsort_check_invariants(void* arr, size_t size, int (*compare)(void*, void*), TimsortMergeState* merge_state);
+/**
+ * @brief Merge runs into single run.
+ */
+static void timsort_collapse_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortMergeState* merge_state);
+/**
+ * @brief Version of binary search for Timsort to be used when galloping.
+ */
+static int timsort_binary_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target);
+
+
 /*=== Helpers ===*/
 
 /**
@@ -150,5 +238,21 @@ void swap(void* a, void* b, size_t size);
  * @param compare Function to be used to compare elements.
  */
 size_t median_three(void* arr, size_t size, size_t a, size_t b, size_t c, int (*compare)(void*, void*));
+/**
+ * @brief Reverse given array.
+ */
+static void reverse_array(void* arr, size_t start, size_t end, size_t size);
+/**
+ * @brief Use binary search to find index of value within subarray of an array.
+ *
+ * @param arr Array to be searched.
+ * @param size Size of each element in array.
+ * @param compare Function to be used to compare elements.
+ * @param lo Lower bound of subarray.
+ * @param hi Upper bound of subarray.
+ * @param target Item to search for in subarray.
+ * @return Index of item if found, else -1.
+ */
+static int bin_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target);
 
 #endif /* MY_SORTING_ALGORITHMS_ */
