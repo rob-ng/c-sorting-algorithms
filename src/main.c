@@ -41,6 +41,7 @@ main(int argc, char* argv[])
 
   char arr_char[SIZE];
   int arr_int[SIZE];
+  int arr_int_rev[SIZE];
   int i, sort_ind;
   int wrong_int = 0, wrong_char = 0;
   for (sort_ind = 0; sort_ind < 1; sort_ind++) {
@@ -50,11 +51,16 @@ main(int argc, char* argv[])
     for (i = 0; i < SIZE; i++) {
       arr_int[i] = rand() % 10000;
     }
+    for (i = SIZE; i --> 0;) {
+      arr_int_rev[i] = i;
+    }
     timsort(arr_char, sizeof(arr_char)/sizeof(char), sizeof(char), compare_chars);
     timsort(arr_int, sizeof(arr_int)/sizeof(int), sizeof(int), compare_ints);
+    timsort(arr_int_rev, sizeof(arr_int)/sizeof(int), sizeof(int), compare_ints);
     for (i = 0; i < SIZE-1; i++) {
       assert(arr_char[i] <= arr_char[i+1]);
       assert(arr_int[i] <= arr_int[i+1]);
+      assert(arr_int_rev[i] <= arr_int_rev[i+1]);
     }
   }
   return 0;
