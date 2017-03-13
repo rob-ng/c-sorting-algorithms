@@ -8,7 +8,8 @@
 #include "stack.h"
 
 /**
- * @brief Struct representation of a run.
+ * @struct TimsortRun.
+ * @brief Struct to represent run during Timsort.
  *
  * start - index where run began.
  * len - length of run (start index to end index).
@@ -17,8 +18,10 @@ struct TimsortRun {
   size_t start;
   size_t len;
 };
+
 /**
- * @brief Struct to preserve merge state between merges.
+ * @struct TimsortMergeState.
+ * @brief Struct to represent merge state during Timsort.
  */
 struct TimsortMergeState {
   Stack* runs_stack;
@@ -29,13 +32,15 @@ struct TimsortMergeState {
 };
 
 /**
- * @brief Sort array of arbitrary values using insertion sort.
+ * @brief Sort generic array using insertion sort.
  *
  * @param arr Array to be sorted.
  * @param nelems Number of elements in the array.
  * @param size Size of each element in the array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @return Void.
+ *
+ * @see insert_sort_partial()
  */
 void
 insert_sort(void* arr, size_t nelems, size_t size, 
@@ -45,13 +50,13 @@ insert_sort(void* arr, size_t nelems, size_t size,
 }
 
 /**
- * @brief Sort subarray of array using insertion sort.
+ * @brief Sort generic contiguous subarray using insertion sort.
  *
- * @param arr Array to be sorted.
+ * @param arr Array containing the subarray.
  * @param size Size of each element in the array.
- * @param compare Function to be used to compare elements.
- * @param lo Lower bound (inclusive).
- * @param hi Upper bound (exclusive).
+ * @param compare Function to compare elements.
+ * @param lo Lower bound of subarray (inclusive).
+ * @param hi Upper bound of subarray (exclusive).
  * @return Void.
  */
 void
@@ -76,13 +81,13 @@ insert_sort_partial(void* arr, size_t size,
 }
 
 /**
- * @brief Sort subarray of array using insertion sort which uses binary search.
+ * @brief Sort generic contiguous subarray using binary insertion sort.
  *
- * @param arr The array to be sorted.
- * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
- * @param lo Lower bound of subarray.
- * @param hi Upper bound of subarray.
+ * @param arr Array containing the subarray.
+ * @param size Size of each element in the array.
+ * @param compare Function to compare elements.
+ * @param lo Lower bound of subarray (inclusive).
+ * @param hi Upper bound of subarray (inclusive).
  * @return Void.
  */
 void
@@ -125,12 +130,12 @@ binary_insert_sort(void* arr, size_t size,
 }
 
 /**
- * @brief Sort array of arbitrary values using selection sort.
+ * @brief Sort generic array using selection sort.
  *
  * @param arr Array to be sorted.
  * @param nelems Number of elemenets in the array.
  * @param size Size of each element in the array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @return Void.
  */
 void
@@ -153,7 +158,7 @@ select_sort(void* arr, size_t nelems, size_t size,
 }
 
 /**
- * Sort array of arbitrary values using comb sort (bubble sort variant).
+ * @brief Sort generic array using comb sort.
  *
  * Comb sort is an improvement over standard bubble sort. As in bubble sort,
  * comb sort operates by repeatedly looping through an array and swapping
@@ -173,7 +178,7 @@ select_sort(void* arr, size_t nelems, size_t size,
  * @param arr Array to be sorted.
  * @param nelems Number of elements in array.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @return Void.
  */
 void
@@ -207,7 +212,7 @@ comb_sort(void* arr, size_t nelems, size_t size,
 }
 
 /**
- * @brief Sort array of arbitrary values using merge sort.
+ * @brief Sort generic array using merge sort.
  *
  * Merge sort is not efficient for small arrays. As such, merge sort is only
  * performed if the length of the array is above LENGTH_THRESHOLD.
@@ -244,7 +249,7 @@ merge_sort(void* arr, size_t nelems, size_t size,
 }
 
 /**
- * @brief Helper (merge_sort): Recursively perform merge sort.
+ * @brief Recursively perform merge sort.
  *
  * Merge sort is only perfomed if current index interval [lo, hi] is
  * sufficiently large. If it isn't, insertion sort is used to sort the array in
@@ -261,10 +266,13 @@ merge_sort(void* arr, size_t nelems, size_t size,
  * @param arr Array from which values will be copied.
  * @param aux Array into which values will be copied.
  * @param size Size of each element in either array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @param lo Lower bound of subarray (inclusive).
  * @param hi Upper bound of subarray (inclusive).
  * @return Void.
+ *
+ * @see merge_sort()
+ * @see merge_sort_merge()
  */
 void
 merge_sort_sort(void* arr, void* aux, size_t size, 
@@ -284,8 +292,7 @@ merge_sort_sort(void* arr, void* aux, size_t size,
 }
 
 /**
- * @brief Helper (merge_sort): "Merge" subarrays by updating aux with sorted 
- * values taken from arr.
+ * @brief Merge subarrays by updating aux with sorted values taken from arr.
  *
  * @param arr Array from which values are copied.
  * @param aux Array to which sorted values are copied.
@@ -317,15 +324,17 @@ merge_sort_merge(void* arr, void* aux, size_t size,
 }
 
 /**
- * @brief Sort array of arbitrary values using quicksort.
+ * @brief Sort generic array using quicksort.
  *
- * If array is small enough, function defers to insertion sort instead.
+ * If array is small enough, defers to insertion sort instead.
  *
  * @param arr Array to be sorted.
  * @param nelems Number of elements in the array.
  * @param size Size of each element in the array.
  * @param compare Function to be used to compare elements.
  * @return Void.
+ *
+ * @see quick_sort_sort()
  */
 void
 quick_sort(void* arr, size_t nelems, size_t size, 
@@ -339,7 +348,7 @@ quick_sort(void* arr, size_t nelems, size_t size,
 }
 
 /**
- * @brief Helper (quick_sort): Recursively perform quicksort.
+ * @brief Recursively perform quicksort.
  *
  * Quicksort is not efficient for small arrays. As such, insertion sort is used
  * when subarray is small.
@@ -350,6 +359,9 @@ quick_sort(void* arr, size_t nelems, size_t size,
  * @param lo Lower index bound of current subarray (inclusive).
  * @param hi Upper index bound of the current subarray (invclusive).
  * @return Void.
+ *
+ * @see quick_sort()
+ * @see quick_sort_partition()
  */
 void
 quick_sort_sort(void* arr, size_t size, 
@@ -368,7 +380,7 @@ quick_sort_sort(void* arr, size_t size,
 }
 
 /**
- * @brief Helper (quick_sort): Partition subarray around pivot element.
+ * @brief Partition subarray around pivot element.
  *
  * Smaller elements are moved to left of pivot, larger to right of pivot.
  * The pivot index is set to the median of the lower, middle, and upper bounds
@@ -379,9 +391,9 @@ quick_sort_sort(void* arr, size_t size,
  *
  * @param arr Array containing the subarray.
  * @param size Size of each element in the array.
- * @param compare Function to be used to compare elements.
- * @param lo Lower index bound of the subarray (inclusive).
- * @param hi Upper index bound of the subarray (inclusive).
+ * @param compare Function to compare elements.
+ * @param lo Lower bound of the subarray (inclusive).
+ * @param hi Upper bound of the subarray (inclusive).
  * @return Final index of the pivot element.
  */
 size_t
@@ -415,7 +427,7 @@ quick_sort_partition(void* arr, size_t size,
 }
 
 /**
- * @brief Sort array of arbitrary values using Timsort.
+ * @brief Sort generic array using Timsort.
  *
  * Timsort (developed by Tim Peters) is a hybrid stable sorting algorithm.
  * Timsort uses a combination of insertion sort and merge sort to first
@@ -438,7 +450,7 @@ quick_sort_partition(void* arr, size_t size,
  * @param arr Array to be sorted.
  * @param nelems Number of elements in array.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @return Void.
  *
  * @see timsort_minrun
@@ -490,10 +502,10 @@ timsort(void* arr, size_t nelems, size_t size,
  * calls timsort_check_invariants() to ensure that the run invariants still
  * hold.
  *
- * @param arr Target array.
+ * @param arr Array to search for runs.
  * @param nelems Number of elements in array.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @param minrun Minimum acceptable run length.
  * @param merge_state Struct containing information about merges and runs.
  * @return Void.
@@ -564,9 +576,9 @@ timsort_find_runs(void* arr, size_t nelems, size_t size,
  * If either invariant fails to hold, merge Y with smaller of X and Z and
  * push new merged value onto stack, maintaing order.
  *
- * @param arr Target array.
+ * @param arr Array containing runs.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @param merge_state Struct containing information about merges and runs.
  * @return Void.
  *
@@ -616,9 +628,9 @@ timsort_check_invariants(void* arr, size_t size,
  *
  * Once all the runs have been merged, the array will be fully sorted.
  *
- * @param arr Target array.
+ * @param arr Array containing runs.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @param merge_state Struct containing information about merges and runs.
  * @return Void.
  *
@@ -642,13 +654,13 @@ timsort_collapse_runs(void* arr, size_t size,
 /**
  * @brief Merge 2 consecutive runs.
  *
- * @param arr Target array.
+ * @param arr Array containing runs.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @param frst Leftmost run. 
  * @param scnd Rightmost run.
  * @param merge_state Struct containing information about merges and runs.
- * @return Pointer to first run, now with length updated to include second.
+ * @return Pointer to first run, now with length updated to include second's.
  *
  * @see timsort
  * @see timsort_check_invariants
@@ -718,12 +730,12 @@ timsort_merge_runs(void* arr, size_t size,
  * merge_state->min_run to make entering galloping mode harder and we exit out
  * of galloping mode.
  * 
- * @param arr Target array.
+ * @param arr Array containing runs.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
- * @param lo Lower index bound of merge.
+ * @param compare Function to compare elements.
+ * @param lo Lower index bound of merge (inclusive).
  * @param lo_len Length of smaller leftmost run.
- * @param hi Upper index bound of merge.
+ * @param hi Upper index bound of merge (inclusive).
  * @param hi_len Length of larger rightmost run.
  * @param merge_state Struct containing information about merges and runs.
  * @retun Void.
@@ -818,7 +830,7 @@ timsort_merge_runs_lo(void* arr, size_t size,
  * @param base Index to begin gallop.
  * @param limit Index limit for galloping.
  * @param target Target element.
- * @return Number of elements in slice.
+ * @return Number of elements in source array less than target.
  *
  * @see timsort
  * @see timsort_merge_runs_lo
@@ -863,12 +875,12 @@ timsort_gallop_right(void* src, size_t size,
  *
  * Called when the rightmost run is smaller than the leftmost run.
  *
- * @param arr Target array.
+ * @param arr Array containing runs.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
- * @param lo Lower index bound of merge.
+ * @param compare Function to compare elements.
+ * @param lo Lower bound of merge (inclusive).
  * @param lo_len Length of larger leftmost run.
- * @param hi Upper index bound of merge.
+ * @param hi Upper bound of merge (inclusive).
  * @param hi_len Length of smaller rightmost run.
  * @param merge_state Struct containing information about merges and runs.
  * @retun Void.
@@ -959,7 +971,7 @@ timsort_merge_runs_hi(void* arr, size_t size,
 
 /**
  * @brief Gallop right->left to find number of elements in source array greater
- * than element.
+ * than target.
  *
  * @param src Array to gallop over.
  * @param size Size of each element in array.
@@ -967,7 +979,7 @@ timsort_merge_runs_hi(void* arr, size_t size,
  * @param base Index to begin gallop.
  * @param limit Index limit for galloping.
  * @param target Target element.
- * @return Number of elements in slice.
+ * @return Number of elements in souce array greater than target.
  *
  * @see timsort
  * @see timsort_merge_runs_hi
@@ -1047,7 +1059,11 @@ timsort_minrun(size_t nelems)
 }
 
 /**
- * @brief Version of binary search for Timsort to be used when galloping.
+ * @brief Find position of element within array using binary search.
+ *
+ * Used in Timsort when galloping. When this version of binary search fails to
+ * find the element being search for, it just returns 'l'. Comparisons between
+ * the target and the value at arr[l] are left to galloping functions.
  *
  * @param arr Array to be searched.
  * @param size Size of each element in array.
@@ -1085,6 +1101,11 @@ timsort_binary_search(void* arr, size_t size,
 
 /**
  * @brief Swap the values referenced by two pointers.
+ *
+ * @param a First pointer.
+ * @param b Second pointer.
+ * @param size Size of the values referenced by the pointers.
+ * @return Void.
  */
 void
 swap(void* a, void* b, size_t size)
@@ -1101,15 +1122,15 @@ swap(void* a, void* b, size_t size)
 /**
  * @brief Find median of three elements in given array and return its index.
  *
- * Choosing median of lo, mid, and hi during quicksort gives a better pivot
- * point than using either a fixed position or the midpoint of hi and lo.
+ * When attempting to find a pivot point (e.g. in quicksort), the median is a
+ * better option than using a fixed position (e.g. always first element).
  *
  * @param arr Array containing the elements.
  * @param size Size of each element.
  * @param a First element.
  * @param b Second element.
  * @param c Third element.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @return Index of the median element.
  */
 size_t
@@ -1139,9 +1160,9 @@ median_three(void* arr, size_t size, size_t a, size_t b, size_t c,
 /**
  * @brief Reverse given array.
  *
- * @param arr Target array.
- * @param start Lower index bound.
- * @param end Upper index bound.
+ * @param arr Array to reverse.
+ * @param start Lower index bound (inclusive).
+ * @param end Upper index bound (inclusive).
  * @param size Size of each element in array.
  * @return Void.
  */
@@ -1160,14 +1181,14 @@ reverse_array(void* arr, size_t start, size_t end, size_t size)
 }
 
 /**
- * @brief Use binary search to find index of value within subarray of an array.
+ * @brief Search for an element using binary search in a contiguous subarray.
  *
- * @param arr Array to be searched.
+ * @param arr Array containing the subarray.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
- * @param lo Lower bound of subarray.
- * @param hi Upper bound of subarray.
- * @param target Item to search for in subarray.
+ * @param compare Function to compare elements.
+ * @param lo Lower bound of subarray (inclusive).
+ * @param hi Upper bound of subarray (inclusive).
+ * @param target Item to search for.
  * @return Index of item if found, else -1.
  *
  */
@@ -1192,3 +1213,4 @@ bin_search(void* arr, size_t size, int (*compare)(void*, void*),
     }
   }
 }
+

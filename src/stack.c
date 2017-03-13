@@ -44,8 +44,8 @@ stack_init()
 /**
  * @brief Push data onto stack.
  *
- * @param stack Stack that data will be pushed onto.
- * @param data Data to be added to stack.
+ * @param stack Stack to push data onto.
+ * @param data Data to be pushed.
  * @return Void.
  */
 void
@@ -72,7 +72,7 @@ stack_peek(Stack* stack)
   return stack->head->data;
 }
 /**
- * @brief Remove topmost value from stack.
+ * @brief Remove topmost value from stack wihout returning it.
  *
  * @param stack Target stack.
  * @return Returns 0 if unable to pop else 1.
