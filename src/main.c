@@ -19,7 +19,7 @@
  * @brief Compare function for integers.
  */
 int
-compare_ints(void* a, void* b)
+compare_ints(const void* a, const void* b)
 {
   int diff = ((*(int*)a) - (*(int*)(b)));
   if (diff < 0) {
@@ -35,7 +35,7 @@ compare_ints(void* a, void* b)
  * @brief Compare function for chars.
  */
 int
-compare_chars(void* a, void* b)
+compare_chars(const void* a, const void* b)
 {
   int diff = strncmp((char*)a, (char*)b, 1);
   if (diff < 0) {

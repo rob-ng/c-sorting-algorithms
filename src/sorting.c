@@ -55,7 +55,7 @@ struct TimsortMergeState {
  */
 void
 insert_sort(void* arr, size_t nelems, size_t size, 
-            int (*compare)(void*,void*))
+            int (*compare)(const void*, const void*))
 {
   insert_sort_partial(arr, size, compare, 0, nelems);
 }
@@ -72,7 +72,7 @@ insert_sort(void* arr, size_t nelems, size_t size,
  */
 void
 insert_sort_partial(void* arr, size_t size, 
-                    int (*compare)(void*,void*), 
+                    int (*compare)(const void*, const void*), 
                     size_t lo, size_t hi) 
 {
   char* arrp = (char*)arr;
@@ -103,7 +103,7 @@ insert_sort_partial(void* arr, size_t size,
  */
 void
 binary_insert_sort(void* arr, size_t size, 
-                   int (*compare)(void*, void*), 
+                   int (*compare)(const void*, const void*), 
                    size_t lo, size_t hi)
 {
   char* arr_p = (char*)arr;
@@ -158,7 +158,7 @@ binary_insert_sort(void* arr, size_t size,
  */
 void
 select_sort(void* arr, size_t nelems, size_t size, 
-            int (*compare)(void*, void*))
+            int (*compare)(const void*, const void*))
 {
   char* arr_p = (char*)arr;
   size_t i, j, select_ind;
@@ -213,7 +213,7 @@ select_sort(void* arr, size_t nelems, size_t size,
  */
 void
 comb_sort(void* arr, size_t nelems, size_t size, 
-          int (*compare)(void*, void*))
+          int (*compare)(const void*, const void*))
 {
   char* arr_p = (char*)arr;
   size_t gap = nelems;
@@ -279,7 +279,7 @@ comb_sort(void* arr, size_t nelems, size_t size,
  */
 void
 merge_sort(void* arr, size_t nelems, size_t size, 
-           int (*compare)(void*, void*))
+           int (*compare)(const void*, const void*))
 {
   if (nelems <= LENGTH_THRESHOLD) {
     insert_sort(arr, nelems, size, compare);
@@ -319,7 +319,7 @@ merge_sort(void* arr, size_t nelems, size_t size,
  */
 void
 merge_sort_sort(void* arr, void* aux, size_t size, 
-                int (*compare)(void*, void*), 
+                int (*compare)(const void*, const void*), 
                 size_t lo, size_t hi)
 {
   if (hi <= lo) {
@@ -348,7 +348,7 @@ merge_sort_sort(void* arr, void* aux, size_t size,
  */
 void
 merge_sort_merge(void* arr, void* aux, size_t size, 
-                 int (*compare)(void*, void*), 
+                 int (*compare)(const void*, const void*), 
                  size_t lo, size_t mid, size_t hi)
 {
   char* arr_p = (char*)arr;
@@ -388,7 +388,7 @@ merge_sort_merge(void* arr, void* aux, size_t size,
  */
 void
 quick_sort(void* arr, size_t nelems, size_t size, 
-           int (*compare)(void*, void*))
+           int (*compare)(const void*, const void*))
 {
   if (nelems <= LENGTH_THRESHOLD) {
     insert_sort(arr, nelems, size, compare);
@@ -415,7 +415,7 @@ quick_sort(void* arr, size_t nelems, size_t size,
  */
 void
 quick_sort_sort(void* arr, size_t size, 
-                int (*compare)(void*, void*), 
+                int (*compare)(const void*, const void*), 
                 size_t lo, size_t hi)
 {
   if (hi <= lo) {
@@ -448,7 +448,7 @@ quick_sort_sort(void* arr, size_t size,
  */
 size_t
 quick_sort_partition(void* arr, size_t size, 
-                     int (*compare)(void*, void*), 
+                     int (*compare)(const void*, const void*), 
                      size_t lo, size_t hi)
 {
   char* arr_p = (char*)arr;
@@ -526,7 +526,7 @@ quick_sort_partition(void* arr, size_t size,
  */
 void 
 timsort(void* arr, size_t nelems, size_t size, 
-        int (*compare)(void*, void*))
+        int (*compare)(const void*, const void*))
 {
   const size_t MIN_NELEMS = 64;
   if (nelems < MIN_NELEMS) {
@@ -581,7 +581,7 @@ timsort(void* arr, size_t nelems, size_t size,
  */
 void
 timsort_find_runs(void* arr, size_t nelems, size_t size, 
-                  int (*compare)(void*, void*), 
+                  int (*compare)(const void*, const void*), 
                   size_t minrun, TimsortMergeState* merge_state)
 {
   char* arr_p = (char*)arr;
@@ -653,7 +653,7 @@ timsort_find_runs(void* arr, size_t nelems, size_t size,
  */
 void
 timsort_check_invariants(void* arr, size_t size, 
-                         int (*compare)(void*, void*), 
+                         int (*compare)(const void*, const void*), 
                          TimsortMergeState* merge_state)
 {
   while (1) {
@@ -705,7 +705,7 @@ timsort_check_invariants(void* arr, size_t size,
  */
 void
 timsort_collapse_runs(void* arr, size_t size, 
-                      int (*compare)(void*, void*), 
+                      int (*compare)(const void*, const void*), 
                       TimsortMergeState* merge_state)
 {
   while (merge_state->runs_stack->len > 1) {
@@ -736,7 +736,7 @@ timsort_collapse_runs(void* arr, size_t size,
  */
 TimsortRun*
 timsort_merge_runs(void* arr, size_t size, 
-                   int (*compare)(void*, void*), 
+                   int (*compare)(const void*, const void*), 
                    TimsortRun* frst, TimsortRun* scnd, 
                    TimsortMergeState* merge_state)
 {
@@ -812,7 +812,7 @@ timsort_merge_runs(void* arr, size_t size,
  */
 void
 timsort_merge_runs_lo(void* arr, size_t size, 
-                      int (*compare)(void*, void*), size_t lo, size_t lo_len, 
+                      int (*compare)(const void*, const void*), size_t lo, size_t lo_len, 
                       size_t hi, size_t hi_len, TimsortMergeState* merge_state) 
 {
   char* arr_p = (char*)arr;
@@ -903,7 +903,7 @@ timsort_merge_runs_lo(void* arr, size_t size,
  */
 int
 timsort_gallop_right(void* src, size_t size, 
-                     int (*compare)(void*, void*), int base, 
+                     int (*compare)(const void*, const void*), int base, 
                      int limit, void* target)
 {
   char* src_p = (char*)src;
@@ -957,7 +957,7 @@ timsort_gallop_right(void* src, size_t size,
  */
 void
 timsort_merge_runs_hi(void* arr, size_t size, 
-                      int (*compare)(void*, void*), size_t lo, size_t lo_len, 
+                      int (*compare)(const void*, const void*), size_t lo, size_t lo_len, 
                       size_t hi, size_t hi_len, TimsortMergeState* merge_state) 
 {
   char* arr_p = (char*)arr;
@@ -1052,7 +1052,7 @@ timsort_merge_runs_hi(void* arr, size_t size,
  */
 int 
 timsort_gallop_left(void* src, size_t size, 
-                    int (*compare)(void*, void*), 
+                    int (*compare)(const void*, const void*), 
                     int base, int limit, void* target) {
   char* src_p = (char*)src;
   int srch_lo = 0, srch_hi = 0, gallop_exp = 1, gallop_ind = 0, slice = 0;
@@ -1145,7 +1145,7 @@ timsort_minrun(size_t nelems)
  */
 int
 timsort_binary_search(void* arr, size_t size, 
-                      int (*compare)(void*, void*), 
+                      int (*compare)(const void*, const void*), 
                       size_t lo, size_t hi, void* target)
 {
   char* arr_p = (char*)arr;
@@ -1211,7 +1211,7 @@ swap(void* a, void* b, size_t size)
  */
 size_t
 median_three(void* arr, size_t size, size_t a, size_t b, size_t c, 
-             int (*compare)(void*, void*))
+             int (*compare)(const void*, const void*))
 {
   char* arr_p = (char*)arr;
   if (compare(arr_p+(a*size), arr_p+(b*size)) > 0) {
@@ -1269,7 +1269,7 @@ reverse_array(void* arr, size_t start, size_t end, size_t size)
  *
  */
 int
-bin_search(void* arr, size_t size, int (*compare)(void*, void*), 
+bin_search(void* arr, size_t size, int (*compare)(const void*, const void*), 
            size_t lo, size_t hi, void* target)
 {
   char* arr_p = (char*)arr;
