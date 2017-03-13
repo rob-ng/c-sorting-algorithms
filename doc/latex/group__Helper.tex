@@ -1,0 +1,123 @@
+\hypertarget{group__Helper}{}\section{Helper}
+\label{group__Helper}\index{Helper@{Helper}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{group__Helper_gac005eaa05ec80dbf1a0984d3d4fa80a8}{swap} (void $\ast$a, void $\ast$b, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em Swap the values referenced by two pointers. \end{DoxyCompactList}\item 
+size\+\_\+t \hyperlink{group__Helper_ga64dc225cd385660f0c413520416e8d40}{median\+\_\+three} (void $\ast$arr, size\+\_\+t size, size\+\_\+t a, size\+\_\+t b, size\+\_\+t c, int($\ast$compare)(void $\ast$, void $\ast$))
+\begin{DoxyCompactList}\small\item\em Find median of three elements in given array and return its index. \end{DoxyCompactList}\item 
+void \hyperlink{group__Helper_gae26181b67ffd4261a676f39624c3ce68}{reverse\+\_\+array} (void $\ast$arr, size\+\_\+t start, size\+\_\+t end, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em Reverse given array. \end{DoxyCompactList}\item 
+int \hyperlink{group__Helper_ga5f3f53398f1206d95119c4ba54faab58}{bin\+\_\+search} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t hi, void $\ast$target)
+\begin{DoxyCompactList}\small\item\em Search for an element using binary search in a contiguous subarray. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{group__Helper_ga5f3f53398f1206d95119c4ba54faab58}\label{group__Helper_ga5f3f53398f1206d95119c4ba54faab58}} 
+\index{Helper@{Helper}!bin\+\_\+search@{bin\+\_\+search}}
+\index{bin\+\_\+search@{bin\+\_\+search}!Helper@{Helper}}
+\subsubsection{\texorpdfstring{bin\+\_\+search()}{bin\_search()}}
+{\footnotesize\ttfamily int bin\+\_\+search (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{hi,  }\item[{void $\ast$}]{target }\end{DoxyParamCaption})}
+
+
+
+Search for an element using binary search in a contiguous subarray. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arr} & Array containing the subarray. \\
+\hline
+{\em size} & Size of each element in array. \\
+\hline
+{\em compare} & Function to compare elements. \\
+\hline
+{\em lo} & Lower bound of subarray (inclusive). \\
+\hline
+{\em hi} & Upper bound of subarray (inclusive). \\
+\hline
+{\em target} & Item to search for. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Index of item if found, else -\/1. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{group__Helper_ga64dc225cd385660f0c413520416e8d40}\label{group__Helper_ga64dc225cd385660f0c413520416e8d40}} 
+\index{Helper@{Helper}!median\+\_\+three@{median\+\_\+three}}
+\index{median\+\_\+three@{median\+\_\+three}!Helper@{Helper}}
+\subsubsection{\texorpdfstring{median\+\_\+three()}{median\_three()}}
+{\footnotesize\ttfamily size\+\_\+t median\+\_\+three (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{size\+\_\+t}]{a,  }\item[{size\+\_\+t}]{b,  }\item[{size\+\_\+t}]{c,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare }\end{DoxyParamCaption})}
+
+
+
+Find median of three elements in given array and return its index. 
+
+When attempting to find a pivot point (e.\+g. in quicksort), the median is a better option than using a fixed position (e.\+g. always first element).
+
+
+\begin{DoxyParams}{Parameters}
+{\em arr} & Array containing the elements. \\
+\hline
+{\em size} & Size of each element. \\
+\hline
+{\em a} & First element. \\
+\hline
+{\em b} & Second element. \\
+\hline
+{\em c} & Third element. \\
+\hline
+{\em compare} & Function to compare elements. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Index of the median element. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{group__Helper_gae26181b67ffd4261a676f39624c3ce68}\label{group__Helper_gae26181b67ffd4261a676f39624c3ce68}} 
+\index{Helper@{Helper}!reverse\+\_\+array@{reverse\+\_\+array}}
+\index{reverse\+\_\+array@{reverse\+\_\+array}!Helper@{Helper}}
+\subsubsection{\texorpdfstring{reverse\+\_\+array()}{reverse\_array()}}
+{\footnotesize\ttfamily void reverse\+\_\+array (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{start,  }\item[{size\+\_\+t}]{end,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+Reverse given array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arr} & Array to reverse. \\
+\hline
+{\em start} & Lower index bound (inclusive). \\
+\hline
+{\em end} & Upper index bound (inclusive). \\
+\hline
+{\em size} & Size of each element in array. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{group__Helper_gac005eaa05ec80dbf1a0984d3d4fa80a8}\label{group__Helper_gac005eaa05ec80dbf1a0984d3d4fa80a8}} 
+\index{Helper@{Helper}!swap@{swap}}
+\index{swap@{swap}!Helper@{Helper}}
+\subsubsection{\texorpdfstring{swap()}{swap()}}
+{\footnotesize\ttfamily void swap (\begin{DoxyParamCaption}\item[{void $\ast$}]{a,  }\item[{void $\ast$}]{b,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+Swap the values referenced by two pointers. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & First pointer. \\
+\hline
+{\em b} & Second pointer. \\
+\hline
+{\em size} & Size of the values referenced by the pointers. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void. 
+\end{DoxyReturn}

@@ -1,5 +1,20 @@
+/** 
+ * @file
+ * @brief Stack implementation.
+ */
 #include <stdlib.h>
 #include "stack.h"
+#include "doxygen.h"
+
+/**
+ * @addtogroup Stack
+ * @{
+ */
+
+/**
+ * @addtogroup StackFrame
+ * @{
+ */
 
 /**
  * @brief Initialize new stack frame.
@@ -27,6 +42,8 @@ stack_frame_free(StackFrame** frame)
   free(*frame);
   *frame = NULL;
 }
+
+/** @} */
 
 /**
  * @brief Initialize new stack.
@@ -74,7 +91,7 @@ stack_peek(Stack* stack)
 /**
  * @brief Remove topmost value from stack wihout returning it.
  *
- * @param stack Target stack.
+ * @param stack Stack to pop from.
  * @return Returns 0 if unable to pop else 1.
  */
 int
@@ -93,7 +110,7 @@ stack_pop(Stack* stack)
 /**
  * @brief Remove topmost value from stack and return it.
  *
- * @param stack Target stack.
+ * @param stack Stack to pop from.
  * @return Previous top of stack.
  */
 void*
@@ -113,10 +130,10 @@ stack_pop_return(Stack* stack)
 /**
  * @brief Free stack and its stack frames.
  *
- * NOTE: Does not free data stored in stack frames. Data is assumed to be
+ * @note Does not free data stored in stack frames. Data is assumed to be
  * stored in memory stack.
  *
- * @param stack Target stack.
+ * @param stack Stack to free.
  * @return Void.
  */
 void
@@ -128,4 +145,6 @@ stack_free(Stack** stack)
   free(*stack);
   *stack = NULL;
 }
+
+/** @} */
 

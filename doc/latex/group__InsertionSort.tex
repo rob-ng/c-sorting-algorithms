@@ -1,0 +1,103 @@
+\hypertarget{group__InsertionSort}{}\section{Insertion Sorts}
+\label{group__InsertionSort}\index{Insertion Sorts@{Insertion Sorts}}
+
+
+Insertion sort implementations.  
+
+
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{group__InsertionSort_ga0f8cbdee5711f9a401c6a6bc0910e5c9}{insert\+\_\+sort} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$))
+\begin{DoxyCompactList}\small\item\em Sort generic array using insertion sort. \end{DoxyCompactList}\item 
+void \hyperlink{group__InsertionSort_gabab9277ccf9fc7370143131b469142b9}{insert\+\_\+sort\+\_\+partial} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t hi)
+\begin{DoxyCompactList}\small\item\em Sort generic contiguous subarray using insertion sort. \end{DoxyCompactList}\item 
+void \hyperlink{group__InsertionSort_ga9955e0e065cbb32f516533e134c437a8}{binary\+\_\+insert\+\_\+sort} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t hi)
+\begin{DoxyCompactList}\small\item\em Sort generic contiguous subarray using binary insertion sort. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Insertion sort implementations. 
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{group__InsertionSort_ga9955e0e065cbb32f516533e134c437a8}\label{group__InsertionSort_ga9955e0e065cbb32f516533e134c437a8}} 
+\index{Insertion Sorts@{Insertion Sorts}!binary\+\_\+insert\+\_\+sort@{binary\+\_\+insert\+\_\+sort}}
+\index{binary\+\_\+insert\+\_\+sort@{binary\+\_\+insert\+\_\+sort}!Insertion Sorts@{Insertion Sorts}}
+\subsubsection{\texorpdfstring{binary\+\_\+insert\+\_\+sort()}{binary\_insert\_sort()}}
+{\footnotesize\ttfamily void binary\+\_\+insert\+\_\+sort (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{hi }\end{DoxyParamCaption})}
+
+
+
+Sort generic contiguous subarray using binary insertion sort. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arr} & Array containing the subarray. \\
+\hline
+{\em size} & Size of each element in the array. \\
+\hline
+{\em compare} & Function to compare elements. \\
+\hline
+{\em lo} & Lower bound of subarray (inclusive). \\
+\hline
+{\em hi} & Upper bound of subarray (inclusive). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{group__InsertionSort_ga0f8cbdee5711f9a401c6a6bc0910e5c9}\label{group__InsertionSort_ga0f8cbdee5711f9a401c6a6bc0910e5c9}} 
+\index{Insertion Sorts@{Insertion Sorts}!insert\+\_\+sort@{insert\+\_\+sort}}
+\index{insert\+\_\+sort@{insert\+\_\+sort}!Insertion Sorts@{Insertion Sorts}}
+\subsubsection{\texorpdfstring{insert\+\_\+sort()}{insert\_sort()}}
+{\footnotesize\ttfamily void insert\+\_\+sort (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{nelems,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare }\end{DoxyParamCaption})}
+
+
+
+Sort generic array using insertion sort. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arr} & Array to be sorted. \\
+\hline
+{\em nelems} & Number of elements in the array. \\
+\hline
+{\em size} & Size of each element in the array. \\
+\hline
+{\em compare} & Function to compare elements. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__InsertionSort_gabab9277ccf9fc7370143131b469142b9}{insert\+\_\+sort\+\_\+partial()} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{group__InsertionSort_gabab9277ccf9fc7370143131b469142b9}\label{group__InsertionSort_gabab9277ccf9fc7370143131b469142b9}} 
+\index{Insertion Sorts@{Insertion Sorts}!insert\+\_\+sort\+\_\+partial@{insert\+\_\+sort\+\_\+partial}}
+\index{insert\+\_\+sort\+\_\+partial@{insert\+\_\+sort\+\_\+partial}!Insertion Sorts@{Insertion Sorts}}
+\subsubsection{\texorpdfstring{insert\+\_\+sort\+\_\+partial()}{insert\_sort\_partial()}}
+{\footnotesize\ttfamily void insert\+\_\+sort\+\_\+partial (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{hi }\end{DoxyParamCaption})}
+
+
+
+Sort generic contiguous subarray using insertion sort. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arr} & Array containing the subarray. \\
+\hline
+{\em size} & Size of each element in the array. \\
+\hline
+{\em compare} & Function to compare elements. \\
+\hline
+{\em lo} & Lower bound of subarray (inclusive). \\
+\hline
+{\em hi} & Upper bound of subarray (exclusive). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void. 
+\end{DoxyReturn}

@@ -1,0 +1,77 @@
+\hypertarget{sorting_8h}{}\section{src/sorting.h File Reference}
+\label{sorting_8h}\index{src/sorting.\+h@{src/sorting.\+h}}
+
+
+Sorting header file.  
+
+
+{\ttfamily \#include \char`\"{}stack.\+h\char`\"{}}\newline
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{sorting_8h_ad512e573b34de0f3d33707498d526f58}\label{sorting_8h_ad512e573b34de0f3d33707498d526f58}} 
+\#define \hyperlink{sorting_8h_ad512e573b34de0f3d33707498d526f58}{L\+E\+N\+G\+T\+H\+\_\+\+T\+H\+R\+E\+S\+H\+O\+LD}~7
+\begin{DoxyCompactList}\small\item\em Maximum array length at which complex sorts should defer to simpler sorts. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{sorting_8h_abe73bd3088a83cfb688912430724100c}\label{sorting_8h_abe73bd3088a83cfb688912430724100c}} 
+\#define \hyperlink{sorting_8h_abe73bd3088a83cfb688912430724100c}{M\+I\+N\+\_\+\+G\+A\+L\+L\+OP}~7
+\begin{DoxyCompactList}\small\item\em Default minimum galloping threshold for Timsort. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{group__InsertionSort_ga0f8cbdee5711f9a401c6a6bc0910e5c9}{insert\+\_\+sort} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$))
+\begin{DoxyCompactList}\small\item\em Sort generic array using insertion sort. \end{DoxyCompactList}\item 
+void \hyperlink{group__InsertionSort_gabab9277ccf9fc7370143131b469142b9}{insert\+\_\+sort\+\_\+partial} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t hi)
+\begin{DoxyCompactList}\small\item\em Sort generic contiguous subarray using insertion sort. \end{DoxyCompactList}\item 
+void \hyperlink{group__InsertionSort_ga9955e0e065cbb32f516533e134c437a8}{binary\+\_\+insert\+\_\+sort} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t hi)
+\begin{DoxyCompactList}\small\item\em Sort generic contiguous subarray using binary insertion sort. \end{DoxyCompactList}\item 
+void \hyperlink{group__SelectionSort_ga6174e0499c83fdbe406f52cc09df7058}{select\+\_\+sort} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$))
+\begin{DoxyCompactList}\small\item\em Sort generic array using selection sort. \end{DoxyCompactList}\item 
+void \hyperlink{group__CombSort_ga619c6623faf56c2add4d8bd9e796b3dc}{comb\+\_\+sort} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$))
+\begin{DoxyCompactList}\small\item\em Sort generic array using comb sort. \end{DoxyCompactList}\item 
+void \hyperlink{group__MergeSort_gae79ad9eeaa55ba9f59fd89f9cdeb5924}{merge\+\_\+sort} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$))
+\begin{DoxyCompactList}\small\item\em Sort generic array using merge sort. \end{DoxyCompactList}\item 
+void \hyperlink{group__MergeSort_ga530d5666451d2ecee0dd5fd88cd7e88c}{merge\+\_\+sort\+\_\+sort} (void $\ast$arr, void $\ast$aux, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t hi)
+\begin{DoxyCompactList}\small\item\em Recursively perform merge sort. \end{DoxyCompactList}\item 
+void \hyperlink{group__MergeSort_ga7018ae4bb54261fff3f754fd8e6b6bc4}{merge\+\_\+sort\+\_\+merge} (void $\ast$arr, void $\ast$aux, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t mid, size\+\_\+t hi)
+\begin{DoxyCompactList}\small\item\em Merge subarrays by updating aux with sorted values taken from arr. \end{DoxyCompactList}\item 
+void \hyperlink{group__QuickSort_ga7aea235f1d6b3dff511a11e02d27be68}{quick\+\_\+sort} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$))
+\begin{DoxyCompactList}\small\item\em Sort generic array using quicksort. \end{DoxyCompactList}\item 
+void \hyperlink{group__QuickSort_ga81da4500a40b9f11155fb6b1c6edf3d8}{quick\+\_\+sort\+\_\+sort} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t hi)
+\begin{DoxyCompactList}\small\item\em Recursively perform quicksort. \end{DoxyCompactList}\item 
+size\+\_\+t \hyperlink{group__QuickSort_ga093c6d71dca8ea2ea18ba4f6b6e63359}{quick\+\_\+sort\+\_\+partition} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t hi)
+\begin{DoxyCompactList}\small\item\em Partition subarray around pivot element. \end{DoxyCompactList}\item 
+void \hyperlink{group__Timsort_gae421187852c6c109058362a81539de0f}{timsort} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$))
+\begin{DoxyCompactList}\small\item\em Sort generic array using Timsort. \end{DoxyCompactList}\item 
+static size\+\_\+t \hyperlink{group__Timsort_ga7d1b40d5d91736aa4b5362896cdc68f3}{timsort\+\_\+minrun} (size\+\_\+t nelems)
+\begin{DoxyCompactList}\small\item\em Find minimum run size to use in timsort. \end{DoxyCompactList}\item 
+static void \hyperlink{group__Timsort_ga95a12fa41d6574d3350a908cf0fcb63d}{timsort\+\_\+find\+\_\+runs} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t minrun, \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$merge\+\_\+state)
+\begin{DoxyCompactList}\small\item\em Find runs of either strictly descending or non-\/descending elements. \end{DoxyCompactList}\item 
+static \hyperlink{structTimsortRun}{Timsort\+Run} $\ast$ \hyperlink{group__Timsort_ga0be2dffcafd8880d305fd0c7d9f87fd7}{timsort\+\_\+merge\+\_\+runs} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), \hyperlink{structTimsortRun}{Timsort\+Run} $\ast$a, \hyperlink{structTimsortRun}{Timsort\+Run} $\ast$b, \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$merge\+\_\+state)
+\begin{DoxyCompactList}\small\item\em Merge 2 consecutive runs. \end{DoxyCompactList}\item 
+static void \hyperlink{group__Timsort_ga18534dcb0fb5689af44c3309a44a4968}{timsort\+\_\+merge\+\_\+runs\+\_\+lo} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t lo\+\_\+len, size\+\_\+t hi, size\+\_\+t hi\+\_\+len, \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$merge\+\_\+state)
+\begin{DoxyCompactList}\small\item\em Merge runs from left to right. \end{DoxyCompactList}\item 
+static void \hyperlink{group__Timsort_ga82043845fa8abc3c91332008ddbb4b55}{timsort\+\_\+merge\+\_\+runs\+\_\+hi} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t lo\+\_\+len, size\+\_\+t hi, size\+\_\+t hi\+\_\+len, \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$merge\+\_\+state)
+\begin{DoxyCompactList}\small\item\em Merge runs from right to left. \end{DoxyCompactList}\item 
+static int \hyperlink{group__Timsort_gaa2295bcc1b001663881a0ad6c20d6d7a}{timsort\+\_\+gallop\+\_\+right} (void $\ast$src, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), int base, int limit, void $\ast$target)
+\begin{DoxyCompactList}\small\item\em Gallop left-\/$>$right to find number of elements in source array less than target. \end{DoxyCompactList}\item 
+static int \hyperlink{group__Timsort_ga503a8e66f4c150e73b2b37980996cae0}{timsort\+\_\+gallop\+\_\+left} (void $\ast$src, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), int base, int limit, void $\ast$target)
+\begin{DoxyCompactList}\small\item\em Gallop right-\/$>$left to find number of elements in source array greater than target. \end{DoxyCompactList}\item 
+static void \hyperlink{group__Timsort_gac2adf9d2399deb49f6c8bb71ef13829f}{timsort\+\_\+check\+\_\+invariants} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$merge\+\_\+state)
+\begin{DoxyCompactList}\small\item\em Check that run invariants hold and update runs stack if they do not. \end{DoxyCompactList}\item 
+static void \hyperlink{group__Timsort_gabbc386bb95547fd09350b3aaf72c8e26}{timsort\+\_\+collapse\+\_\+runs} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$merge\+\_\+state)
+\begin{DoxyCompactList}\small\item\em Merge top two runs in run stack until only one run remains. \end{DoxyCompactList}\item 
+static int \hyperlink{group__Timsort_gac83afa31d70a068091adc4a017b08602}{timsort\+\_\+binary\+\_\+search} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t hi, void $\ast$target)
+\begin{DoxyCompactList}\small\item\em Find position of element within array using binary search. \end{DoxyCompactList}\item 
+void \hyperlink{group__SortingHelper_gac005eaa05ec80dbf1a0984d3d4fa80a8}{swap} (void $\ast$a, void $\ast$b, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em Swap the values referenced by two pointers. \end{DoxyCompactList}\item 
+size\+\_\+t \hyperlink{group__SortingHelper_ga64dc225cd385660f0c413520416e8d40}{median\+\_\+three} (void $\ast$arr, size\+\_\+t size, size\+\_\+t a, size\+\_\+t b, size\+\_\+t c, int($\ast$compare)(void $\ast$, void $\ast$))
+\begin{DoxyCompactList}\small\item\em Find median of three elements in given array and return its index. \end{DoxyCompactList}\item 
+static void \hyperlink{group__SortingHelper_gae26181b67ffd4261a676f39624c3ce68}{reverse\+\_\+array} (void $\ast$arr, size\+\_\+t start, size\+\_\+t end, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em Reverse given array. \end{DoxyCompactList}\item 
+static int \hyperlink{group__SortingHelper_ga5f3f53398f1206d95119c4ba54faab58}{bin\+\_\+search} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t hi, void $\ast$target)
+\begin{DoxyCompactList}\small\item\em Search for an element using binary search in a contiguous subarray. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Sorting header file. 
+

@@ -7,6 +7,13 @@ The format is based on [Keep a Changelog]() and this project adheres to
 
 ## [Unreleased]
 
+## [2017-03-13] 0.0.6
+
+### Added
+
+- Project documentation.
+- Basic README.
+
 ## [2017-03-10] 0.0.5
 
 ### Added

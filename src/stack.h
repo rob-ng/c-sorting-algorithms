@@ -1,3 +1,7 @@
+/** 
+ * @file
+ * @brief Stack header file.
+ */
 #ifndef MY_STACK_
 #define MY_STACK_
 
@@ -5,31 +9,33 @@
 
 /**
  * @struct StackFrame
- * @brief Struct representing each element in stack.
+ * @brief Struct to represent a frame in a stack.
  */
 typedef struct StackFrame {
-  void* data;
-  struct StackFrame* next;
+  void* data; ///< Data stored in stack frame.
+  struct StackFrame* next; ///< Next frame in stack.
 } StackFrame;
 
 /**
  * @struct Stack
- * @brief Struct representing stack.
+ * @brief Struct to represent a stack.
  */
 typedef struct Stack {
-  StackFrame* head;
-  size_t len;
+  StackFrame* head; ///< Top frame in stack.
+  size_t len; ///< Total number of frames in stack.
 } Stack;
 
-////////////////////////////////////////////////////////////////////////////////
-/// STACK FRAME
-////////////////////////////////////////////////////////////////////////////////
+//##############################################################################
+//# STACK FRAME
+//##############################################################################
+
 StackFrame* stack_frame_init(void* data);
 void stack_frame_free(StackFrame** frame);
 
-////////////////////////////////////////////////////////////////////////////////
-/// STACK
-////////////////////////////////////////////////////////////////////////////////
+//##############################################################################
+//# STACK
+//##############################################################################
+
 Stack* stack_init();
 void stack_push(Stack* stack, void* data);
 void* stack_peek(Stack* stack);

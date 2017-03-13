@@ -1,22 +1,28 @@
+/** 
+ * @file
+ * @brief Sorting header file.
+ */
 #ifndef MY_SORTING_ALGORITHMS_
 #define MY_SORTING_ALGORITHMS_
 
 #include "stack.h"
 
-/* @def LENGTH_THRESHOLD
- * Maximum array length at which complex sorts should defer to simpler 
+/** 
+ * @def LENGTH_THRESHOLD
+ * @brief Maximum array length at which complex sorts should defer to simpler 
  * sorts. */
 #define LENGTH_THRESHOLD 7
-/* @def MIN_GALLOP
- * Default minimum galloping threshold for Timsort. */
+/** 
+ * @def MIN_GALLOP
+ * @brief Default minimum galloping threshold for Timsort. */
 #define MIN_GALLOP 7
 
 typedef struct TimsortRun TimsortRun;
 typedef struct TimsortMergeState TimsortMergeState;
 
-////////////////////////////////////////////////////////////////////////////////
-/// SIMPLE SORTS
-////////////////////////////////////////////////////////////////////////////////
+//##############################################################################
+//# SIMPLE SORTS
+//##############################################################################
 
 void insert_sort(void* arr, size_t nelems, size_t size, 
                  int (*compare)(void*, void*));
@@ -32,16 +38,16 @@ void binary_insert_sort(void* arr, size_t size,
 void select_sort(void* arr, size_t nelems, size_t size, 
                  int (*compare)(void*, void*));
 
-////////////////////////////////////////////////////////////////////////////////
-/// BUBBLE SORTS
-////////////////////////////////////////////////////////////////////////////////
+//##############################################################################
+//# BUBBLE SORTS
+//##############################################################################
 
 void comb_sort(void* arr, size_t nelems, size_t size, 
                int (*compare)(void*, void*));
 
-////////////////////////////////////////////////////////////////////////////////
-/// EFFICIENT SORTS
-////////////////////////////////////////////////////////////////////////////////
+//##############################################################################
+//# EFFICIENT SORTS
+//##############################################################################
 
 void merge_sort(void* arr, size_t nelems, size_t size, 
                 int (*compare)(void*, void*));
@@ -66,9 +72,9 @@ size_t quick_sort_partition(void* arr, size_t size,
                             int (*compare)(void*, void*), 
                             size_t lo, size_t hi);
 
-////////////////////////////////////////////////////////////////////////////////
-/// HYBRID SORTS
-////////////////////////////////////////////////////////////////////////////////
+//##############################################################################
+//# HYBRID SORTS
+//##############################################################################
 
 void timsort(void* arr, size_t nelems, size_t size, 
              int (*compare)(void*, void*));
@@ -116,9 +122,9 @@ static int timsort_binary_search(void* arr, size_t size,
                                  int (*compare)(void*, void*), 
                                  size_t lo, size_t hi, void* target);
 
-////////////////////////////////////////////////////////////////////////////////
-/// HELPERS
-////////////////////////////////////////////////////////////////////////////////
+//##############################################################################
+//# HELPERS
+//##############################################################################
 
 void swap(void* a, void* b, size_t size);
 

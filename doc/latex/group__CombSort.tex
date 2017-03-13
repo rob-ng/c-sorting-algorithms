@@ -1,0 +1,48 @@
+\hypertarget{group__CombSort}{}\section{Comb Sorts}
+\label{group__CombSort}\index{Comb Sorts@{Comb Sorts}}
+
+
+Comb sort implementations.  
+
+
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{group__CombSort_ga619c6623faf56c2add4d8bd9e796b3dc}{comb\+\_\+sort} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$))
+\begin{DoxyCompactList}\small\item\em Sort generic array using comb sort. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Comb sort implementations. 
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{group__CombSort_ga619c6623faf56c2add4d8bd9e796b3dc}\label{group__CombSort_ga619c6623faf56c2add4d8bd9e796b3dc}} 
+\index{Comb Sorts@{Comb Sorts}!comb\+\_\+sort@{comb\+\_\+sort}}
+\index{comb\+\_\+sort@{comb\+\_\+sort}!Comb Sorts@{Comb Sorts}}
+\subsubsection{\texorpdfstring{comb\+\_\+sort()}{comb\_sort()}}
+{\footnotesize\ttfamily void comb\+\_\+sort (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{nelems,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare }\end{DoxyParamCaption})}
+
+
+
+Sort generic array using comb sort. 
+
+Comb sort is an improvement over standard bubble sort. As in bubble sort, comb sort operates by repeatedly looping through an array and swapping elements until the array is sorted. What distinguishes the two is that bubble sort always compares consecutive elements, while comb sort compares elements a distance k apart. On each new iteration through the loop, the value of k is shrunk by some fixed factor. Once k becomes less then one, k\textquotesingle{}s value is set to one and comb sort becomes identical to bubble sort.
+
+The primary benefit of comb sort over bubble sort is its ability to move small values away from the end of the list. Bubble sort\textquotesingle{}s is least efficient when small values are at the end of the array, as comparisons are made from left to right. As such, each such element can be moved left at most 1 index per iteration. So if the smallest element where located at an index n, n -\/ 1 loop iterations would have to occur for it to be sorted.
+
+
+\begin{DoxyParams}{Parameters}
+{\em arr} & Array to be sorted. \\
+\hline
+{\em nelems} & Number of elements in array. \\
+\hline
+{\em size} & Size of each element in array. \\
+\hline
+{\em compare} & Function to compare elements. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void. 
+\end{DoxyReturn}
