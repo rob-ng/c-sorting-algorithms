@@ -3,47 +3,66 @@
 #include <stdio.h>
 #include <limits.h>
 #include <math.h>
+
 #include "sorting.h"
 #include "stack.h"
 
 /**
- * @brief Specifies length at / below which more complex sorts (e.g. quicksort)
- * should defer to simpler sorts (e.g. insertion sort).
+ * @struct TimsortRun.
+ * @brief Struct to represent run during Timsort.
+ *
+ * start - index where run began.
+ * len - length of run (start index to end index).
  */
-#define LENGTH_THRESHOLD 7
+struct TimsortRun {
+  size_t start;
+  size_t len;
+};
 
 /**
- * @brief Default length at which gallop mode should begin in Timsort.
+ * @struct TimsortMergeState.
+ * @brief Struct to represent merge state during Timsort.
  */
-#define MIN_GALLOP 7
+struct TimsortMergeState {
+  Stack* runs_stack;
+  TimsortRun* runs;
+  size_t max_runs;
+  int min_gallop;
+  int galloping;
+};
 
 /**
- * @brief Sort array of arbitrary values using insertion sort.
+ * @brief Sort generic array using insertion sort.
  *
  * @param arr Array to be sorted.
  * @param nelems Number of elements in the array.
  * @param size Size of each element in the array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @return Void.
+ *
+ * @see insert_sort_partial()
  */
 void
-insert_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*,void*))
+insert_sort(void* arr, size_t nelems, size_t size, 
+            int (*compare)(void*,void*))
 {
   insert_sort_partial(arr, size, compare, 0, nelems);
 }
 
 /**
- * @brief Sort subarray of array using insertion sort.
+ * @brief Sort generic contiguous subarray using insertion sort.
  *
- * @param arr Array to be sorted.
+ * @param arr Array containing the subarray.
  * @param size Size of each element in the array.
- * @param compare Function to be used to compare elements.
- * @param lo Lower bound (inclusive).
- * @param hi Upper bound (exclusive).
+ * @param compare Function to compare elements.
+ * @param lo Lower bound of subarray (inclusive).
+ * @param hi Upper bound of subarray (exclusive).
  * @return Void.
  */
 void
-insert_sort_partial(void* arr, size_t size, int (*compare)(void*,void*), size_t lo, size_t hi) 
+insert_sort_partial(void* arr, size_t size, 
+                    int (*compare)(void*,void*), 
+                    size_t lo, size_t hi) 
 {
   char* arrp = (char*)arr;
   size_t i, j;
@@ -62,17 +81,19 @@ insert_sort_partial(void* arr, size_t size, int (*compare)(void*,void*), size_t 
 }
 
 /**
- * @brief Sort subarray of array using insertion sort which uses binary search.
+ * @brief Sort generic contiguous subarray using binary insertion sort.
  *
- * @param arr The array to be sorted.
- * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
- * @param lo Lower bound of subarray.
- * @param hi Upper bound of subarray.
+ * @param arr Array containing the subarray.
+ * @param size Size of each element in the array.
+ * @param compare Function to compare elements.
+ * @param lo Lower bound of subarray (inclusive).
+ * @param hi Upper bound of subarray (inclusive).
  * @return Void.
  */
 void
-binary_insert_sort(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi)
+binary_insert_sort(void* arr, size_t size, 
+                   int (*compare)(void*, void*), 
+                   size_t lo, size_t hi)
 {
   char* arr_p = (char*)arr;
   int i, j, l, r, m, loc;
@@ -109,16 +130,17 @@ binary_insert_sort(void* arr, size_t size, int (*compare)(void*, void*), size_t 
 }
 
 /**
- * @brief Sort array of arbitrary values using selection sort.
+ * @brief Sort generic array using selection sort.
  *
  * @param arr Array to be sorted.
  * @param nelems Number of elemenets in the array.
  * @param size Size of each element in the array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @return Void.
  */
 void
-select_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
+select_sort(void* arr, size_t nelems, size_t size, 
+            int (*compare)(void*, void*))
 {
   char* arr_p = (char*)arr;
   size_t i, j, select_ind;
@@ -136,7 +158,7 @@ select_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
 }
 
 /**
- * Sort array of arbitrary values using comb sort (bubble sort variant).
+ * @brief Sort generic array using comb sort.
  *
  * Comb sort is an improvement over standard bubble sort. As in bubble sort,
  * comb sort operates by repeatedly looping through an array and swapping
@@ -149,18 +171,19 @@ select_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
  * The primary benefit of comb sort over bubble sort is its ability to move
  * small values away from the end of the list. Bubble sort's is least efficient
  * when small values are at the end of the array, as comparisons are made
- * from left to right. As such, each such element can be moved left at most 1 index
- * per iteration. So if the smallest element where located at an index n, n - 1
- * loop iterations would have to occur for it to be sorted.
+ * from left to right. As such, each such element can be moved left at most 1 
+ * index per iteration. So if the smallest element where located at an index n,
+ * n - 1 loop iterations would have to occur for it to be sorted.
  *
  * @param arr Array to be sorted.
  * @param nelems Number of elements in array.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @return Void.
  */
 void
-comb_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
+comb_sort(void* arr, size_t nelems, size_t size, 
+          int (*compare)(void*, void*))
 {
   char* arr_p = (char*)arr;
   size_t gap = nelems;
@@ -189,7 +212,7 @@ comb_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
 }
 
 /**
- * @brief Sort array of arbitrary values using merge sort.
+ * @brief Sort generic array using merge sort.
  *
  * Merge sort is not efficient for small arrays. As such, merge sort is only
  * performed if the length of the array is above LENGTH_THRESHOLD.
@@ -212,7 +235,8 @@ comb_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
  * @return Void.
  */
 void
-merge_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
+merge_sort(void* arr, size_t nelems, size_t size, 
+           int (*compare)(void*, void*))
 {
   if (nelems <= LENGTH_THRESHOLD) {
     insert_sort(arr, nelems, size, compare);
@@ -225,7 +249,7 @@ merge_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
 }
 
 /**
- * @brief Helper (merge_sort): Recursively perform merge sort.
+ * @brief Recursively perform merge sort.
  *
  * Merge sort is only perfomed if current index interval [lo, hi] is
  * sufficiently large. If it isn't, insertion sort is used to sort the array in
@@ -233,8 +257,8 @@ merge_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
  *
  * Note that the merge_sort_sort() and merge_sort_merge() calls swap the order
  * of arr and aux. This ensures that the aux array (INTO which values are
- * copied from arr in merge) is the array FROM which values are copied in the next
- * merge. See merge_sort() documentation for why this is done.
+ * copied from arr in merge) is the array FROM which values are copied in the 
+ * next merge. See merge_sort() documentation for why this is done.
  *
  * Note: we use lo + (hi - lo) / 2 rather than (hi + lo) / 2 to guard against
  * overflow.
@@ -242,13 +266,18 @@ merge_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
  * @param arr Array from which values will be copied.
  * @param aux Array into which values will be copied.
  * @param size Size of each element in either array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @param lo Lower bound of subarray (inclusive).
  * @param hi Upper bound of subarray (inclusive).
  * @return Void.
+ *
+ * @see merge_sort()
+ * @see merge_sort_merge()
  */
 void
-merge_sort_sort(void* arr, void* aux, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi)
+merge_sort_sort(void* arr, void* aux, size_t size, 
+                int (*compare)(void*, void*), 
+                size_t lo, size_t hi)
 {
   if (hi <= lo) {
     return;
@@ -263,7 +292,7 @@ merge_sort_sort(void* arr, void* aux, size_t size, int (*compare)(void*, void*),
 }
 
 /**
- * @brief Helper (merge_sort): "Merge" subarrays by updating aux with sorted values taken from arr.
+ * @brief Merge subarrays by updating aux with sorted values taken from arr.
  *
  * @param arr Array from which values are copied.
  * @param aux Array to which sorted values are copied.
@@ -275,7 +304,9 @@ merge_sort_sort(void* arr, void* aux, size_t size, int (*compare)(void*, void*),
  * @return Void.
  */
 void
-merge_sort_merge(void* arr, void* aux, size_t size, int (*compare)(void*, void*), size_t lo, size_t mid, size_t hi)
+merge_sort_merge(void* arr, void* aux, size_t size, 
+                 int (*compare)(void*, void*), 
+                 size_t lo, size_t mid, size_t hi)
 {
   char* arr_p = (char*)arr;
   char* aux_p = (char*)aux;
@@ -293,18 +324,21 @@ merge_sort_merge(void* arr, void* aux, size_t size, int (*compare)(void*, void*)
 }
 
 /**
- * @brief Sort array of arbitrary values using quicksort.
+ * @brief Sort generic array using quicksort.
  *
- * If array is small enough, function defers to insertion sort instead.
+ * If array is small enough, defers to insertion sort instead.
  *
  * @param arr Array to be sorted.
  * @param nelems Number of elements in the array.
  * @param size Size of each element in the array.
  * @param compare Function to be used to compare elements.
  * @return Void.
+ *
+ * @see quick_sort_sort()
  */
 void
-quick_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
+quick_sort(void* arr, size_t nelems, size_t size, 
+           int (*compare)(void*, void*))
 {
   if (nelems <= LENGTH_THRESHOLD) {
     insert_sort(arr, nelems, size, compare);
@@ -314,7 +348,7 @@ quick_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
 }
 
 /**
- * @brief Helper (quick_sort): Recursively perform quicksort.
+ * @brief Recursively perform quicksort.
  *
  * Quicksort is not efficient for small arrays. As such, insertion sort is used
  * when subarray is small.
@@ -325,9 +359,14 @@ quick_sort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
  * @param lo Lower index bound of current subarray (inclusive).
  * @param hi Upper index bound of the current subarray (invclusive).
  * @return Void.
+ *
+ * @see quick_sort()
+ * @see quick_sort_partition()
  */
 void
-quick_sort_sort(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi)
+quick_sort_sort(void* arr, size_t size, 
+                int (*compare)(void*, void*), 
+                size_t lo, size_t hi)
 {
   if (hi <= lo) {
     return;
@@ -341,7 +380,7 @@ quick_sort_sort(void* arr, size_t size, int (*compare)(void*, void*), size_t lo,
 }
 
 /**
- * @brief Helper (quick_sort): Partition subarray around pivot element.
+ * @brief Partition subarray around pivot element.
  *
  * Smaller elements are moved to left of pivot, larger to right of pivot.
  * The pivot index is set to the median of the lower, middle, and upper bounds
@@ -352,13 +391,15 @@ quick_sort_sort(void* arr, size_t size, int (*compare)(void*, void*), size_t lo,
  *
  * @param arr Array containing the subarray.
  * @param size Size of each element in the array.
- * @param compare Function to be used to compare elements.
- * @param lo Lower index bound of the subarray (inclusive).
- * @param hi Upper index bound of the subarray (inclusive).
+ * @param compare Function to compare elements.
+ * @param lo Lower bound of the subarray (inclusive).
+ * @param hi Upper bound of the subarray (inclusive).
  * @return Final index of the pivot element.
  */
 size_t
-quick_sort_partition(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi)
+quick_sort_partition(void* arr, size_t size, 
+                     int (*compare)(void*, void*), 
+                     size_t lo, size_t hi)
 {
   char* arr_p = (char*)arr;
   size_t mid = lo + (hi - lo) / 2;
@@ -386,7 +427,7 @@ quick_sort_partition(void* arr, size_t size, int (*compare)(void*, void*), size_
 }
 
 /**
- * @brief Sort array of arbitrary values using Timsort.
+ * @brief Sort generic array using Timsort.
  *
  * Timsort (developed by Tim Peters) is a hybrid stable sorting algorithm.
  * Timsort uses a combination of insertion sort and merge sort to first
@@ -409,7 +450,7 @@ quick_sort_partition(void* arr, size_t size, int (*compare)(void*, void*), size_
  * @param arr Array to be sorted.
  * @param nelems Number of elements in array.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @return Void.
  *
  * @see timsort_minrun
@@ -418,7 +459,8 @@ quick_sort_partition(void* arr, size_t size, int (*compare)(void*, void*), size_
  * @see timsort_collapse_runs
  */
 void 
-timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
+timsort(void* arr, size_t nelems, size_t size, 
+        int (*compare)(void*, void*))
 {
   const size_t MIN_NELEMS = 64;
   if (nelems < MIN_NELEMS) {
@@ -432,7 +474,13 @@ timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
       TimsortRun run = { 0, 0 };
       runs[run_ind] = run;
     }
-    TimsortMergeState merge_state = { stack_init(), runs, MAX_RUNS, MIN_GALLOP, 0 };
+    TimsortMergeState merge_state = { 
+      stack_init(), 
+      runs, 
+      MAX_RUNS, 
+      MIN_GALLOP, 
+      0 
+    };
 
     timsort_find_runs(arr, nelems, size, compare, minrun, &merge_state);
     timsort_collapse_runs(arr, size, compare, &merge_state);
@@ -454,10 +502,10 @@ timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
  * calls timsort_check_invariants() to ensure that the run invariants still
  * hold.
  *
- * @param arr Target array.
+ * @param arr Array to search for runs.
  * @param nelems Number of elements in array.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @param minrun Minimum acceptable run length.
  * @param merge_state Struct containing information about merges and runs.
  * @return Void.
@@ -466,7 +514,9 @@ timsort(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*))
  * @see timsort_check_invariants
  */
 void
-timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, void*), size_t minrun, TimsortMergeState* merge_state)
+timsort_find_runs(void* arr, size_t nelems, size_t size, 
+                  int (*compare)(void*, void*), 
+                  size_t minrun, TimsortMergeState* merge_state)
 {
   char* arr_p = (char*)arr;
   // The curr_run value is the index of the run in 'runs' array. When a run
@@ -478,7 +528,8 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
   // is always occuring. 
   int new_run = 1;
   for (i = 0; i < nelems-1; i++) {
-    if (new_run || (compare(arr_p+(i*size), arr_p+((i+1)*size)) == compare(arr_p+((i-1)*size), arr_p+(i*size)))) {
+    if (new_run || (compare(arr_p+(i*size), arr_p+((i+1)*size)) 
+                    == compare(arr_p+((i-1)*size), arr_p+(i*size)))) {
       if (new_run) {
         merge_state->runs[curr_run].start = i;
       }
@@ -486,12 +537,22 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
       new_run = 0;
     } else {
       if (compare(arr_p+((i-1)*size), arr_p+(i*size)) < 0) {
-        reverse_array(arr, merge_state->runs[curr_run].start, merge_state->runs[curr_run].start + merge_state->runs[curr_run].len - 1, size);
+        reverse_array(arr, merge_state->runs[curr_run].start, 
+                      merge_state->runs[curr_run].start + 
+                      merge_state->runs[curr_run].len - 1, 
+                      size);
       }
       if (merge_state->runs[curr_run].len < minrun) {
-        merge_state->runs[curr_run].len = merge_state->runs[curr_run].start + minrun - 1 >= nelems ? nelems - merge_state->runs[curr_run].start : minrun;
-        i = merge_state->runs[curr_run].start + merge_state->runs[curr_run].len - 1;
-        binary_insert_sort(arr, size, compare, merge_state->runs[curr_run].start, (merge_state->runs[curr_run].start + merge_state->runs[curr_run].len - 1));
+        merge_state->runs[curr_run].len = merge_state->runs[curr_run].start + 
+                                          minrun - 1 >= nelems 
+                                          ? nelems - merge_state->runs[curr_run].start 
+                                          : minrun;
+        i = merge_state->runs[curr_run].start 
+          + merge_state->runs[curr_run].len - 1;
+        binary_insert_sort(arr, size, compare, 
+                           merge_state->runs[curr_run].start, 
+                           (merge_state->runs[curr_run].start 
+                            + merge_state->runs[curr_run].len - 1));
       }
       stack_push(merge_state->runs_stack, &merge_state->runs[curr_run]);
       curr_run++;
@@ -515,9 +576,9 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
  * If either invariant fails to hold, merge Y with smaller of X and Z and
  * push new merged value onto stack, maintaing order.
  *
- * @param arr Target array.
+ * @param arr Array containing runs.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @param merge_state Struct containing information about merges and runs.
  * @return Void.
  *
@@ -525,7 +586,9 @@ timsort_find_runs(void* arr, size_t nelems, size_t size, int (*compare)(void*, v
  * @see timsort_check_invariants
  */
 void
-timsort_check_invariants(void* arr, size_t size, int (*compare)(void*, void*), TimsortMergeState* merge_state)
+timsort_check_invariants(void* arr, size_t size, 
+                         int (*compare)(void*, void*), 
+                         TimsortMergeState* merge_state)
 {
   while (1) {
     if (merge_state->runs_stack->len >= 3) {
@@ -538,10 +601,12 @@ timsort_check_invariants(void* arr, size_t size, int (*compare)(void*, void*), T
           // PUSH Z BACK ONTO STACK
           stack_push(merge_state->runs_stack, z);
           // MERGE AND PUSH X AND Y
-          stack_push(merge_state->runs_stack, timsort_merge_runs(arr, size, compare, y, x, merge_state));
+          stack_push(merge_state->runs_stack, 
+                     timsort_merge_runs(arr, size, compare, y, x, merge_state));
         } else {
           // MERGE AND PUSH Y AND Z
-          stack_push(merge_state->runs_stack, timsort_merge_runs(arr, size, compare, z, y, merge_state));
+          stack_push(merge_state->runs_stack, 
+                     timsort_merge_runs(arr, size, compare, z, y, merge_state));
           // PUSH X BACK ONTO STACK
           stack_push(merge_state->runs_stack, x);
         }
@@ -563,9 +628,9 @@ timsort_check_invariants(void* arr, size_t size, int (*compare)(void*, void*), T
  *
  * Once all the runs have been merged, the array will be fully sorted.
  *
- * @param arr Target array.
+ * @param arr Array containing runs.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @param merge_state Struct containing information about merges and runs.
  * @return Void.
  *
@@ -573,25 +638,29 @@ timsort_check_invariants(void* arr, size_t size, int (*compare)(void*, void*), T
  * @see timsort_merge_runs
  */
 void
-timsort_collapse_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortMergeState* merge_state)
+timsort_collapse_runs(void* arr, size_t size, 
+                      int (*compare)(void*, void*), 
+                      TimsortMergeState* merge_state)
 {
   while (merge_state->runs_stack->len > 1) {
     TimsortRun* second = (TimsortRun*)stack_pop_return(merge_state->runs_stack);
     TimsortRun* first = (TimsortRun*)stack_pop_return(merge_state->runs_stack);
-    stack_push(merge_state->runs_stack, timsort_merge_runs(arr, size, compare, first, second, merge_state));
+    stack_push(merge_state->runs_stack, 
+               timsort_merge_runs(arr, size, compare, first, second, 
+                                  merge_state));
   }
 }
 
 /**
  * @brief Merge 2 consecutive runs.
  *
- * @param arr Target array.
+ * @param arr Array containing runs.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @param frst Leftmost run. 
  * @param scnd Rightmost run.
  * @param merge_state Struct containing information about merges and runs.
- * @return Pointer to first run, now with length updated to include second.
+ * @return Pointer to first run, now with length updated to include second's.
  *
  * @see timsort
  * @see timsort_check_invariants
@@ -600,15 +669,22 @@ timsort_collapse_runs(void* arr, size_t size, int (*compare)(void*, void*), Tims
  * @see timsort_merge_runs_hi
  */
 TimsortRun*
-timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), TimsortRun* frst, TimsortRun* scnd, TimsortMergeState* merge_state)
+timsort_merge_runs(void* arr, size_t size, 
+                   int (*compare)(void*, void*), 
+                   TimsortRun* frst, TimsortRun* scnd, 
+                   TimsortMergeState* merge_state)
 {
   char* arr_p = (char*)arr;
   if (frst->start > scnd->start) { 
     swap(frst, scnd, sizeof(TimsortRun)); 
   }
 
-  int lo = bin_search(arr, size, compare, frst->start, frst->start + frst->len - 1, arr_p+(scnd->start*size));
-  int hi = bin_search(arr, size, compare, scnd->start, scnd->start + scnd->len - 1, arr_p+((frst->start + frst->len - 1)*size));
+  int lo = bin_search(arr, size, compare, frst->start, 
+                      frst->start + frst->len - 1, 
+                      arr_p+(scnd->start*size));
+  int hi = bin_search(arr, size, compare, scnd->start, 
+                      scnd->start + scnd->len - 1, 
+                      arr_p+((frst->start + frst->len - 1)*size));
   lo = lo >= 0 ? lo : frst->start;
   hi = hi >= 0 ? hi : scnd->start + scnd->len - 1;
   size_t frst_len_adj = frst->len - (lo - frst->start);
@@ -616,9 +692,11 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
 
   size_t i, j, k;
   if (frst_len_adj < scnd_len_adj) {
-    timsort_merge_runs_lo(arr, size, compare, lo, frst_len_adj, hi, scnd_len_adj, merge_state);
+    timsort_merge_runs_lo(arr, size, compare, lo, frst_len_adj, 
+                          hi, scnd_len_adj, merge_state);
   } else {
-    timsort_merge_runs_hi(arr, size, compare, lo, frst_len_adj, hi, scnd_len_adj, merge_state);
+    timsort_merge_runs_hi(arr, size, compare, lo, frst_len_adj, 
+                          hi, scnd_len_adj, merge_state);
   }
 
   frst->len = frst->len + scnd->len;
@@ -652,12 +730,12 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
  * merge_state->min_run to make entering galloping mode harder and we exit out
  * of galloping mode.
  * 
- * @param arr Target array.
+ * @param arr Array containing runs.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
- * @param lo Lower index bound of merge.
+ * @param compare Function to compare elements.
+ * @param lo Lower index bound of merge (inclusive).
  * @param lo_len Length of smaller leftmost run.
- * @param hi Upper index bound of merge.
+ * @param hi Upper index bound of merge (inclusive).
  * @param hi_len Length of larger rightmost run.
  * @param merge_state Struct containing information about merges and runs.
  * @retun Void.
@@ -667,7 +745,9 @@ timsort_merge_runs(void* arr, size_t size, int (*compare)(void*, void*), Timsort
  * @see timsort_gallop_right
  */
 void
-timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len, TimsortMergeState* merge_state) 
+timsort_merge_runs_lo(void* arr, size_t size, 
+                      int (*compare)(void*, void*), size_t lo, size_t lo_len, 
+                      size_t hi, size_t hi_len, TimsortMergeState* merge_state) 
 {
   char* arr_p = (char*)arr;
   char* temp = malloc(size * lo_len);
@@ -695,21 +775,24 @@ timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size
 
       k++;
 
-      slice2 = timsort_gallop_right(temp, size, compare, l, lo_len, arr_p+(r * size));
+      slice2 = timsort_gallop_right(temp, size, compare, l, lo_len, 
+                                    arr_p+(r * size));
       memcpy(arr_p+(k * size), temp+(l * size), (slice2) * size);
       memcpy(arr_p+((k + slice2) * size), arr_p+(r * size), size);
       k += slice2;
       r += 1;
       l += slice2;
 
-      if (slice1 < merge_state->min_gallop || slice2 < merge_state->min_gallop) {
+      if (slice1 < merge_state->min_gallop 
+          || slice2 < merge_state->min_gallop) {
         merge_state->galloping = 0;
         merge_state->min_gallop++;
       } else {
         merge_state->min_gallop--;
       }
     } else {
-      if (l < lo_len && (r > hi || compare(temp+(l * size), arr_p+(r * size)) < 0)) {
+      if (l < lo_len 
+          && (r > hi || compare(temp+(l * size), arr_p+(r * size)) < 0)) {
         memcpy(arr_p+(k * size), temp+(l * size), size);
         l++;
         winner = 0;
@@ -747,13 +830,15 @@ timsort_merge_runs_lo(void* arr, size_t size, int (*compare)(void*, void*), size
  * @param base Index to begin gallop.
  * @param limit Index limit for galloping.
  * @param target Target element.
- * @return Number of elements in slice.
+ * @return Number of elements in source array less than target.
  *
  * @see timsort
  * @see timsort_merge_runs_lo
  */
 int
-timsort_gallop_right(void* src, size_t size, int (*compare)(void*, void*), int base, int limit, void* target)
+timsort_gallop_right(void* src, size_t size, 
+                     int (*compare)(void*, void*), int base, 
+                     int limit, void* target)
 {
   char* src_p = (char*)src;
   int srch_lo = 0, srch_hi = 0, gallop_exp = 1, gallop_ind = 0, slice = 0;
@@ -768,13 +853,15 @@ timsort_gallop_right(void* src, size_t size, int (*compare)(void*, void*), int b
         srch_hi = limit;
         break;
       }
-      if (!((compare(target, src_p+(srch_lo * size)) > 0) && (compare(target, src_p+(srch_hi * size)) <= 0))) {
+      if (!((compare(target, src_p+(srch_lo * size)) > 0) 
+            && (compare(target, src_p+(srch_hi * size)) <= 0))) {
         gallop_exp++;
       } else {
         break;
       }
     }
-    gallop_ind = timsort_binary_search(src, size, compare, srch_lo, srch_hi, target);
+    gallop_ind = timsort_binary_search(src, size, compare, 
+                                       srch_lo, srch_hi, target);
     slice = gallop_ind - base;
     if (compare(target, src_p+(gallop_ind * size)) > 0) {
       slice++;
@@ -788,12 +875,12 @@ timsort_gallop_right(void* src, size_t size, int (*compare)(void*, void*), int b
  *
  * Called when the rightmost run is smaller than the leftmost run.
  *
- * @param arr Target array.
+ * @param arr Array containing runs.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
- * @param lo Lower index bound of merge.
+ * @param compare Function to compare elements.
+ * @param lo Lower bound of merge (inclusive).
  * @param lo_len Length of larger leftmost run.
- * @param hi Upper index bound of merge.
+ * @param hi Upper bound of merge (inclusive).
  * @param hi_len Length of smaller rightmost run.
  * @param merge_state Struct containing information about merges and runs.
  * @retun Void.
@@ -803,7 +890,9 @@ timsort_gallop_right(void* src, size_t size, int (*compare)(void*, void*), int b
  * @see timsort_gallop_left
  */
 void
-timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t lo_len, size_t hi, size_t hi_len, TimsortMergeState* merge_state) 
+timsort_merge_runs_hi(void* arr, size_t size, 
+                      int (*compare)(void*, void*), size_t lo, size_t lo_len, 
+                      size_t hi, size_t hi_len, TimsortMergeState* merge_state) 
 {
   char* arr_p = (char*)arr;
   char* temp = malloc(size * hi_len);
@@ -818,7 +907,8 @@ timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size
     if ((r >= 0 && (l >= 0 && l >= lo)) && merge_state->galloping) {
       slice1 = timsort_gallop_left(arr, size, compare, l, lo, temp+(r * size));
       if (slice1 > 0) {
-        memcpy(arr_p+((k - slice1 + 1) * size), arr_p+((l - slice1 + 1) * size), slice1 * size);
+        memcpy(arr_p+((k - slice1 + 1) * size), arr_p+((l - slice1 + 1) * size),
+               slice1 * size);
       }
       memcpy(arr_p+((k - slice1) * size), temp+(r * size), size);
       k -= slice1;
@@ -835,21 +925,24 @@ timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size
 
       slice2 = timsort_gallop_left(temp, size, compare, r, 0, arr_p+(l * size));
       if (slice2 > 0) {
-        memcpy(arr_p+((k - slice2 + 1) * size), temp+((r - slice2 + 1) * size), slice2 * size);
+        memcpy(arr_p+((k - slice2 + 1) * size), temp+((r - slice2 + 1) * size),
+               slice2 * size);
       }
       memcpy(arr_p+((k - slice2) * size), arr_p+(l * size), size);
       k -= slice2;
       l -= 1;
       r -= slice2;
 
-      if (slice1 < merge_state->min_gallop || slice2 < merge_state->min_gallop) {
+      if (slice1 < merge_state->min_gallop 
+          || slice2 < merge_state->min_gallop) {
         merge_state->galloping = 0;
         merge_state->min_gallop++;
       } else {
         merge_state->min_gallop--;
       }
     } else {
-      if (r >= 0 && ((l < 0 || l < lo) || compare(temp+(r * size), arr_p+(l * size)) > 0)) {
+      if (r >= 0 && ((l < 0 || l < lo) 
+                     || compare(temp+(r * size), arr_p+(l * size)) > 0)) {
         memcpy(arr_p+(k * size), temp+(r * size), size);
         r--;
         winner = 0;
@@ -877,7 +970,8 @@ timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size
 }
 
 /**
- * @brief Gallop right->left to find number of elements in source array greater than element.
+ * @brief Gallop right->left to find number of elements in source array greater
+ * than target.
  *
  * @param src Array to gallop over.
  * @param size Size of each element in array.
@@ -885,13 +979,15 @@ timsort_merge_runs_hi(void* arr, size_t size, int (*compare)(void*, void*), size
  * @param base Index to begin gallop.
  * @param limit Index limit for galloping.
  * @param target Target element.
- * @return Number of elements in slice.
+ * @return Number of elements in souce array greater than target.
  *
  * @see timsort
  * @see timsort_merge_runs_hi
  */
 int 
-timsort_gallop_left(void* src, size_t size, int (*compare)(void*, void*), int base, int limit, void* target) {
+timsort_gallop_left(void* src, size_t size, 
+                    int (*compare)(void*, void*), 
+                    int base, int limit, void* target) {
   char* src_p = (char*)src;
   int srch_lo = 0, srch_hi = 0, gallop_exp = 1, gallop_ind = 0, slice = 0;
   if (compare(target, src_p+(base * size)) >= 0) { 
@@ -900,18 +996,21 @@ timsort_gallop_left(void* src, size_t size, int (*compare)(void*, void*), int ba
     while (1) {
       srch_lo = base - ((int)pow(2, gallop_exp) - 1);
       srch_hi = base - ((int)pow(2, gallop_exp - 1) - 1);
-      if ((srch_lo < 0 || srch_lo < limit) || (srch_hi < 0 || srch_hi < limit)) {
+      if ((srch_lo < 0 || srch_lo < limit) 
+          || (srch_hi < 0 || srch_hi < limit)) {
         srch_lo = limit;
         srch_hi = (srch_hi < 0 || srch_hi < limit) ? limit : srch_hi;
         break;
       }
-      if (!((compare(target, src_p+(srch_lo * size)) > 0) && (compare(target, src_p+(srch_hi * size)) <= 0))) {
+      if (!((compare(target, src_p+(srch_lo * size)) > 0) 
+            && (compare(target, src_p+(srch_hi * size)) <= 0))) {
         gallop_exp++;
       } else {
         break;
       }
     }
-    gallop_ind = timsort_binary_search(src, size, compare, srch_lo, srch_hi, target);
+    gallop_ind = timsort_binary_search(src, size, compare, srch_lo, srch_hi, 
+                                       target);
     slice = base - gallop_ind;
     if (compare(target, src_p+(gallop_ind * size)) < 0) {
       slice++;
@@ -936,32 +1035,35 @@ timsort_gallop_left(void* src, size_t size, int (*compare)(void*, void*), int ba
 size_t
 timsort_minrun(size_t nelems)
 {
-	const size_t SIZE_T_SIZE = sizeof(nelems);
-	const size_t MAX_BITS = SIZE_T_SIZE * CHAR_BIT;
-	int lead_zeros;
-	if (MAX_BITS == 32) {
-		lead_zeros = __builtin_clzl(nelems);
-	} else if (MAX_BITS == 64) {
-		lead_zeros = __builtin_clzll(nelems);
-	}
-	// Indicates number of bits which will be shifted.
-	int shifts = (MAX_BITS - lead_zeros) - 6;
-	int i, pad = 0;
-	for (i = 0; i < shifts; i++) {
-			// If any bits not in 6 most significant are set, pad final result by 1.
-			// The & operator selects only bits that share the same 'index'.
-			// As such, this operation returns 1 iff the bit and index i in nelems is
-			// set.
-			if (nelems & (1 << i)) {
-					pad = 1;
-			}
-			nelems = nelems >> 1;
-	}
-	return nelems + pad;
+  const size_t SIZE_T_SIZE = sizeof(nelems);
+  const size_t MAX_BITS = SIZE_T_SIZE * CHAR_BIT;
+  int lead_zeros;
+  if (MAX_BITS == 32) {
+    lead_zeros = __builtin_clzl(nelems);
+  } else if (MAX_BITS == 64) {
+    lead_zeros = __builtin_clzll(nelems);
+  }
+  // Indicates number of bits which will be shifted.
+  int shifts = (MAX_BITS - lead_zeros) - 6;
+  int i, pad = 0;
+  for (i = 0; i < shifts; i++) {
+    // If any bits not in 6 most significant are set, pad final result by 1. 
+    // The & operator selects only bits that share the same 'index'. As such, 
+    // this operation returns 1 iff the bit and index i in nelems is set.
+    if (nelems & (1 << i)) {
+      pad = 1;
+    }
+    nelems = nelems >> 1;
+  }
+  return nelems + pad;
 }
 
 /**
- * @brief Version of binary search for Timsort to be used when galloping.
+ * @brief Find position of element within array using binary search.
+ *
+ * Used in Timsort when galloping. When this version of binary search fails to
+ * find the element being search for, it just returns 'l'. Comparisons between
+ * the target and the value at arr[l] are left to galloping functions.
  *
  * @param arr Array to be searched.
  * @param size Size of each element in array.
@@ -976,7 +1078,9 @@ timsort_minrun(size_t nelems)
  * @see timsort_gallop_right
  */
 int
-timsort_binary_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target)
+timsort_binary_search(void* arr, size_t size, 
+                      int (*compare)(void*, void*), 
+                      size_t lo, size_t hi, void* target)
 {
   char* arr_p = (char*)arr;
   int m, l = lo, r = hi;
@@ -997,6 +1101,11 @@ timsort_binary_search(void* arr, size_t size, int (*compare)(void*, void*), size
 
 /**
  * @brief Swap the values referenced by two pointers.
+ *
+ * @param a First pointer.
+ * @param b Second pointer.
+ * @param size Size of the values referenced by the pointers.
+ * @return Void.
  */
 void
 swap(void* a, void* b, size_t size)
@@ -1013,19 +1122,20 @@ swap(void* a, void* b, size_t size)
 /**
  * @brief Find median of three elements in given array and return its index.
  *
- * Choosing median of lo, mid, and hi during quicksort gives a better pivot
- * point than using either a fixed position or the midpoint of hi and lo.
+ * When attempting to find a pivot point (e.g. in quicksort), the median is a
+ * better option than using a fixed position (e.g. always first element).
  *
  * @param arr Array containing the elements.
  * @param size Size of each element.
  * @param a First element.
  * @param b Second element.
  * @param c Third element.
- * @param compare Function to be used to compare elements.
+ * @param compare Function to compare elements.
  * @return Index of the median element.
  */
 size_t
-median_three(void* arr, size_t size, size_t a, size_t b, size_t c, int (*compare)(void*, void*))
+median_three(void* arr, size_t size, size_t a, size_t b, size_t c, 
+             int (*compare)(void*, void*))
 {
   char* arr_p = (char*)arr;
   if (compare(arr_p+(a*size), arr_p+(b*size)) > 0) {
@@ -1050,9 +1160,9 @@ median_three(void* arr, size_t size, size_t a, size_t b, size_t c, int (*compare
 /**
  * @brief Reverse given array.
  *
- * @param arr Target array.
- * @param start Lower index bound.
- * @param end Upper index bound.
+ * @param arr Array to reverse.
+ * @param start Lower index bound (inclusive).
+ * @param end Upper index bound (inclusive).
  * @param size Size of each element in array.
  * @return Void.
  */
@@ -1071,19 +1181,20 @@ reverse_array(void* arr, size_t start, size_t end, size_t size)
 }
 
 /**
- * @brief Use binary search to find index of value within subarray of an array.
+ * @brief Search for an element using binary search in a contiguous subarray.
  *
- * @param arr Array to be searched.
+ * @param arr Array containing the subarray.
  * @param size Size of each element in array.
- * @param compare Function to be used to compare elements.
- * @param lo Lower bound of subarray.
- * @param hi Upper bound of subarray.
- * @param target Item to search for in subarray.
+ * @param compare Function to compare elements.
+ * @param lo Lower bound of subarray (inclusive).
+ * @param hi Upper bound of subarray (inclusive).
+ * @param target Item to search for.
  * @return Index of item if found, else -1.
  *
  */
 int
-bin_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size_t hi, void* target)
+bin_search(void* arr, size_t size, int (*compare)(void*, void*), 
+           size_t lo, size_t hi, void* target)
 {
   char* arr_p = (char*)arr;
   int m, l = lo, r = hi;
@@ -1102,3 +1213,4 @@ bin_search(void* arr, size_t size, int (*compare)(void*, void*), size_t lo, size
     }
   }
 }
+
