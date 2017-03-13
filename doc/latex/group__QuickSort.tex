@@ -1,0 +1,116 @@
+\hypertarget{group__QuickSort}{}\section{Quicksorts}
+\label{group__QuickSort}\index{Quicksorts@{Quicksorts}}
+
+
+Quicksort implementations.  
+
+
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{group__QuickSort_ga7aea235f1d6b3dff511a11e02d27be68}{quick\+\_\+sort} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$))
+\begin{DoxyCompactList}\small\item\em Sort generic array using quicksort. \end{DoxyCompactList}\item 
+void \hyperlink{group__QuickSort_ga81da4500a40b9f11155fb6b1c6edf3d8}{quick\+\_\+sort\+\_\+sort} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t hi)
+\begin{DoxyCompactList}\small\item\em Recursively perform quicksort. \end{DoxyCompactList}\item 
+size\+\_\+t \hyperlink{group__QuickSort_ga093c6d71dca8ea2ea18ba4f6b6e63359}{quick\+\_\+sort\+\_\+partition} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t hi)
+\begin{DoxyCompactList}\small\item\em Partition subarray around pivot element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Quicksort implementations. 
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{group__QuickSort_ga7aea235f1d6b3dff511a11e02d27be68}\label{group__QuickSort_ga7aea235f1d6b3dff511a11e02d27be68}} 
+\index{Quicksorts@{Quicksorts}!quick\+\_\+sort@{quick\+\_\+sort}}
+\index{quick\+\_\+sort@{quick\+\_\+sort}!Quicksorts@{Quicksorts}}
+\subsubsection{\texorpdfstring{quick\+\_\+sort()}{quick\_sort()}}
+{\footnotesize\ttfamily void quick\+\_\+sort (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{nelems,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare }\end{DoxyParamCaption})}
+
+
+
+Sort generic array using quicksort. 
+
+If array is small enough, defers to insertion sort instead.
+
+
+\begin{DoxyParams}{Parameters}
+{\em arr} & Array to be sorted. \\
+\hline
+{\em nelems} & Number of elements in the array. \\
+\hline
+{\em size} & Size of each element in the array. \\
+\hline
+{\em compare} & Function to be used to compare elements. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__QuickSort_ga81da4500a40b9f11155fb6b1c6edf3d8}{quick\+\_\+sort\+\_\+sort()} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{group__QuickSort_ga093c6d71dca8ea2ea18ba4f6b6e63359}\label{group__QuickSort_ga093c6d71dca8ea2ea18ba4f6b6e63359}} 
+\index{Quicksorts@{Quicksorts}!quick\+\_\+sort\+\_\+partition@{quick\+\_\+sort\+\_\+partition}}
+\index{quick\+\_\+sort\+\_\+partition@{quick\+\_\+sort\+\_\+partition}!Quicksorts@{Quicksorts}}
+\subsubsection{\texorpdfstring{quick\+\_\+sort\+\_\+partition()}{quick\_sort\_partition()}}
+{\footnotesize\ttfamily size\+\_\+t quick\+\_\+sort\+\_\+partition (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{hi }\end{DoxyParamCaption})}
+
+
+
+Partition subarray around pivot element. 
+
+Smaller elements are moved to left of pivot, larger to right of pivot. The pivot index is set to the median of the lower, middle, and upper bounds of the subarray. Choosing the median element results in a faster sort than always using one of lo, mid, and hi.
+
+Aside from choice of pivot, this is the Hoare partition scheme.
+
+
+\begin{DoxyParams}{Parameters}
+{\em arr} & Array containing the subarray. \\
+\hline
+{\em size} & Size of each element in the array. \\
+\hline
+{\em compare} & Function to compare elements. \\
+\hline
+{\em lo} & Lower bound of the subarray (inclusive). \\
+\hline
+{\em hi} & Upper bound of the subarray (inclusive). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Final index of the pivot element. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{group__QuickSort_ga81da4500a40b9f11155fb6b1c6edf3d8}\label{group__QuickSort_ga81da4500a40b9f11155fb6b1c6edf3d8}} 
+\index{Quicksorts@{Quicksorts}!quick\+\_\+sort\+\_\+sort@{quick\+\_\+sort\+\_\+sort}}
+\index{quick\+\_\+sort\+\_\+sort@{quick\+\_\+sort\+\_\+sort}!Quicksorts@{Quicksorts}}
+\subsubsection{\texorpdfstring{quick\+\_\+sort\+\_\+sort()}{quick\_sort\_sort()}}
+{\footnotesize\ttfamily void quick\+\_\+sort\+\_\+sort (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{hi }\end{DoxyParamCaption})}
+
+
+
+Recursively perform quicksort. 
+
+Quicksort is not efficient for small arrays. As such, insertion sort is used when subarray is small.
+
+
+\begin{DoxyParams}{Parameters}
+{\em arr} & Array to be sorted. \\
+\hline
+{\em size} & Size of each element in the array. \\
+\hline
+{\em compare} & Function to be used to compare elements. \\
+\hline
+{\em lo} & Lower index bound of current subarray (inclusive). \\
+\hline
+{\em hi} & Upper index bound of the current subarray (invclusive). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{group__QuickSort_ga7aea235f1d6b3dff511a11e02d27be68}{quick\+\_\+sort()} 
+
+\hyperlink{group__QuickSort_ga093c6d71dca8ea2ea18ba4f6b6e63359}{quick\+\_\+sort\+\_\+partition()} 
+\end{DoxySeeAlso}

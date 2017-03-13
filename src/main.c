@@ -1,3 +1,7 @@
+/** 
+ * @file 
+ * @brief Main.
+ */
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -5,8 +9,15 @@
 #include <assert.h>
 #include "sorting.h"
 
+/** 
+ * @def SIZE
+ * @brief Size of atest arrays.
+ */
 #define SIZE 100000
 
+/**
+ * @brief Compare function for integers.
+ */
 int
 compare_ints(void* a, void* b)
 {
@@ -20,6 +31,9 @@ compare_ints(void* a, void* b)
   }
 }
 
+/**
+ * @brief Compare function for chars.
+ */
 int
 compare_chars(void* a, void* b)
 {
@@ -33,6 +47,9 @@ compare_chars(void* a, void* b)
   }
 }
 
+/**
+ * @brief Main function.
+ */
 int
 main(int argc, char* argv[])
 {

@@ -1,0 +1,143 @@
+\hypertarget{group__Stack}{}\section{Stack}
+\label{group__Stack}\index{Stack@{Stack}}
+
+
+\hyperlink{structStack}{Stack} implementation.  
+
+
+\subsection*{Modules}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__StackFrame}{Stack Frame}
+\begin{DoxyCompactList}\small\item\em \hyperlink{structStackFrame}{Stack\+Frame} implementation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structStack}{Stack} $\ast$ \hyperlink{group__Stack_ga6ed22bc6b5d4779a67eb400d7b6e3dfd}{stack\+\_\+init} ()
+\begin{DoxyCompactList}\small\item\em Initialize new stack. \end{DoxyCompactList}\item 
+void \hyperlink{group__Stack_ga26f038389f7a063ff212ca6cfee41f2d}{stack\+\_\+push} (\hyperlink{structStack}{Stack} $\ast$stack, void $\ast$data)
+\begin{DoxyCompactList}\small\item\em Push data onto stack. \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{group__Stack_ga6c01cb19646f8f9134032e08fd63133a}{stack\+\_\+peek} (\hyperlink{structStack}{Stack} $\ast$stack)
+\begin{DoxyCompactList}\small\item\em Get topmost value in stack without removing it. \end{DoxyCompactList}\item 
+int \hyperlink{group__Stack_ga86914bce7c52639297c92a086ba87581}{stack\+\_\+pop} (\hyperlink{structStack}{Stack} $\ast$stack)
+\begin{DoxyCompactList}\small\item\em Remove topmost value from stack wihout returning it. \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{group__Stack_gad1986611f7a858ac370254eb4a2a1580}{stack\+\_\+pop\+\_\+return} (\hyperlink{structStack}{Stack} $\ast$stack)
+\begin{DoxyCompactList}\small\item\em Remove topmost value from stack and return it. \end{DoxyCompactList}\item 
+void \hyperlink{group__Stack_ga88c5e1bfd0fccd7738393f47dc946674}{stack\+\_\+free} (\hyperlink{structStack}{Stack} $\ast$$\ast$stack)
+\begin{DoxyCompactList}\small\item\em Free stack and its stack frames. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{structStack}{Stack} implementation. 
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{group__Stack_ga88c5e1bfd0fccd7738393f47dc946674}\label{group__Stack_ga88c5e1bfd0fccd7738393f47dc946674}} 
+\index{Stack@{Stack}!stack\+\_\+free@{stack\+\_\+free}}
+\index{stack\+\_\+free@{stack\+\_\+free}!Stack@{Stack}}
+\subsubsection{\texorpdfstring{stack\+\_\+free()}{stack\_free()}}
+{\footnotesize\ttfamily void stack\+\_\+free (\begin{DoxyParamCaption}\item[{\hyperlink{structStack}{Stack} $\ast$$\ast$}]{stack }\end{DoxyParamCaption})}
+
+
+
+Free stack and its stack frames. 
+
+\begin{DoxyNote}{Note}
+Does not free data stored in stack frames. Data is assumed to be stored in memory stack.
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & \hyperlink{structStack}{Stack} to free. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{group__Stack_ga6ed22bc6b5d4779a67eb400d7b6e3dfd}\label{group__Stack_ga6ed22bc6b5d4779a67eb400d7b6e3dfd}} 
+\index{Stack@{Stack}!stack\+\_\+init@{stack\+\_\+init}}
+\index{stack\+\_\+init@{stack\+\_\+init}!Stack@{Stack}}
+\subsubsection{\texorpdfstring{stack\+\_\+init()}{stack\_init()}}
+{\footnotesize\ttfamily \hyperlink{structStack}{Stack}$\ast$ stack\+\_\+init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Initialize new stack. 
+
+\begin{DoxyReturn}{Returns}
+New stack. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{group__Stack_ga6c01cb19646f8f9134032e08fd63133a}\label{group__Stack_ga6c01cb19646f8f9134032e08fd63133a}} 
+\index{Stack@{Stack}!stack\+\_\+peek@{stack\+\_\+peek}}
+\index{stack\+\_\+peek@{stack\+\_\+peek}!Stack@{Stack}}
+\subsubsection{\texorpdfstring{stack\+\_\+peek()}{stack\_peek()}}
+{\footnotesize\ttfamily void$\ast$ stack\+\_\+peek (\begin{DoxyParamCaption}\item[{\hyperlink{structStack}{Stack} $\ast$}]{stack }\end{DoxyParamCaption})}
+
+
+
+Get topmost value in stack without removing it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & \hyperlink{structStack}{Stack} to peek at. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Topmost value in stack. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{group__Stack_ga86914bce7c52639297c92a086ba87581}\label{group__Stack_ga86914bce7c52639297c92a086ba87581}} 
+\index{Stack@{Stack}!stack\+\_\+pop@{stack\+\_\+pop}}
+\index{stack\+\_\+pop@{stack\+\_\+pop}!Stack@{Stack}}
+\subsubsection{\texorpdfstring{stack\+\_\+pop()}{stack\_pop()}}
+{\footnotesize\ttfamily int stack\+\_\+pop (\begin{DoxyParamCaption}\item[{\hyperlink{structStack}{Stack} $\ast$}]{stack }\end{DoxyParamCaption})}
+
+
+
+Remove topmost value from stack wihout returning it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & \hyperlink{structStack}{Stack} to pop from. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns 0 if unable to pop else 1. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{group__Stack_gad1986611f7a858ac370254eb4a2a1580}\label{group__Stack_gad1986611f7a858ac370254eb4a2a1580}} 
+\index{Stack@{Stack}!stack\+\_\+pop\+\_\+return@{stack\+\_\+pop\+\_\+return}}
+\index{stack\+\_\+pop\+\_\+return@{stack\+\_\+pop\+\_\+return}!Stack@{Stack}}
+\subsubsection{\texorpdfstring{stack\+\_\+pop\+\_\+return()}{stack\_pop\_return()}}
+{\footnotesize\ttfamily void$\ast$ stack\+\_\+pop\+\_\+return (\begin{DoxyParamCaption}\item[{\hyperlink{structStack}{Stack} $\ast$}]{stack }\end{DoxyParamCaption})}
+
+
+
+Remove topmost value from stack and return it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & \hyperlink{structStack}{Stack} to pop from. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Previous top of stack. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{group__Stack_ga26f038389f7a063ff212ca6cfee41f2d}\label{group__Stack_ga26f038389f7a063ff212ca6cfee41f2d}} 
+\index{Stack@{Stack}!stack\+\_\+push@{stack\+\_\+push}}
+\index{stack\+\_\+push@{stack\+\_\+push}!Stack@{Stack}}
+\subsubsection{\texorpdfstring{stack\+\_\+push()}{stack\_push()}}
+{\footnotesize\ttfamily void stack\+\_\+push (\begin{DoxyParamCaption}\item[{\hyperlink{structStack}{Stack} $\ast$}]{stack,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})}
+
+
+
+Push data onto stack. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & \hyperlink{structStack}{Stack} to push data onto. \\
+\hline
+{\em data} & Data to be pushed. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void. 
+\end{DoxyReturn}

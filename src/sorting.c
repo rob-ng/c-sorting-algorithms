@@ -1,3 +1,7 @@
+/** 
+ * @file 
+ * @brief Sorting implementation. 
+ */
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -6,17 +10,15 @@
 
 #include "sorting.h"
 #include "stack.h"
+#include "doxygen.h"
 
 /**
  * @struct TimsortRun.
  * @brief Struct to represent run during Timsort.
- *
- * start - index where run began.
- * len - length of run (start index to end index).
  */
 struct TimsortRun {
-  size_t start;
-  size_t len;
+  size_t start; ///< Start index of run.
+  size_t len; ///< Length of run.
 };
 
 /**
@@ -24,12 +26,21 @@ struct TimsortRun {
  * @brief Struct to represent merge state during Timsort.
  */
 struct TimsortMergeState {
-  Stack* runs_stack;
-  TimsortRun* runs;
-  size_t max_runs;
-  int min_gallop;
-  int galloping;
+  Stack* runs_stack; ///< Stack containing discovered runs.
+  TimsortRun* runs; ///< Array of initialized runs.
+  size_t max_runs; ///< Max number of runs.
+  int min_gallop; ///< Current galloping threshold.
+  int galloping; ///< Whether or not in galloping mode.
 };
+
+/**
+ * @addtogroup SortingAlgorithm
+ * @{
+ * @addtogroup SimpleSort
+ * @{
+ * @addtogroup InsertionSort
+ * @{
+ */
 
 /**
  * @brief Sort generic array using insertion sort.
@@ -129,6 +140,13 @@ binary_insert_sort(void* arr, size_t size,
   free(slctd);
 }
 
+/** @} */ // End InsertionSort
+
+/**
+ * @addtogroup SelectionSort
+ * @{
+ */
+
 /**
  * @brief Sort generic array using selection sort.
  *
@@ -156,6 +174,18 @@ select_sort(void* arr, size_t nelems, size_t size,
     }
   }
 }
+
+/** 
+ * @}
+ * @}
+ */ // End SelectionSort, End SimpleSort 
+
+/**
+ * @addtogroup BubbleSort
+ * @{
+ * @addtogroup CombSort
+ * @{
+ */
 
 /**
  * @brief Sort generic array using comb sort.
@@ -212,6 +242,18 @@ comb_sort(void* arr, size_t nelems, size_t size,
 }
 
 /**
+ * @}
+ * @}
+ */ // End CombSort, End BubbleSort
+
+/**
+ * @addtogroup EfficientSort
+ * @{
+ * @addtogroup MergeSort
+ * @{
+ */
+
+/**
  * @brief Sort generic array using merge sort.
  *
  * Merge sort is not efficient for small arrays. As such, merge sort is only
@@ -231,6 +273,7 @@ comb_sort(void* arr, size_t nelems, size_t size,
  *
  * @param arr Array to be sorted.
  * @param nelems Number of elements in the array.
+ * @param size Size of each element in the array.
  * @param compare Function to be used to compare elements.
  * @return Void.
  */
@@ -322,6 +365,13 @@ merge_sort_merge(void* arr, void* aux, size_t size,
     }
   }
 }
+
+/** @} */ // End MergeSort
+
+/**
+ * @addtogroup QuickSort
+ * @{
+ */
 
 /**
  * @brief Sort generic array using quicksort.
@@ -426,6 +476,18 @@ quick_sort_partition(void* arr, size_t size,
   }
 }
 
+/** 
+ * @}
+ * @}
+ */ // End QuickSort, End EfficientSort
+
+/**
+ * @addtogroup HybridSort
+ * @{
+ * @addtogroup Timsort
+ * @{
+ */
+
 /**
  * @brief Sort generic array using Timsort.
  *
@@ -435,17 +497,21 @@ quick_sort_partition(void* arr, size_t size,
  * then merge those runs into a single sorted run.
  * The algorithm proceeds through the following steps:
  *
- * If array to sort is shorter than 64 elements:
- *   1. Defer to insertion sort.
- * Otherwise:
- *   1. Calculate the minimum run length.
- *   2. Initialize a struct to represent merge state for the duration of the
+ * - If array to sort is shorter than 64 elements:
+ *   -# Defer to insertion sort.
+ * - Otherwise
+ *   -# Calculate the minimum run length.
+ *        - Minimum run length is chosen such that (array length / minimum run)
+ *          is equal to (or slightly less than) 2 to some power. Doing so
+ *          ensures that merges remain balanced for random data (where most
+ *          runs are likely to have length equal to the minimum run).
+ *   -# Initialize a struct to represent merge state for the duration of the
  *      sort.
- *   3. Find (or create if necessary) runs of at least minrun length. All runs
- *      are sorted to be ascending if they aren't already. On finding a run, 
- *      push it onto the runs stack and check to see if run invariants still 
- *      hold. Merge runs if they do not.
- *   4. Collapse the remaining runs in the runs stack into a single sorted run.
+ *   -# Find (or create if necessary) runs of at least minrun length. All runs
+ *      are sorted to be ascending if they aren't already. 
+ *        - On finding a run, push it onto the runs stack and check to see 
+ *          if run invariants still hold. Merge runs until they do.
+ *   -# Collapse the remaining runs in the runs stack into a single sorted run.
  *
  * @param arr Array to be sorted.
  * @param nelems Number of elements in array.
@@ -738,7 +804,7 @@ timsort_merge_runs(void* arr, size_t size,
  * @param hi Upper index bound of merge (inclusive).
  * @param hi_len Length of larger rightmost run.
  * @param merge_state Struct containing information about merges and runs.
- * @retun Void.
+ * @return Void.
  *
  * @see timsort
  * @see timsort_merge_runs
@@ -883,7 +949,7 @@ timsort_gallop_right(void* src, size_t size,
  * @param hi Upper bound of merge (inclusive).
  * @param hi_len Length of smaller rightmost run.
  * @param merge_state Struct containing information about merges and runs.
- * @retun Void.
+ * @return Void.
  *
  * @see timsort
  * @see timsort_merge_runs
@@ -1100,6 +1166,16 @@ timsort_binary_search(void* arr, size_t size,
 }
 
 /**
+ * @}
+ * @}
+ */ // End Timsort, End HybridSort
+
+/**
+ * @addtogroup SortingHelper
+ * @{
+ */
+
+/**
  * @brief Swap the values referenced by two pointers.
  *
  * @param a First pointer.
@@ -1213,4 +1289,9 @@ bin_search(void* arr, size_t size, int (*compare)(void*, void*),
     }
   }
 }
+
+/** 
+ * @}
+ * @}
+ */ // End SortingHelper, End SortingAlgorithm
 
