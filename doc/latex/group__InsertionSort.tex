@@ -8,11 +8,11 @@ Insertion sort implementations.
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \hyperlink{group__InsertionSort_ga0f8cbdee5711f9a401c6a6bc0910e5c9}{insert\+\_\+sort} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$))
+void \hyperlink{group__InsertionSort_ga262ca6566c76d4587cba88441880a293}{insert\+\_\+sort} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$))
 \begin{DoxyCompactList}\small\item\em Sort generic array using insertion sort. \end{DoxyCompactList}\item 
-void \hyperlink{group__InsertionSort_gabab9277ccf9fc7370143131b469142b9}{insert\+\_\+sort\+\_\+partial} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t hi)
+void \hyperlink{group__InsertionSort_gad147d05ac7625135f328ce4924ac2553}{insert\+\_\+sort\+\_\+partial} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$), size\+\_\+t lo, size\+\_\+t hi)
 \begin{DoxyCompactList}\small\item\em Sort generic contiguous subarray using insertion sort. \end{DoxyCompactList}\item 
-void \hyperlink{group__InsertionSort_ga9955e0e065cbb32f516533e134c437a8}{binary\+\_\+insert\+\_\+sort} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t hi)
+void \hyperlink{group__InsertionSort_gaac4076ef31a1984eb307e21d3ce5df0a}{binary\+\_\+insert\+\_\+sort} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$), size\+\_\+t lo, size\+\_\+t hi)
 \begin{DoxyCompactList}\small\item\em Sort generic contiguous subarray using binary insertion sort. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -22,16 +22,21 @@ Insertion sort implementations.
 
 
 \subsection{Function Documentation}
-\mbox{\Hypertarget{group__InsertionSort_ga9955e0e065cbb32f516533e134c437a8}\label{group__InsertionSort_ga9955e0e065cbb32f516533e134c437a8}} 
+\mbox{\Hypertarget{group__InsertionSort_gaac4076ef31a1984eb307e21d3ce5df0a}\label{group__InsertionSort_gaac4076ef31a1984eb307e21d3ce5df0a}} 
 \index{Insertion Sorts@{Insertion Sorts}!binary\+\_\+insert\+\_\+sort@{binary\+\_\+insert\+\_\+sort}}
 \index{binary\+\_\+insert\+\_\+sort@{binary\+\_\+insert\+\_\+sort}!Insertion Sorts@{Insertion Sorts}}
 \subsubsection{\texorpdfstring{binary\+\_\+insert\+\_\+sort()}{binary\_insert\_sort()}}
-{\footnotesize\ttfamily void binary\+\_\+insert\+\_\+sort (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{hi }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void binary\+\_\+insert\+\_\+sort (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{hi }\end{DoxyParamCaption})}
 
 
 
 Sort generic contiguous subarray using binary insertion sort. 
 
+Uses binary search (via \hyperlink{group__SortingHelper_ga347d3eac5748d59424afd8566181fc27}{bin\+\_\+search\+\_\+loc()}) to find proper index of each element in subarray. Once the index of an element has been found, the elements beginning at that index and ending before the current index of the element are shifted to the right by one to make room for the element\textquotesingle{}s insertion.
+
+\begin{DoxyNote}{Note}
+As shifting elements involves overlapping memory, the function uses memmove() rather than memcpy(). While memcpy() is typically faster than memmove(), being able to copy memory in bulk via memmove() (rather than one at a time, as we would need to with memcpy() to prevent problems with overlapping memory) results in an enormous performance boost.
+\end{DoxyNote}
 
 \begin{DoxyParams}{Parameters}
 {\em arr} & Array containing the subarray. \\
@@ -48,11 +53,11 @@ Sort generic contiguous subarray using binary insertion sort.
 \begin{DoxyReturn}{Returns}
 Void. 
 \end{DoxyReturn}
-\mbox{\Hypertarget{group__InsertionSort_ga0f8cbdee5711f9a401c6a6bc0910e5c9}\label{group__InsertionSort_ga0f8cbdee5711f9a401c6a6bc0910e5c9}} 
+\mbox{\Hypertarget{group__InsertionSort_ga262ca6566c76d4587cba88441880a293}\label{group__InsertionSort_ga262ca6566c76d4587cba88441880a293}} 
 \index{Insertion Sorts@{Insertion Sorts}!insert\+\_\+sort@{insert\+\_\+sort}}
 \index{insert\+\_\+sort@{insert\+\_\+sort}!Insertion Sorts@{Insertion Sorts}}
 \subsubsection{\texorpdfstring{insert\+\_\+sort()}{insert\_sort()}}
-{\footnotesize\ttfamily void insert\+\_\+sort (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{nelems,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void insert\+\_\+sort (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{nelems,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare }\end{DoxyParamCaption})}
 
 
 
@@ -73,13 +78,13 @@ Sort generic array using insertion sort.
 Void.
 \end{DoxyReturn}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__InsertionSort_gabab9277ccf9fc7370143131b469142b9}{insert\+\_\+sort\+\_\+partial()} 
+\hyperlink{group__InsertionSort_gad147d05ac7625135f328ce4924ac2553}{insert\+\_\+sort\+\_\+partial()} 
 \end{DoxySeeAlso}
-\mbox{\Hypertarget{group__InsertionSort_gabab9277ccf9fc7370143131b469142b9}\label{group__InsertionSort_gabab9277ccf9fc7370143131b469142b9}} 
+\mbox{\Hypertarget{group__InsertionSort_gad147d05ac7625135f328ce4924ac2553}\label{group__InsertionSort_gad147d05ac7625135f328ce4924ac2553}} 
 \index{Insertion Sorts@{Insertion Sorts}!insert\+\_\+sort\+\_\+partial@{insert\+\_\+sort\+\_\+partial}}
 \index{insert\+\_\+sort\+\_\+partial@{insert\+\_\+sort\+\_\+partial}!Insertion Sorts@{Insertion Sorts}}
 \subsubsection{\texorpdfstring{insert\+\_\+sort\+\_\+partial()}{insert\_sort\_partial()}}
-{\footnotesize\ttfamily void insert\+\_\+sort\+\_\+partial (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{hi }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void insert\+\_\+sort\+\_\+partial (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{hi }\end{DoxyParamCaption})}
 
 
 

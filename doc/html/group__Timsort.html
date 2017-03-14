@@ -71,45 +71,45 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gae421187852c6c109058362a81539de0f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#gae421187852c6c109058362a81539de0f">timsort</a> (void *arr, size_t nelems, size_t size, int(*compare)(void *, void *))</td></tr>
-<tr class="memdesc:gae421187852c6c109058362a81539de0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sort generic array using Timsort.  <a href="#gae421187852c6c109058362a81539de0f">More...</a><br /></td></tr>
-<tr class="separator:gae421187852c6c109058362a81539de0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga95a12fa41d6574d3350a908cf0fcb63d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga95a12fa41d6574d3350a908cf0fcb63d">timsort_find_runs</a> (void *arr, size_t nelems, size_t size, int(*compare)(void *, void *), size_t minrun, <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
-<tr class="memdesc:ga95a12fa41d6574d3350a908cf0fcb63d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find runs of either strictly descending or non-descending elements.  <a href="#ga95a12fa41d6574d3350a908cf0fcb63d">More...</a><br /></td></tr>
-<tr class="separator:ga95a12fa41d6574d3350a908cf0fcb63d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac2adf9d2399deb49f6c8bb71ef13829f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#gac2adf9d2399deb49f6c8bb71ef13829f">timsort_check_invariants</a> (void *arr, size_t size, int(*compare)(void *, void *), <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
-<tr class="memdesc:gac2adf9d2399deb49f6c8bb71ef13829f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check that run invariants hold and update runs stack if they do not.  <a href="#gac2adf9d2399deb49f6c8bb71ef13829f">More...</a><br /></td></tr>
-<tr class="separator:gac2adf9d2399deb49f6c8bb71ef13829f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gabbc386bb95547fd09350b3aaf72c8e26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#gabbc386bb95547fd09350b3aaf72c8e26">timsort_collapse_runs</a> (void *arr, size_t size, int(*compare)(void *, void *), <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
-<tr class="memdesc:gabbc386bb95547fd09350b3aaf72c8e26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge top two runs in run stack until only one run remains.  <a href="#gabbc386bb95547fd09350b3aaf72c8e26">More...</a><br /></td></tr>
-<tr class="separator:gabbc386bb95547fd09350b3aaf72c8e26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0be2dffcafd8880d305fd0c7d9f87fd7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structTimsortRun.html">TimsortRun</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga0be2dffcafd8880d305fd0c7d9f87fd7">timsort_merge_runs</a> (void *arr, size_t size, int(*compare)(void *, void *), <a class="el" href="structTimsortRun.html">TimsortRun</a> *frst, <a class="el" href="structTimsortRun.html">TimsortRun</a> *scnd, <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
-<tr class="memdesc:ga0be2dffcafd8880d305fd0c7d9f87fd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge 2 consecutive runs.  <a href="#ga0be2dffcafd8880d305fd0c7d9f87fd7">More...</a><br /></td></tr>
-<tr class="separator:ga0be2dffcafd8880d305fd0c7d9f87fd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga18534dcb0fb5689af44c3309a44a4968"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga18534dcb0fb5689af44c3309a44a4968">timsort_merge_runs_lo</a> (void *arr, size_t size, int(*compare)(void *, void *), size_t lo, size_t lo_len, size_t hi, size_t hi_len, <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
-<tr class="memdesc:ga18534dcb0fb5689af44c3309a44a4968"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge runs from left to right.  <a href="#ga18534dcb0fb5689af44c3309a44a4968">More...</a><br /></td></tr>
-<tr class="separator:ga18534dcb0fb5689af44c3309a44a4968"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa2295bcc1b001663881a0ad6c20d6d7a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#gaa2295bcc1b001663881a0ad6c20d6d7a">timsort_gallop_right</a> (void *src, size_t size, int(*compare)(void *, void *), int base, int limit, void *target)</td></tr>
-<tr class="memdesc:gaa2295bcc1b001663881a0ad6c20d6d7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gallop left-&gt;right to find number of elements in source array less than target.  <a href="#gaa2295bcc1b001663881a0ad6c20d6d7a">More...</a><br /></td></tr>
-<tr class="separator:gaa2295bcc1b001663881a0ad6c20d6d7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga82043845fa8abc3c91332008ddbb4b55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga82043845fa8abc3c91332008ddbb4b55">timsort_merge_runs_hi</a> (void *arr, size_t size, int(*compare)(void *, void *), size_t lo, size_t lo_len, size_t hi, size_t hi_len, <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
-<tr class="memdesc:ga82043845fa8abc3c91332008ddbb4b55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge runs from right to left.  <a href="#ga82043845fa8abc3c91332008ddbb4b55">More...</a><br /></td></tr>
-<tr class="separator:ga82043845fa8abc3c91332008ddbb4b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga503a8e66f4c150e73b2b37980996cae0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga503a8e66f4c150e73b2b37980996cae0">timsort_gallop_left</a> (void *src, size_t size, int(*compare)(void *, void *), int base, int limit, void *target)</td></tr>
-<tr class="memdesc:ga503a8e66f4c150e73b2b37980996cae0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gallop right-&gt;left to find number of elements in source array greater than target.  <a href="#ga503a8e66f4c150e73b2b37980996cae0">More...</a><br /></td></tr>
-<tr class="separator:ga503a8e66f4c150e73b2b37980996cae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1c9fca70060e37617156b89b387aa4d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3">timsort</a> (void *arr, size_t nelems, size_t size, int(*compare)(const void *, const void *))</td></tr>
+<tr class="memdesc:ga1c9fca70060e37617156b89b387aa4d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sort generic array using Timsort.  <a href="#ga1c9fca70060e37617156b89b387aa4d3">More...</a><br /></td></tr>
+<tr class="separator:ga1c9fca70060e37617156b89b387aa4d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabdbb9c8c9cff36ac260a15b51080e47b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#gabdbb9c8c9cff36ac260a15b51080e47b">timsort_find_runs</a> (void *arr, size_t nelems, size_t size, int(*compare)(const void *, const void *), size_t minrun, <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
+<tr class="memdesc:gabdbb9c8c9cff36ac260a15b51080e47b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find runs of either strictly descending or non-descending elements.  <a href="#gabdbb9c8c9cff36ac260a15b51080e47b">More...</a><br /></td></tr>
+<tr class="separator:gabdbb9c8c9cff36ac260a15b51080e47b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga77b690ab2bb67a139ba32a6715834952"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga77b690ab2bb67a139ba32a6715834952">timsort_check_invariants</a> (void *arr, size_t size, int(*compare)(const void *, const void *), <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
+<tr class="memdesc:ga77b690ab2bb67a139ba32a6715834952"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check that run invariants hold and update runs stack if they do not.  <a href="#ga77b690ab2bb67a139ba32a6715834952">More...</a><br /></td></tr>
+<tr class="separator:ga77b690ab2bb67a139ba32a6715834952"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3978be9f06411c3f9cd0bd597d64b555"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga3978be9f06411c3f9cd0bd597d64b555">timsort_collapse_runs</a> (void *arr, size_t size, int(*compare)(const void *, const void *), <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
+<tr class="memdesc:ga3978be9f06411c3f9cd0bd597d64b555"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge top two runs in run stack until only one run remains.  <a href="#ga3978be9f06411c3f9cd0bd597d64b555">More...</a><br /></td></tr>
+<tr class="separator:ga3978be9f06411c3f9cd0bd597d64b555"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga62d32e069756222c797c569f08220237"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structTimsortRun.html">TimsortRun</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga62d32e069756222c797c569f08220237">timsort_merge_runs</a> (void *arr, size_t size, int(*compare)(const void *, const void *), <a class="el" href="structTimsortRun.html">TimsortRun</a> *frst, <a class="el" href="structTimsortRun.html">TimsortRun</a> *scnd, <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
+<tr class="memdesc:ga62d32e069756222c797c569f08220237"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge 2 consecutive runs.  <a href="#ga62d32e069756222c797c569f08220237">More...</a><br /></td></tr>
+<tr class="separator:ga62d32e069756222c797c569f08220237"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga67d92f57e1b421c1110d15ea25492bb4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga67d92f57e1b421c1110d15ea25492bb4">timsort_merge_runs_lo</a> (void *arr, size_t size, int(*compare)(const void *, const void *), size_t lo, size_t lo_len, size_t hi, size_t hi_len, <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
+<tr class="memdesc:ga67d92f57e1b421c1110d15ea25492bb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge runs from left to right.  <a href="#ga67d92f57e1b421c1110d15ea25492bb4">More...</a><br /></td></tr>
+<tr class="separator:ga67d92f57e1b421c1110d15ea25492bb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga59524f2247f32032582b8f17ab93a1f6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga59524f2247f32032582b8f17ab93a1f6">timsort_gallop_right</a> (void *src, size_t size, int(*compare)(const void *, const void *), int base, int limit, void *target)</td></tr>
+<tr class="memdesc:ga59524f2247f32032582b8f17ab93a1f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gallop left-&gt;right to find number of elements in source array less than target.  <a href="#ga59524f2247f32032582b8f17ab93a1f6">More...</a><br /></td></tr>
+<tr class="separator:ga59524f2247f32032582b8f17ab93a1f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab79f5bad70cecab915e4a564516cf5a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#gab79f5bad70cecab915e4a564516cf5a8">timsort_merge_runs_hi</a> (void *arr, size_t size, int(*compare)(const void *, const void *), size_t lo, size_t lo_len, size_t hi, size_t hi_len, <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
+<tr class="memdesc:gab79f5bad70cecab915e4a564516cf5a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge runs from right to left.  <a href="#gab79f5bad70cecab915e4a564516cf5a8">More...</a><br /></td></tr>
+<tr class="separator:gab79f5bad70cecab915e4a564516cf5a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac60918d0e6930ae4dd66dc5376b74649"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#gac60918d0e6930ae4dd66dc5376b74649">timsort_gallop_left</a> (void *src, size_t size, int(*compare)(const void *, const void *), int base, int limit, void *target)</td></tr>
+<tr class="memdesc:gac60918d0e6930ae4dd66dc5376b74649"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gallop right-&gt;left to find number of elements in source array greater than target.  <a href="#gac60918d0e6930ae4dd66dc5376b74649">More...</a><br /></td></tr>
+<tr class="separator:gac60918d0e6930ae4dd66dc5376b74649"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7d1b40d5d91736aa4b5362896cdc68f3"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga7d1b40d5d91736aa4b5362896cdc68f3">timsort_minrun</a> (size_t nelems)</td></tr>
 <tr class="memdesc:ga7d1b40d5d91736aa4b5362896cdc68f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find minimum run size to use in timsort.  <a href="#ga7d1b40d5d91736aa4b5362896cdc68f3">More...</a><br /></td></tr>
 <tr class="separator:ga7d1b40d5d91736aa4b5362896cdc68f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac83afa31d70a068091adc4a017b08602"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#gac83afa31d70a068091adc4a017b08602">timsort_binary_search</a> (void *arr, size_t size, int(*compare)(void *, void *), size_t lo, size_t hi, void *target)</td></tr>
-<tr class="memdesc:gac83afa31d70a068091adc4a017b08602"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find position of element within array using binary search.  <a href="#gac83afa31d70a068091adc4a017b08602">More...</a><br /></td></tr>
-<tr class="separator:gac83afa31d70a068091adc4a017b08602"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac9b25eb89bf429f324330ee07a9c9400"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#gac9b25eb89bf429f324330ee07a9c9400">timsort_binary_search</a> (void *arr, size_t size, int(*compare)(const void *, const void *), size_t lo, size_t hi, void *target)</td></tr>
+<tr class="memdesc:gac9b25eb89bf429f324330ee07a9c9400"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find position of element within array using binary search.  <a href="#gac9b25eb89bf429f324330ee07a9c9400">More...</a><br /></td></tr>
+<tr class="separator:gac9b25eb89bf429f324330ee07a9c9400"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Timsort implementations. </p>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="gae421187852c6c109058362a81539de0f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gae421187852c6c109058362a81539de0f">&#9670;&nbsp;</a></span>timsort()</h2>
+<a id="ga1c9fca70060e37617156b89b387aa4d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1c9fca70060e37617156b89b387aa4d3">&#9670;&nbsp;</a></span>timsort()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -135,7 +135,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int(*)(void *, void *)&#160;</td>
+          <td class="paramtype">int(*)(const void *, const void *)&#160;</td>
           <td class="paramname"><em>compare</em>&#160;</td>
         </tr>
         <tr>
@@ -179,16 +179,16 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>Void.</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga7d1b40d5d91736aa4b5362896cdc68f3" title="Find minimum run size to use in timsort. ">timsort_minrun</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga95a12fa41d6574d3350a908cf0fcb63d" title="Find runs of either strictly descending or non-descending elements. ">timsort_find_runs</a> </dd>
+<a class="el" href="group__Timsort.html#gabdbb9c8c9cff36ac260a15b51080e47b" title="Find runs of either strictly descending or non-descending elements. ">timsort_find_runs</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#gac2adf9d2399deb49f6c8bb71ef13829f" title="Check that run invariants hold and update runs stack if they do not. ">timsort_check_invariants</a> </dd>
+<a class="el" href="group__Timsort.html#ga77b690ab2bb67a139ba32a6715834952" title="Check that run invariants hold and update runs stack if they do not. ">timsort_check_invariants</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#gabbc386bb95547fd09350b3aaf72c8e26" title="Merge top two runs in run stack until only one run remains. ">timsort_collapse_runs</a> </dd></dl>
+<a class="el" href="group__Timsort.html#ga3978be9f06411c3f9cd0bd597d64b555" title="Merge top two runs in run stack until only one run remains. ">timsort_collapse_runs</a> </dd></dl>
 
 </div>
 </div>
-<a id="gac83afa31d70a068091adc4a017b08602"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gac83afa31d70a068091adc4a017b08602">&#9670;&nbsp;</a></span>timsort_binary_search()</h2>
+<a id="gac9b25eb89bf429f324330ee07a9c9400"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac9b25eb89bf429f324330ee07a9c9400">&#9670;&nbsp;</a></span>timsort_binary_search()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -208,7 +208,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int(*)(void *, void *)&#160;</td>
+          <td class="paramtype">int(*)(const void *, const void *)&#160;</td>
           <td class="paramname"><em>compare</em>, </td>
         </tr>
         <tr>
@@ -251,16 +251,16 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Index where element either is, or should be, located in the array.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#gae421187852c6c109058362a81539de0f" title="Sort generic array using Timsort. ">timsort</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga503a8e66f4c150e73b2b37980996cae0" title="Gallop right-&gt;left to find number of elements in source array greater than target. ">timsort_gallop_left</a> </dd>
+<a class="el" href="group__Timsort.html#gac60918d0e6930ae4dd66dc5376b74649" title="Gallop right-&gt;left to find number of elements in source array greater than target. ">timsort_gallop_left</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#gaa2295bcc1b001663881a0ad6c20d6d7a" title="Gallop left-&gt;right to find number of elements in source array less than target. ">timsort_gallop_right</a> </dd></dl>
+<a class="el" href="group__Timsort.html#ga59524f2247f32032582b8f17ab93a1f6" title="Gallop left-&gt;right to find number of elements in source array less than target. ">timsort_gallop_right</a> </dd></dl>
 
 </div>
 </div>
-<a id="gac2adf9d2399deb49f6c8bb71ef13829f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gac2adf9d2399deb49f6c8bb71ef13829f">&#9670;&nbsp;</a></span>timsort_check_invariants()</h2>
+<a id="ga77b690ab2bb67a139ba32a6715834952"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga77b690ab2bb67a139ba32a6715834952">&#9670;&nbsp;</a></span>timsort_check_invariants()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -280,7 +280,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int(*)(void *, void *)&#160;</td>
+          <td class="paramtype">int(*)(const void *, const void *)&#160;</td>
           <td class="paramname"><em>compare</em>, </td>
         </tr>
         <tr>
@@ -312,14 +312,14 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Void.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#gae421187852c6c109058362a81539de0f" title="Sort generic array using Timsort. ">timsort</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#gac2adf9d2399deb49f6c8bb71ef13829f" title="Check that run invariants hold and update runs stack if they do not. ">timsort_check_invariants</a> </dd></dl>
+<a class="el" href="group__Timsort.html#ga77b690ab2bb67a139ba32a6715834952" title="Check that run invariants hold and update runs stack if they do not. ">timsort_check_invariants</a> </dd></dl>
 
 </div>
 </div>
-<a id="gabbc386bb95547fd09350b3aaf72c8e26"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gabbc386bb95547fd09350b3aaf72c8e26">&#9670;&nbsp;</a></span>timsort_collapse_runs()</h2>
+<a id="ga3978be9f06411c3f9cd0bd597d64b555"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3978be9f06411c3f9cd0bd597d64b555">&#9670;&nbsp;</a></span>timsort_collapse_runs()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -339,7 +339,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int(*)(void *, void *)&#160;</td>
+          <td class="paramtype">int(*)(const void *, const void *)&#160;</td>
           <td class="paramname"><em>compare</em>, </td>
         </tr>
         <tr>
@@ -368,14 +368,14 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Void.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#gae421187852c6c109058362a81539de0f" title="Sort generic array using Timsort. ">timsort</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga0be2dffcafd8880d305fd0c7d9f87fd7" title="Merge 2 consecutive runs. ">timsort_merge_runs</a> </dd></dl>
+<a class="el" href="group__Timsort.html#ga62d32e069756222c797c569f08220237" title="Merge 2 consecutive runs. ">timsort_merge_runs</a> </dd></dl>
 
 </div>
 </div>
-<a id="ga95a12fa41d6574d3350a908cf0fcb63d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga95a12fa41d6574d3350a908cf0fcb63d">&#9670;&nbsp;</a></span>timsort_find_runs()</h2>
+<a id="gabdbb9c8c9cff36ac260a15b51080e47b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabdbb9c8c9cff36ac260a15b51080e47b">&#9670;&nbsp;</a></span>timsort_find_runs()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -401,7 +401,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int(*)(void *, void *)&#160;</td>
+          <td class="paramtype">int(*)(const void *, const void *)&#160;</td>
           <td class="paramname"><em>compare</em>, </td>
         </tr>
         <tr>
@@ -427,7 +427,7 @@ Functions</h2></td></tr>
 <p>Find runs of either strictly descending or non-descending elements. </p>
 <p>Runs must be at least minrun elements long. If a run is shorter than this, it is extended using consecutive elements. There is one exception; the last run may be shorter if there are not enough elements to pad out its length.</p>
 <p>Importantly, all runs must be non-descending before they can be pushed onto the runs stack - runs which are descending are reveresed before they are pushed.</p>
-<p>Once a new run has been found and pushed on the runs stack, the function calls <a class="el" href="group__Timsort.html#gac2adf9d2399deb49f6c8bb71ef13829f" title="Check that run invariants hold and update runs stack if they do not. ">timsort_check_invariants()</a> to ensure that the run invariants still hold.</p>
+<p>Once a new run has been found and pushed on the runs stack, the function calls <a class="el" href="group__Timsort.html#ga77b690ab2bb67a139ba32a6715834952" title="Check that run invariants hold and update runs stack if they do not. ">timsort_check_invariants()</a> to ensure that the run invariants still hold.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">arr</td><td>Array to search for runs. </td></tr>
@@ -440,14 +440,14 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Void.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#gae421187852c6c109058362a81539de0f" title="Sort generic array using Timsort. ">timsort</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#gac2adf9d2399deb49f6c8bb71ef13829f" title="Check that run invariants hold and update runs stack if they do not. ">timsort_check_invariants</a> </dd></dl>
+<a class="el" href="group__Timsort.html#ga77b690ab2bb67a139ba32a6715834952" title="Check that run invariants hold and update runs stack if they do not. ">timsort_check_invariants</a> </dd></dl>
 
 </div>
 </div>
-<a id="ga503a8e66f4c150e73b2b37980996cae0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga503a8e66f4c150e73b2b37980996cae0">&#9670;&nbsp;</a></span>timsort_gallop_left()</h2>
+<a id="gac60918d0e6930ae4dd66dc5376b74649"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac60918d0e6930ae4dd66dc5376b74649">&#9670;&nbsp;</a></span>timsort_gallop_left()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -467,7 +467,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int(*)(void *, void *)&#160;</td>
+          <td class="paramtype">int(*)(const void *, const void *)&#160;</td>
           <td class="paramname"><em>compare</em>, </td>
         </tr>
         <tr>
@@ -509,14 +509,14 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Number of elements in souce array greater than target.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#gae421187852c6c109058362a81539de0f" title="Sort generic array using Timsort. ">timsort</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga82043845fa8abc3c91332008ddbb4b55" title="Merge runs from right to left. ">timsort_merge_runs_hi</a> </dd></dl>
+<a class="el" href="group__Timsort.html#gab79f5bad70cecab915e4a564516cf5a8" title="Merge runs from right to left. ">timsort_merge_runs_hi</a> </dd></dl>
 
 </div>
 </div>
-<a id="gaa2295bcc1b001663881a0ad6c20d6d7a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaa2295bcc1b001663881a0ad6c20d6d7a">&#9670;&nbsp;</a></span>timsort_gallop_right()</h2>
+<a id="ga59524f2247f32032582b8f17ab93a1f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga59524f2247f32032582b8f17ab93a1f6">&#9670;&nbsp;</a></span>timsort_gallop_right()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -536,7 +536,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int(*)(void *, void *)&#160;</td>
+          <td class="paramtype">int(*)(const void *, const void *)&#160;</td>
           <td class="paramname"><em>compare</em>, </td>
         </tr>
         <tr>
@@ -578,14 +578,14 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Number of elements in source array less than target.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#gae421187852c6c109058362a81539de0f" title="Sort generic array using Timsort. ">timsort</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga18534dcb0fb5689af44c3309a44a4968" title="Merge runs from left to right. ">timsort_merge_runs_lo</a> </dd></dl>
+<a class="el" href="group__Timsort.html#ga67d92f57e1b421c1110d15ea25492bb4" title="Merge runs from left to right. ">timsort_merge_runs_lo</a> </dd></dl>
 
 </div>
 </div>
-<a id="ga0be2dffcafd8880d305fd0c7d9f87fd7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga0be2dffcafd8880d305fd0c7d9f87fd7">&#9670;&nbsp;</a></span>timsort_merge_runs()</h2>
+<a id="ga62d32e069756222c797c569f08220237"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga62d32e069756222c797c569f08220237">&#9670;&nbsp;</a></span>timsort_merge_runs()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -605,7 +605,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int(*)(void *, void *)&#160;</td>
+          <td class="paramtype">int(*)(const void *, const void *)&#160;</td>
           <td class="paramname"><em>compare</em>, </td>
         </tr>
         <tr>
@@ -647,20 +647,20 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to first run, now with length updated to include second's.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#gae421187852c6c109058362a81539de0f" title="Sort generic array using Timsort. ">timsort</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#gac2adf9d2399deb49f6c8bb71ef13829f" title="Check that run invariants hold and update runs stack if they do not. ">timsort_check_invariants</a> </dd>
+<a class="el" href="group__Timsort.html#ga77b690ab2bb67a139ba32a6715834952" title="Check that run invariants hold and update runs stack if they do not. ">timsort_check_invariants</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#gabbc386bb95547fd09350b3aaf72c8e26" title="Merge top two runs in run stack until only one run remains. ">timsort_collapse_runs</a> </dd>
+<a class="el" href="group__Timsort.html#ga3978be9f06411c3f9cd0bd597d64b555" title="Merge top two runs in run stack until only one run remains. ">timsort_collapse_runs</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga18534dcb0fb5689af44c3309a44a4968" title="Merge runs from left to right. ">timsort_merge_runs_lo</a> </dd>
+<a class="el" href="group__Timsort.html#ga67d92f57e1b421c1110d15ea25492bb4" title="Merge runs from left to right. ">timsort_merge_runs_lo</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga82043845fa8abc3c91332008ddbb4b55" title="Merge runs from right to left. ">timsort_merge_runs_hi</a> </dd></dl>
+<a class="el" href="group__Timsort.html#gab79f5bad70cecab915e4a564516cf5a8" title="Merge runs from right to left. ">timsort_merge_runs_hi</a> </dd></dl>
 
 </div>
 </div>
-<a id="ga82043845fa8abc3c91332008ddbb4b55"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga82043845fa8abc3c91332008ddbb4b55">&#9670;&nbsp;</a></span>timsort_merge_runs_hi()</h2>
+<a id="gab79f5bad70cecab915e4a564516cf5a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab79f5bad70cecab915e4a564516cf5a8">&#9670;&nbsp;</a></span>timsort_merge_runs_hi()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -680,7 +680,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int(*)(void *, void *)&#160;</td>
+          <td class="paramtype">int(*)(const void *, const void *)&#160;</td>
           <td class="paramname"><em>compare</em>, </td>
         </tr>
         <tr>
@@ -737,16 +737,16 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Void.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#gae421187852c6c109058362a81539de0f" title="Sort generic array using Timsort. ">timsort</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga0be2dffcafd8880d305fd0c7d9f87fd7" title="Merge 2 consecutive runs. ">timsort_merge_runs</a> </dd>
+<a class="el" href="group__Timsort.html#ga62d32e069756222c797c569f08220237" title="Merge 2 consecutive runs. ">timsort_merge_runs</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga503a8e66f4c150e73b2b37980996cae0" title="Gallop right-&gt;left to find number of elements in source array greater than target. ">timsort_gallop_left</a> </dd></dl>
+<a class="el" href="group__Timsort.html#gac60918d0e6930ae4dd66dc5376b74649" title="Gallop right-&gt;left to find number of elements in source array greater than target. ">timsort_gallop_left</a> </dd></dl>
 
 </div>
 </div>
-<a id="ga18534dcb0fb5689af44c3309a44a4968"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga18534dcb0fb5689af44c3309a44a4968">&#9670;&nbsp;</a></span>timsort_merge_runs_lo()</h2>
+<a id="ga67d92f57e1b421c1110d15ea25492bb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga67d92f57e1b421c1110d15ea25492bb4">&#9670;&nbsp;</a></span>timsort_merge_runs_lo()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -766,7 +766,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int(*)(void *, void *)&#160;</td>
+          <td class="paramtype">int(*)(const void *, const void *)&#160;</td>
           <td class="paramname"><em>compare</em>, </td>
         </tr>
         <tr>
@@ -825,11 +825,11 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Void.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#gae421187852c6c109058362a81539de0f" title="Sort generic array using Timsort. ">timsort</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga0be2dffcafd8880d305fd0c7d9f87fd7" title="Merge 2 consecutive runs. ">timsort_merge_runs</a> </dd>
+<a class="el" href="group__Timsort.html#ga62d32e069756222c797c569f08220237" title="Merge 2 consecutive runs. ">timsort_merge_runs</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#gaa2295bcc1b001663881a0ad6c20d6d7a" title="Gallop left-&gt;right to find number of elements in source array less than target. ">timsort_gallop_right</a> </dd></dl>
+<a class="el" href="group__Timsort.html#ga59524f2247f32032582b8f17ab93a1f6" title="Gallop left-&gt;right to find number of elements in source array less than target. ">timsort_gallop_right</a> </dd></dl>
 
 </div>
 </div>
@@ -858,7 +858,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Size of minimum run.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#gae421187852c6c109058362a81539de0f" title="Sort generic array using Timsort. ">timsort</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd></dl>
 
 </div>
 </div>

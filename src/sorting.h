@@ -137,4 +137,8 @@ static int bin_search(void* arr, size_t size,
                       int (*compare)(const void*, const void*), 
                       size_t lo, size_t hi, void* target);
 
+static size_t bin_search_loc(void* arr, size_t size, 
+                             int (*compare)(const void*, const void*),
+                             size_t lo, size_t hi, void* target);
+
 #endif /* MY_SORTING_ALGORITHMS_ */

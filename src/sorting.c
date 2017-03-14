@@ -75,24 +75,38 @@ insert_sort_partial(void* arr, size_t size,
                     int (*compare)(const void*, const void*), 
                     size_t lo, size_t hi) 
 {
-  char* arrp = (char*)arr;
-  size_t i, j;
-  void *a, *b;
-  for (i = lo + 1; i < hi; i++) {
-    j = i;
-    a = arrp+(j*size);
-    b = arrp+((j-1)*size);
-    while (j > lo && compare(a, b) < 0) {
-      swap(a, b, size);
-      j--;
-      a = arrp+(j*size);
-      b = arrp+((j-1)*size);
+  char* arr_p = (char*) arr;
+  void* a;
+  void* b;
+  size_t j;
+  for (size_t i = lo + 1; i < hi; i++) {
+    j = i + 1;
+    while (j --> lo + 1) {
+      a = arr_p+(j * size);
+      b = arr_p+((j-1) * size);
+      if (compare(a, b) < 0) {
+        swap(a, b, size);
+      } else {
+        break;
+      }
     }
   }
 }
 
 /**
  * @brief Sort generic contiguous subarray using binary insertion sort.
+ *
+ * Uses binary search (via bin_search_loc()) to find proper index of each
+ * element in subarray. Once the index of an element has been found, 
+ * the elements beginning at that index and ending before the current index of 
+ * the element are shifted to the right by one to make room for the element's
+ * insertion.
+ *
+ * @note As shifting elements involves overlapping memory, the function uses
+ * memmove() rather than memcpy(). While memcpy() is typically faster than
+ * memmove(), being able to copy memory in bulk via memmove() (rather than one 
+ * at a time, as we would need to with memcpy() to prevent problems with 
+ * overlapping memory) results in an enormous performance boost.  
  *
  * @param arr Array containing the subarray.
  * @param size Size of each element in the array.
@@ -106,38 +120,18 @@ binary_insert_sort(void* arr, size_t size,
                    int (*compare)(const void*, const void*), 
                    size_t lo, size_t hi)
 {
-  char* arr_p = (char*)arr;
-  int i, j, l, r, m, loc;
-  void* slctd = malloc(size);
-
-  for (i = lo + 1; i <= hi; i++) {
-    j = i - 1;
-    memcpy(slctd, arr_p+(i*size), size);
-
-    l = lo, r = j;
-    while (1) {
-      if (r <= l) {
-        loc = (compare(slctd, arr_p+(l*size)) > 0) ? (l + 1) : l;
-        break;
-      }
-      m = floor(l + ((r - l) / 2));
-      if (compare(arr_p+(m*size), slctd) < 0) {
-        l = m + 1;
-      } else if (compare(arr_p+(m*size), slctd) > 0) {
-        r = m - 1;
-      } else {
-        loc = m + 1;
-        break;
-      }
-    }
-
-    while (j >= loc) {
-      memcpy(arr_p+((j+1)*size), arr_p+(j*size), size);
-      j--;
-    }
-    memcpy(arr_p+((j+1)*size), slctd, size);
+  char* arr_p = (char*) arr;
+  size_t loc;
+  void* selected = malloc(size);
+  
+  for (size_t i = lo + 1; i <= hi; i++) {
+    memcpy(selected, arr_p+(i * size), size);
+    loc = bin_search_loc(arr, size, compare, lo, i - 1, selected);
+    memmove(arr_p+((loc + 1) * size), arr_p+(loc * size), (i - loc) * size);
+    memcpy(arr_p+(loc * size), selected, size);
   }
-  free(slctd);
+
+  free(selected);
 }
 
 /** @} */ // End InsertionSort
@@ -1290,6 +1284,32 @@ bin_search(void* arr, size_t size, int (*compare)(const void*, const void*),
   }
 }
 
+/**
+ * @brief Find location of target value in array using binary search.
+ */
+size_t
+bin_search_loc(void* arr, size_t size, 
+                int (*compare)(const void*, const void*),
+                size_t lo, size_t hi, void* target)
+{
+  char* arr_p = (char*) arr;
+  size_t l = lo;
+  size_t m = 0;
+  size_t r = hi;
+  while (1) {
+    if (r > hi || r <= l) {
+      return compare(target, arr_p+(l * size)) > 0 ? (l + 1) : l;
+    }
+    m = floor(l + ((r - l) / 2));
+    if (compare(target, arr_p+(m * size)) > 0) {
+      l = m + 1;
+    } else if (compare(target, arr_p+(m * size)) < 0) {
+      r = m - 1;
+    } else {
+      return m + 1;
+    }
+  }
+}
 /** 
  * @}
  * @}

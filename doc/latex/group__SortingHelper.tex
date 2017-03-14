@@ -10,12 +10,15 @@ Helpers for sorting algorithms.
 \item 
 void \hyperlink{group__SortingHelper_gac005eaa05ec80dbf1a0984d3d4fa80a8}{swap} (void $\ast$a, void $\ast$b, size\+\_\+t size)
 \begin{DoxyCompactList}\small\item\em Swap the values referenced by two pointers. \end{DoxyCompactList}\item 
-size\+\_\+t \hyperlink{group__SortingHelper_ga64dc225cd385660f0c413520416e8d40}{median\+\_\+three} (void $\ast$arr, size\+\_\+t size, size\+\_\+t a, size\+\_\+t b, size\+\_\+t c, int($\ast$compare)(void $\ast$, void $\ast$))
+size\+\_\+t \hyperlink{group__SortingHelper_ga7ca72135e6d6f9e7af0ea60d653efb09}{median\+\_\+three} (void $\ast$arr, size\+\_\+t size, size\+\_\+t a, size\+\_\+t b, size\+\_\+t c, int($\ast$compare)(const void $\ast$, const void $\ast$))
 \begin{DoxyCompactList}\small\item\em Find median of three elements in given array and return its index. \end{DoxyCompactList}\item 
 void \hyperlink{group__SortingHelper_gae26181b67ffd4261a676f39624c3ce68}{reverse\+\_\+array} (void $\ast$arr, size\+\_\+t start, size\+\_\+t end, size\+\_\+t size)
 \begin{DoxyCompactList}\small\item\em Reverse given array. \end{DoxyCompactList}\item 
-int \hyperlink{group__SortingHelper_ga5f3f53398f1206d95119c4ba54faab58}{bin\+\_\+search} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t hi, void $\ast$target)
-\begin{DoxyCompactList}\small\item\em Search for an element using binary search in a contiguous subarray. \end{DoxyCompactList}\end{DoxyCompactItemize}
+int \hyperlink{group__SortingHelper_gaf203a2e0f9fe91935ca226e8f038fb43}{bin\+\_\+search} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$), size\+\_\+t lo, size\+\_\+t hi, void $\ast$target)
+\begin{DoxyCompactList}\small\item\em Search for an element using binary search in a contiguous subarray. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{group__SortingHelper_ga347d3eac5748d59424afd8566181fc27}\label{group__SortingHelper_ga347d3eac5748d59424afd8566181fc27}} 
+size\+\_\+t \hyperlink{group__SortingHelper_ga347d3eac5748d59424afd8566181fc27}{bin\+\_\+search\+\_\+loc} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$), size\+\_\+t lo, size\+\_\+t hi, void $\ast$target)
+\begin{DoxyCompactList}\small\item\em Find location of target value in array using binary search. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -24,11 +27,11 @@ Helpers for sorting algorithms.
 
 
 \subsection{Function Documentation}
-\mbox{\Hypertarget{group__SortingHelper_ga5f3f53398f1206d95119c4ba54faab58}\label{group__SortingHelper_ga5f3f53398f1206d95119c4ba54faab58}} 
+\mbox{\Hypertarget{group__SortingHelper_gaf203a2e0f9fe91935ca226e8f038fb43}\label{group__SortingHelper_gaf203a2e0f9fe91935ca226e8f038fb43}} 
 \index{Helper Functions@{Helper Functions}!bin\+\_\+search@{bin\+\_\+search}}
 \index{bin\+\_\+search@{bin\+\_\+search}!Helper Functions@{Helper Functions}}
 \subsubsection{\texorpdfstring{bin\+\_\+search()}{bin\_search()}}
-{\footnotesize\ttfamily int bin\+\_\+search (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{hi,  }\item[{void $\ast$}]{target }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int bin\+\_\+search (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{hi,  }\item[{void $\ast$}]{target }\end{DoxyParamCaption})}
 
 
 
@@ -52,11 +55,11 @@ Search for an element using binary search in a contiguous subarray.
 \begin{DoxyReturn}{Returns}
 Index of item if found, else -\/1. 
 \end{DoxyReturn}
-\mbox{\Hypertarget{group__SortingHelper_ga64dc225cd385660f0c413520416e8d40}\label{group__SortingHelper_ga64dc225cd385660f0c413520416e8d40}} 
+\mbox{\Hypertarget{group__SortingHelper_ga7ca72135e6d6f9e7af0ea60d653efb09}\label{group__SortingHelper_ga7ca72135e6d6f9e7af0ea60d653efb09}} 
 \index{Helper Functions@{Helper Functions}!median\+\_\+three@{median\+\_\+three}}
 \index{median\+\_\+three@{median\+\_\+three}!Helper Functions@{Helper Functions}}
 \subsubsection{\texorpdfstring{median\+\_\+three()}{median\_three()}}
-{\footnotesize\ttfamily size\+\_\+t median\+\_\+three (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{size\+\_\+t}]{a,  }\item[{size\+\_\+t}]{b,  }\item[{size\+\_\+t}]{c,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily size\+\_\+t median\+\_\+three (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{size\+\_\+t}]{a,  }\item[{size\+\_\+t}]{b,  }\item[{size\+\_\+t}]{c,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare }\end{DoxyParamCaption})}
 
 
 

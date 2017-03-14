@@ -74,21 +74,25 @@ Functions</h2></td></tr>
 <tr class="memitem:gac005eaa05ec80dbf1a0984d3d4fa80a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SortingHelper.html#gac005eaa05ec80dbf1a0984d3d4fa80a8">swap</a> (void *a, void *b, size_t size)</td></tr>
 <tr class="memdesc:gac005eaa05ec80dbf1a0984d3d4fa80a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Swap the values referenced by two pointers.  <a href="#gac005eaa05ec80dbf1a0984d3d4fa80a8">More...</a><br /></td></tr>
 <tr class="separator:gac005eaa05ec80dbf1a0984d3d4fa80a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga64dc225cd385660f0c413520416e8d40"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SortingHelper.html#ga64dc225cd385660f0c413520416e8d40">median_three</a> (void *arr, size_t size, size_t a, size_t b, size_t c, int(*compare)(void *, void *))</td></tr>
-<tr class="memdesc:ga64dc225cd385660f0c413520416e8d40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find median of three elements in given array and return its index.  <a href="#ga64dc225cd385660f0c413520416e8d40">More...</a><br /></td></tr>
-<tr class="separator:ga64dc225cd385660f0c413520416e8d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7ca72135e6d6f9e7af0ea60d653efb09"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SortingHelper.html#ga7ca72135e6d6f9e7af0ea60d653efb09">median_three</a> (void *arr, size_t size, size_t a, size_t b, size_t c, int(*compare)(const void *, const void *))</td></tr>
+<tr class="memdesc:ga7ca72135e6d6f9e7af0ea60d653efb09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find median of three elements in given array and return its index.  <a href="#ga7ca72135e6d6f9e7af0ea60d653efb09">More...</a><br /></td></tr>
+<tr class="separator:ga7ca72135e6d6f9e7af0ea60d653efb09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae26181b67ffd4261a676f39624c3ce68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SortingHelper.html#gae26181b67ffd4261a676f39624c3ce68">reverse_array</a> (void *arr, size_t start, size_t end, size_t size)</td></tr>
 <tr class="memdesc:gae26181b67ffd4261a676f39624c3ce68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reverse given array.  <a href="#gae26181b67ffd4261a676f39624c3ce68">More...</a><br /></td></tr>
 <tr class="separator:gae26181b67ffd4261a676f39624c3ce68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga5f3f53398f1206d95119c4ba54faab58"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SortingHelper.html#ga5f3f53398f1206d95119c4ba54faab58">bin_search</a> (void *arr, size_t size, int(*compare)(void *, void *), size_t lo, size_t hi, void *target)</td></tr>
-<tr class="memdesc:ga5f3f53398f1206d95119c4ba54faab58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Search for an element using binary search in a contiguous subarray.  <a href="#ga5f3f53398f1206d95119c4ba54faab58">More...</a><br /></td></tr>
-<tr class="separator:ga5f3f53398f1206d95119c4ba54faab58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf203a2e0f9fe91935ca226e8f038fb43"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SortingHelper.html#gaf203a2e0f9fe91935ca226e8f038fb43">bin_search</a> (void *arr, size_t size, int(*compare)(const void *, const void *), size_t lo, size_t hi, void *target)</td></tr>
+<tr class="memdesc:gaf203a2e0f9fe91935ca226e8f038fb43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Search for an element using binary search in a contiguous subarray.  <a href="#gaf203a2e0f9fe91935ca226e8f038fb43">More...</a><br /></td></tr>
+<tr class="separator:gaf203a2e0f9fe91935ca226e8f038fb43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga347d3eac5748d59424afd8566181fc27"><td class="memItemLeft" align="right" valign="top"><a id="ga347d3eac5748d59424afd8566181fc27"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SortingHelper.html#ga347d3eac5748d59424afd8566181fc27">bin_search_loc</a> (void *arr, size_t size, int(*compare)(const void *, const void *), size_t lo, size_t hi, void *target)</td></tr>
+<tr class="memdesc:ga347d3eac5748d59424afd8566181fc27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find location of target value in array using binary search. <br /></td></tr>
+<tr class="separator:ga347d3eac5748d59424afd8566181fc27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Helpers for sorting algorithms. </p>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ga5f3f53398f1206d95119c4ba54faab58"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga5f3f53398f1206d95119c4ba54faab58">&#9670;&nbsp;</a></span>bin_search()</h2>
+<a id="gaf203a2e0f9fe91935ca226e8f038fb43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf203a2e0f9fe91935ca226e8f038fb43">&#9670;&nbsp;</a></span>bin_search()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -108,7 +112,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int(*)(void *, void *)&#160;</td>
+          <td class="paramtype">int(*)(const void *, const void *)&#160;</td>
           <td class="paramname"><em>compare</em>, </td>
         </tr>
         <tr>
@@ -153,8 +157,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga64dc225cd385660f0c413520416e8d40"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga64dc225cd385660f0c413520416e8d40">&#9670;&nbsp;</a></span>median_three()</h2>
+<a id="ga7ca72135e6d6f9e7af0ea60d653efb09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7ca72135e6d6f9e7af0ea60d653efb09">&#9670;&nbsp;</a></span>median_three()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -192,7 +196,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int(*)(void *, void *)&#160;</td>
+          <td class="paramtype">int(*)(const void *, const void *)&#160;</td>
           <td class="paramname"><em>compare</em>&#160;</td>
         </tr>
         <tr>
