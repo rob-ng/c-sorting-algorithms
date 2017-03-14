@@ -7,30 +7,44 @@ The format is based on [Keep a Changelog]() and this project adheres to
 
 ## [Unreleased]
 
-## [2017-03-13] 0.0.6
+## [2017-03-14] 0.0.6
+
+### Changed
+
+- Refactored "insert_sort_partial()" and "binary_insert_sort()". Functions have
+  been made more concise, have been changed to use only size_t for indexing,
+  and in the case of "binary_insert_sort()", have been made significantly more
+  efficient. 
+
+## [2017-03-13] 0.0.5
 
 ### Added
 
-- Project documentation.
-- Basic README.
+- Project documentation in both HTML and LaTeX. Documentation is generated
+  using Doxygen. 
+- Basic README. README will also provide content for the Doxygen-generated 
+  index.html.
 
-## [2017-03-10] 0.0.5
+### Changed
 
-### Added
+- Documentation comments to make them Doxygen compliant.
 
-- Galloping mode to Timsort.
-
-## [2017-03-02] 0.0.4
-
-### Added
-
-- Working (but unoptimized) Timsort for full sorting.
-
-## [2017-02-28] 0.0.3
+## [2017-03-10] 0.0.4
 
 ### Added
 
-- Nearly working Timsort for full sorting.
+- Galloping mode to Timsort. Galloping mode affects how runs are merged and is 
+  implemented in such a way that it adds minimal overhead when the data doesn't
+  support it (e.g. when data is random) but offers a significant performance 
+  boost when it does.
+
+## [2017-03-02] 0.0.3
+
+### Added
+
+- Working (but unoptimized) Timsort for full sorting. Current implementation
+  does not include "galloping mode", so all merges are performed like those in 
+  standard merge sort.
 
 ## [2017-02-26] 0.0.2
 
