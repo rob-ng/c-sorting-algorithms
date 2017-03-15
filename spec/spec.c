@@ -243,6 +243,50 @@ test_insert_sort()
   return 0;
 }
 
+static char* 
+test_select_sort() 
+{
+  srand(time(NULL));
+
+  TestInput* tests = get_sorting_tests();
+
+  int successful_tests = 0;
+  int matching = 0;
+  TestInput my_test;
+  TestInput compare_test;
+  for (int t = 0; t < 29; t++) {
+    matching = 0;
+    my_test = *(tests+(t));
+    memcpy(&compare_test, &my_test, sizeof(my_test));
+    select_sort(&my_test.arr, my_test.len, sizeof(int), compare_ints);
+    qsort(&compare_test.arr, compare_test.len, sizeof(int), compare_ints);
+    for (int j = 0; j < my_test.len; j++) {
+      if (my_test.arr[j] == compare_test.arr[j]) {
+        matching++;
+      } else {
+        printf("FAILED! Test: %d\n", t);
+        printf("My sort: ");
+        for (int f = 0; f < my_test.len; f++) {
+          printf("%d ", my_test.arr[f]);
+        }
+        printf("\n");
+        printf("Default sort: ");
+        for (int f = 0; f < compare_test.len; f++) {
+          printf("%d ", compare_test.arr[f]);
+        }
+        printf("\n");
+        //break;
+        return NULL;
+      }
+    }
+    if (matching == my_test.len) {
+      successful_tests++;
+    }
+  }
+  mu_assert("insert_sort(): failed to sort input", successful_tests == 29);
+  return 0;
+}
+
 static char* all_tests() {
   // Stack
   mu_run_test(test_stack_init);
@@ -256,6 +300,7 @@ static char* all_tests() {
   // Sorts
   mu_run_test(test_insert_sort);
   mu_run_test(test_binary_insert_sort);
+  mu_run_test(test_select_sort);
 
   return 0;
 }

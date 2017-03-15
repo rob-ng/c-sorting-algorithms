@@ -5,6 +5,7 @@
 #ifndef MY_SORTING_ALGORITHMS_
 #define MY_SORTING_ALGORITHMS_
 
+#include <string.h>
 #include "stack.h"
 
 /** 
@@ -126,7 +127,7 @@ static int timsort_binary_search(void* arr, size_t size,
 //# HELPERS
 //##############################################################################
 
-void swap(void* a, void* b, size_t size);
+static void swap(void* a, void* b, size_t size);
 
 size_t median_three(void* arr, size_t size, size_t a, size_t b, size_t c, 
                     int (*compare)(const void*, const void*));

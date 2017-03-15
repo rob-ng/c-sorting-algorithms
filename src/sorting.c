@@ -154,17 +154,24 @@ void
 select_sort(void* arr, size_t nelems, size_t size, 
             int (*compare)(const void*, const void*))
 {
-  char* arr_p = (char*)arr;
-  size_t i, j, select_ind;
-  for (i = 0; i < nelems; i++) {
-    select_ind = i;
-    for (j = i; j < nelems; j++) {
-      if (compare(arr_p+(j*size), arr_p+(select_ind*size)) < 0) {
-        select_ind = j;
+  /**
+   * @brief To avoid issues with size_t wrapping, and as an empty array is
+   * sorted, return immediately if nelems is 0.
+   */
+  if (nelems == 0) { 
+    return; 
+  }
+  char* arr_p = (char*) arr;
+  size_t min_ind;
+  for (size_t i = 0, max_i = ((nelems - 1) * size); i < max_i; i += size) {
+    min_ind = i;
+    for (size_t j = i + size, max_j = (max_i + size); j < max_j; j += size) {
+      if (compare(arr_p+(j), arr_p+(min_ind)) < 0) {
+        min_ind = j;
       }
     }
-    if (select_ind != i) {
-      swap(arr_p+(i*size), arr_p+(select_ind*size), size);
+    if (min_ind != i) {
+      swap(arr_p+(i), arr_p+(min_ind), size);
     }
   }
 }
