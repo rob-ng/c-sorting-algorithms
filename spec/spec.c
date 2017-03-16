@@ -93,6 +93,9 @@ static char* test_stack_free()
 //# SORTING TESTS
 //##############################################################################
 
+// Number of test cases.
+#define NUM_TESTS 29
+
 int
 compare_ints(const void* a_p, const void* b_p)
 {
@@ -112,15 +115,11 @@ typedef struct TestInput {
   int len;
 } TestInput;
 
-typedef union SortingFunc {
-  void (*insert)(void*, size_t, size_t, int (*cmp)(const void*, const void*));
-} SortingFunc;
-
 TestInput*
 get_sorting_tests()
 {
   srand(time(NULL));
-  static TestInput default_tests[29] = {
+  static TestInput default_tests[NUM_TESTS] = {
     { {}, 0 },
     { {0}, 1 },
     { {0, 0}, 2 },
@@ -142,21 +141,22 @@ get_sorting_tests()
     { {-11, -3, 9, 17, 42, 54, 54, 602, 999 }, 9 }
   };
 
-  int start_index = 19;
-  for (int i = 0; i < 10; i++) {
+  for (int i = 19; i < NUM_TESTS; i++) {
     TestInput rand_test;
     rand_test.len = 100;
     for (int j = 0; j < 100; j++) {
       rand_test.arr[j] = rand() % 100000;
     }
-    default_tests[start_index + i] = rand_test;
+    default_tests[i] = rand_test;
   }
 
   return default_tests;
 }
 
 static char* 
-test_binary_insert_sort()
+test_sort_no_bounds(void (*sort)(void*, size_t, size_t, 
+                                 int (*cmp)(const void*, const void*)),
+                    char* sort_name) 
 {
   srand(time(NULL));
 
@@ -166,19 +166,72 @@ test_binary_insert_sort()
   int matching = 0;
   TestInput my_test;
   TestInput compare_test;
-  for (int t = 0; t < 29; t++) {
+  for (int t = 0; t < NUM_TESTS; t++) {
+    matching = 0;
+    my_test = *(tests+(t));
+    memcpy(&compare_test, &my_test, sizeof(my_test));
+    sort(&my_test.arr, my_test.len, sizeof(int), compare_ints);
+    qsort(&compare_test.arr, compare_test.len, sizeof(int), compare_ints);
+    for (int j = 0; j < my_test.len; j++) {
+      if (my_test.arr[j] == compare_test.arr[j]) {
+        matching++;
+      } else {
+        printf("Sort (%s) FAILED! Test: %d\n", sort_name, t);
+        printf("My sort: ");
+        for (int f = 0; f < my_test.len; f++) {
+          printf("%d ", my_test.arr[f]);
+        }
+        printf("\n");
+        printf("Default sort: ");
+        for (int f = 0; f < compare_test.len; f++) {
+          printf("%d ", compare_test.arr[f]);
+        }
+        printf("\n");
+        break;
+      }
+    }
+    if (matching == my_test.len) {
+      successful_tests++;
+    }
+  }
+  static char msg_buff[100];
+  int msg_created;
+  msg_created = snprintf(msg_buff, 100, "Sort (%d): failed to sort input", 
+                         sort_name);
+  if (msg_created >= 0 && msg_created < 100) {
+    mu_assert(msg_buff, successful_tests == NUM_TESTS);
+  } else {
+    printf("Error generating message for (%s)\n", sort_name);
+  }
+  return 0;
+}
+
+static char* 
+test_sort_bounds(void (*sort)(void*, size_t, 
+                              int (*cmp)(const void*, const void*),
+                              size_t lo, size_t hi), char* sort_name)
+{
+  srand(time(NULL));
+
+  TestInput* tests = get_sorting_tests();
+
+  int successful_tests = 0;
+  int matching = 0;
+  TestInput my_test;
+  TestInput compare_test;
+  for (int t = 0; t < NUM_TESTS; t++) {
     matching = 0;
     my_test = *(tests+(t));
     memcpy(&compare_test, &my_test, sizeof(my_test));
     size_t len = my_test.len > 0 ? my_test.len - 1 : 0;
-    binary_insert_sort(&my_test.arr, sizeof(int), compare_ints, 0, 
+    sort(&my_test.arr, sizeof(int), compare_ints, 0, 
                        len);
     qsort(&compare_test.arr, compare_test.len, sizeof(int), compare_ints);
     for (int j = 0; j < my_test.len; j++) {
       if (my_test.arr[j] == compare_test.arr[j]) {
         matching++;
       } else {
-        printf("FAILED! Test: %d\n", t);
+        printf("Sort (%s) FAILED! Test: %d\n", sort_name, t);
         printf("My sort: ");
         for (int f = 0; f < my_test.len; f++) {
           printf("%d ", my_test.arr[f]);
@@ -196,94 +249,15 @@ test_binary_insert_sort()
       successful_tests++;
     }
   }
-  mu_assert("insert_sort(): failed to sort input", successful_tests == 29);
-  return 0;
-}
-
-static char* 
-test_insert_sort() 
-{
-  srand(time(NULL));
-
-  TestInput* tests = get_sorting_tests();
-
-  int successful_tests = 0;
-  int matching = 0;
-  TestInput my_test;
-  TestInput compare_test;
-  for (int t = 0; t < 29; t++) {
-    matching = 0;
-    my_test = *(tests+(t));
-    memcpy(&compare_test, &my_test, sizeof(my_test));
-    insert_sort(&my_test.arr, my_test.len, sizeof(int), compare_ints);
-    qsort(&compare_test.arr, compare_test.len, sizeof(int), compare_ints);
-    for (int j = 0; j < my_test.len; j++) {
-      if (my_test.arr[j] == compare_test.arr[j]) {
-        matching++;
-      } else {
-        printf("FAILED! Test: %d\n", t);
-        printf("My sort: ");
-        for (int f = 0; f < my_test.len; f++) {
-          printf("%d ", my_test.arr[f]);
-        }
-        printf("\n");
-        printf("Default sort: ");
-        for (int f = 0; f < compare_test.len; f++) {
-          printf("%d ", compare_test.arr[f]);
-        }
-        printf("\n");
-        break;
-      }
-    }
-    if (matching == my_test.len) {
-      successful_tests++;
-    }
+  static char msg_buff[100];
+  int msg_created;
+  msg_created = snprintf(msg_buff, 100, "Sort (%d): failed to sort input", 
+                         sort_name);
+  if (msg_created >= 0 && msg_created < 100) {
+    mu_assert(msg_buff, successful_tests == NUM_TESTS);
+  } else {
+    printf("Error generating message for (%s)\n", sort_name);
   }
-  mu_assert("insert_sort(): failed to sort input", successful_tests == 29);
-  return 0;
-}
-
-static char* 
-test_select_sort() 
-{
-  srand(time(NULL));
-
-  TestInput* tests = get_sorting_tests();
-
-  int successful_tests = 0;
-  int matching = 0;
-  TestInput my_test;
-  TestInput compare_test;
-  for (int t = 0; t < 29; t++) {
-    matching = 0;
-    my_test = *(tests+(t));
-    memcpy(&compare_test, &my_test, sizeof(my_test));
-    select_sort(&my_test.arr, my_test.len, sizeof(int), compare_ints);
-    qsort(&compare_test.arr, compare_test.len, sizeof(int), compare_ints);
-    for (int j = 0; j < my_test.len; j++) {
-      if (my_test.arr[j] == compare_test.arr[j]) {
-        matching++;
-      } else {
-        printf("FAILED! Test: %d\n", t);
-        printf("My sort: ");
-        for (int f = 0; f < my_test.len; f++) {
-          printf("%d ", my_test.arr[f]);
-        }
-        printf("\n");
-        printf("Default sort: ");
-        for (int f = 0; f < compare_test.len; f++) {
-          printf("%d ", compare_test.arr[f]);
-        }
-        printf("\n");
-        //break;
-        return NULL;
-      }
-    }
-    if (matching == my_test.len) {
-      successful_tests++;
-    }
-  }
-  mu_assert("insert_sort(): failed to sort input", successful_tests == 29);
   return 0;
 }
 
@@ -298,9 +272,11 @@ static char* all_tests() {
   mu_run_test(test_stack_free);
 
   // Sorts
-  mu_run_test(test_insert_sort);
-  mu_run_test(test_binary_insert_sort);
-  mu_run_test(test_select_sort);
+  mu_run_test_on_arg(test_sort_no_bounds, insert_sort, "insert_sort");
+  mu_run_test_on_arg(test_sort_bounds, binary_insert_sort, 
+                     "binary_insert_sort");
+  mu_run_test_on_arg(test_sort_no_bounds, select_sort, "select_sort");
+  mu_run_test_on_arg(test_sort_no_bounds, comb_sort, "comb_sort");
 
   return 0;
 }
