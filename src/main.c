@@ -63,28 +63,21 @@ main(int argc, char* argv[])
   int wrong_int = 0, wrong_char = 0;
   for (sort_ind = 0; sort_ind < 1; sort_ind++) {
     for (i = 0; i < SIZE; i++) {
-      arr_char[i] = 'A' + (rand() % 26);
-    }
-    for (i = 0; i < SIZE; i++) {
       arr_int[i] = rand() % 10000;
+    }
+    /*for (i = 0; i < SIZE; i++) {
+      arr_char[i] = 'A' + (rand() % 26);
     }
     for (i = SIZE; i --> 0;) {
       arr_int_rev[i] = i;
-    }
-    //timsort(arr_char, sizeof(arr_char)/sizeof(char), sizeof(char), compare_chars);
-    //timsort(arr_int, sizeof(arr_int)/sizeof(int), sizeof(int), compare_ints);
-    //timsort(arr_int_rev, sizeof(arr_int)/sizeof(int), sizeof(int), compare_ints);
+    }*/
     clock_t start = clock();
-    //binary_insert_sort(arr_int, sizeof(int), compare_ints, 0,
-                       //sizeof(arr_int) / sizeof(int) - 1);
-    select_sort(arr_int, sizeof(arr_int)/sizeof(int), sizeof(int), 
+    comb_sort(arr_int, sizeof(arr_int)/sizeof(int), sizeof(int), 
                 compare_ints);
     clock_t end = clock();
     printf("Elapsed: %f\n", (double) (end - start) / CLOCKS_PER_SEC);
     for (i = 0; i < SIZE-1; i++) {
-      //assert(arr_char[i] <= arr_char[i+1]);
       assert(arr_int[i] <= arr_int[i+1]);
-      //assert(arr_int_rev[i] <= arr_int_rev[i+1]);
     }
   }
   return 0;

@@ -216,28 +216,30 @@ void
 comb_sort(void* arr, size_t nelems, size_t size, 
           int (*compare)(const void*, const void*))
 {
-  char* arr_p = (char*)arr;
-  size_t gap = nelems;
-  double shrink = 1.3;
+  char* arr_p = (char*) arr;
+  const size_t MAX_MEM = nelems * size;
+  const double SHRINK = 1.3 * size;
+
+  size_t gap = MAX_MEM;
+  size_t i = 0;
   int sorted = 0;
 
   while (!sorted) {
-    gap = floor(gap / shrink);
-    if (gap > 1) {
+    gap = floor(gap / SHRINK) * size;
+    if (gap > size) {
       sorted = 0;
     } else {
-      gap = 1;
+      gap = size;
       sorted = 1;
     }
 
-    int i = 0;
-    while (i + gap < nelems) {
-      if (compare(arr_p+(i*size), arr_p+((i+gap)*size)) > 0) {
-        swap(arr_p+(i*size), arr_p+((i+gap)*size), size);
+    i = 0;
+    while (i + gap < MAX_MEM) {
+      if (compare(arr_p+(i), arr_p+(i + gap)) > 0) {
+        swap(arr_p+(i), arr_p+(i + gap), size);
         sorted = 0;
-        i += gap;
       }
-      i += 1;
+      i += size; 
     }
   }
 }
