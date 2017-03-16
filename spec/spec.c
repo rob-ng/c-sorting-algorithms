@@ -277,6 +277,7 @@ static char* all_tests() {
                      "binary_insert_sort");
   mu_run_test_on_arg(test_sort_no_bounds, select_sort, "select_sort");
   mu_run_test_on_arg(test_sort_no_bounds, comb_sort, "comb_sort");
+  mu_run_test_on_arg(test_sort_no_bounds, merge_sort, "merge_sort");
 
   return 0;
 }

@@ -53,13 +53,13 @@ void comb_sort(void* arr, size_t nelems, size_t size,
 void merge_sort(void* arr, size_t nelems, size_t size, 
                 int (*compare)(const void*, const void*));
 
-void merge_sort_sort(void* arr, void* aux, size_t size, 
-                     int (*compare)(const void*, const void*), 
-                     size_t lo, size_t hi);
+static void merge_sort_recursive(void* arr, void* aux, size_t size, 
+                                 int (*compare)(const void*, const void*), 
+                                 size_t lo, size_t hi);
 
-void merge_sort_merge(void* arr, void* aux, size_t size, 
-                      int (*compare)(const void*, const void*), 
-                      size_t lo, size_t mid, size_t hi);
+static void merge_sort_merge(void* arr, void* aux, size_t size, 
+                             int (*compare)(const void*, const void*), 
+                             size_t lo, size_t mid, size_t hi);
 
 
 void quick_sort(void* arr, size_t nelems, size_t size, 

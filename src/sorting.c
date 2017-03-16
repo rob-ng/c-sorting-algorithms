@@ -289,7 +289,7 @@ merge_sort(void* arr, size_t nelems, size_t size,
   } else {
     void* aux = malloc(size * nelems);
     memcpy(aux, arr, size * nelems);
-    merge_sort_sort(aux, arr, size, compare, 0, nelems-1);
+    merge_sort_recursive(aux, arr, size, compare, 0, (nelems - 1) * size);
     free(aux);
   }
 }
@@ -306,8 +306,9 @@ merge_sort(void* arr, size_t nelems, size_t size,
  * copied from arr in merge) is the array FROM which values are copied in the 
  * next merge. See merge_sort() documentation for why this is done.
  *
- * Note: we use lo + (hi - lo) / 2 rather than (hi + lo) / 2 to guard against
- * overflow.
+ * @note The parameters 'hi' and 'lo' are multiples of 'size'. As such, 
+ * calculating 'mid' is slightly more involved as it must also be a multiple 
+ * of 'size'.
  *
  * @param arr Array from which values will be copied.
  * @param aux Array into which values will be copied.
@@ -321,18 +322,19 @@ merge_sort(void* arr, size_t nelems, size_t size,
  * @see merge_sort_merge()
  */
 void
-merge_sort_sort(void* arr, void* aux, size_t size, 
+merge_sort_recursive(void* arr, void* aux, size_t size, 
                 int (*compare)(const void*, const void*), 
                 size_t lo, size_t hi)
 {
   if (hi <= lo) {
     return;
-  } else if (hi - lo <= LENGTH_THRESHOLD) {
-    insert_sort_partial(aux, size, compare, lo, hi+1);
-  } else {
-    size_t mid = lo + (hi - lo) / 2;
-    merge_sort_sort(aux, arr, size, compare, lo, mid);
-    merge_sort_sort(aux, arr, size, compare, mid+1, hi);
+  }// else if (hi - lo <= (LENGTH_THRESHOLD * size)) {
+    //insert_sort_partial(aux, size, compare, lo, hi + 1);//+ size);
+  //} 
+  else {
+    size_t mid = ((hi + lo) / 2 / size) * size;
+    merge_sort_recursive(aux, arr, size, compare, lo, mid);
+    merge_sort_recursive(aux, arr, size, compare, mid + size, hi);
     merge_sort_merge(arr, aux, size, compare, lo, mid, hi);
   }
 }
@@ -354,17 +356,17 @@ merge_sort_merge(void* arr, void* aux, size_t size,
                  int (*compare)(const void*, const void*), 
                  size_t lo, size_t mid, size_t hi)
 {
-  char* arr_p = (char*)arr;
-  char* aux_p = (char*)aux;
-  void *a, *b;
-  size_t i = lo, j = mid+1, k;
-  for (k = lo; k <= hi; k++) {
-    if (i <= mid && (j > hi || compare(arr_p+(i*size), arr_p+(j*size)) < 0)) {
-      memcpy(aux_p+(k*size), arr_p+(i*size), size);
-      i++;
+  char* arr_p = (char*) arr;
+  char* aux_p = (char*) aux;
+  size_t i = lo;
+  size_t j = mid + size;
+  for (size_t k = lo; k <= hi; k += size) {
+    if (i <= mid && (j > hi || compare(arr_p+(i), arr_p+(j)) < 0)) {
+      memcpy(aux_p+(k), arr_p+(i), size);
+      i += size;
     } else {
-      memcpy(aux_p+(k*size), arr_p+(j*size), size);
-      j++;
+      memcpy(aux_p+(k), arr_p+(j), size);
+      j += size;
     }
   }
 }

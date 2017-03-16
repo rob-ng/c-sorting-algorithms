@@ -72,7 +72,7 @@ main(int argc, char* argv[])
       arr_int_rev[i] = i;
     }*/
     clock_t start = clock();
-    comb_sort(arr_int, sizeof(arr_int)/sizeof(int), sizeof(int), 
+    merge_sort(arr_int, sizeof(arr_int)/sizeof(int), sizeof(int), 
                 compare_ints);
     clock_t end = clock();
     printf("Elapsed: %f\n", (double) (end - start) / CLOCKS_PER_SEC);
