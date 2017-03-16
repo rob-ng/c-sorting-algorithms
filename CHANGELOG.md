@@ -7,6 +7,27 @@ The format is based on [Keep a Changelog]() and this project adheres to
 
 ## [Unreleased]
 
+## [2017-03-15] 0.0.7
+
+### Added
+
+- New test functions and associated macro. The functions, test_sort_bounded()
+  and test_sort_no_bounds(), are called using the macro mu_run_test_on_arg()
+  with two arguments: function pointer to sort function, name of sort function
+  as string. Nearly all of the sort functions can be tested with one of these
+  functions.
+
+### Changed
+
+- Refactored select_sort(). Rather than iterate over integers and use those
+  values to calculate offsets (e.g. ptr+(int_index * element_size)), indices
+  and associated values are now incremented by 'size' (the size of an element
+  in the array). By doing this, calculating offsets now takes 1 operation
+  rather than 2.
+- Refactored comb_sort(). Made a similar change as above with respect to
+  indices. In addition, I corrected an issue with indices that was causing the
+  sort to be substantially less efficient.
+
 ## [2017-03-14] 0.0.6
 
 ### Changed
