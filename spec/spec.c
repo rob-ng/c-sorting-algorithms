@@ -278,6 +278,7 @@ static char* all_tests() {
   mu_run_test_on_arg(test_sort_no_bounds, select_sort, "select_sort");
   mu_run_test_on_arg(test_sort_no_bounds, comb_sort, "comb_sort");
   mu_run_test_on_arg(test_sort_no_bounds, merge_sort, "merge_sort");
+  mu_run_test_on_arg(test_sort_no_bounds, quick_sort, "quick_sort");
 
   return 0;
 }

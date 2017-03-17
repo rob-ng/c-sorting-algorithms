@@ -13,7 +13,7 @@
  * @def SIZE
  * @brief Size of test arrays.
  */
-#define SIZE 50000
+#define SIZE 100000
 
 /**
  * @brief Compare function for integers.
@@ -73,10 +73,13 @@ main(int argc, char* argv[])
     for (i = SIZE; i --> 0;) {
       arr_int_rev[i] = i;
     }*/
+    clock_t cmp_start = clock();
     qsort(arr_int_cmp, sizeof(arr_int_cmp)/sizeof(int), sizeof(int),
           compare_ints);
+    clock_t cmp_end = clock();
+    printf("Elapsed: %f\n", (double) (cmp_end - cmp_start) / CLOCKS_PER_SEC);
     clock_t start = clock();
-    binary_insert_sort(arr_int_me, sizeof(arr_int_me)/sizeof(int), sizeof(int), 
+    quick_sort(arr_int_me, sizeof(arr_int_me)/sizeof(int), sizeof(int), 
                 compare_ints);
     clock_t end = clock();
     printf("Elapsed: %f\n", (double) (end - start) / CLOCKS_PER_SEC);

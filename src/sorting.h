@@ -68,13 +68,13 @@ static void merge_sort_merge(void* arr, void* aux, size_t size,
 void quick_sort(void* arr, size_t nelems, size_t size, 
                 int (*compare)(const void*, const void*));
 
-void quick_sort_sort(void* arr, size_t size, 
-                     int (*compare)(const void*, const void*), 
-                     size_t lo, size_t hi);
+static void quick_sort_recursive(void* arr, size_t size, 
+                                 int (*compare)(const void*, const void*), 
+                                 size_t lo, size_t hi);
 
-size_t quick_sort_partition(void* arr, size_t size, 
-                            int (*compare)(const void*, const void*), 
-                            size_t lo, size_t hi);
+static size_t quick_sort_partition(void* arr, size_t size, 
+                                   int (*compare)(const void*, const void*), 
+                                   size_t lo, size_t hi);
 
 //##############################################################################
 //# HYBRID SORTS
@@ -132,8 +132,8 @@ static int timsort_binary_search(void* arr, size_t size,
 
 static void swap(void* a, void* b, size_t size);
 
-size_t median_three(void* arr, size_t size, size_t a, size_t b, size_t c, 
-                    int (*compare)(const void*, const void*));
+static size_t median_three(void* arr, size_t size, size_t a, size_t b, size_t c, 
+                           int (*compare)(const void*, const void*));
 
 static void reverse_array(void* arr, size_t start, size_t end, size_t size);
 

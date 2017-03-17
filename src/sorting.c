@@ -403,8 +403,6 @@ merge_sort_merge(void* arr, void* aux, size_t size,
 /**
  * @brief Sort generic array using quicksort.
  *
- * If array is small enough, defers to insertion sort instead.
- *
  * @param arr Array to be sorted.
  * @param nelems Number of elements in the array.
  * @param size Size of each element in the array.
@@ -417,11 +415,10 @@ void
 quick_sort(void* arr, size_t nelems, size_t size, 
            int (*compare)(const void*, const void*))
 {
-  if (nelems <= LENGTH_THRESHOLD) {
-    insert_sort(arr, nelems, size, compare);
-  } else {
-    quick_sort_sort(arr, size, compare, 1, nelems-1);
+  if (nelems == 0) {
+    return;
   }
+  quick_sort_recursive(arr, size, compare, 0, (nelems - 1) * size);
 }
 
 /**
@@ -441,18 +438,18 @@ quick_sort(void* arr, size_t nelems, size_t size,
  * @see quick_sort_partition()
  */
 void
-quick_sort_sort(void* arr, size_t size, 
-                int (*compare)(const void*, const void*), 
-                size_t lo, size_t hi)
+quick_sort_recursive(void* arr, size_t size, 
+                     int (*compare)(const void*, const void*), 
+                     size_t lo, size_t hi)
 {
   if (hi <= lo) {
     return;
-  } else if (hi - lo <= LENGTH_THRESHOLD) {
-    insert_sort_partial(arr, size, compare, lo, hi+1);
+  } else if (hi - lo <= LENGTH_THRESHOLD * size) {
+    insert_sort_partial(arr, size, compare, lo, hi);
   } else {
     size_t pivot = quick_sort_partition(arr, size, compare, lo, hi);
-    quick_sort_sort(arr, size, compare, lo, pivot);
-    quick_sort_sort(arr, size, compare, pivot+1, hi);
+    quick_sort_recursive(arr, size, compare, lo, pivot);
+    quick_sort_recursive(arr, size, compare, pivot + size, hi);
   }
 }
 
@@ -478,25 +475,25 @@ quick_sort_partition(void* arr, size_t size,
                      int (*compare)(const void*, const void*), 
                      size_t lo, size_t hi)
 {
-  char* arr_p = (char*)arr;
-  size_t mid = lo + (hi - lo) / 2;
+  char* arr_p = (char*) arr;
+  size_t mid = ((hi + lo) / 2 / size) * size;
   size_t pivot = median_three(arr, size, lo, mid, hi, compare);
 
-  size_t left = lo - 1, right = hi + 1;
+  size_t left = lo - size, right = hi + size;
   while (1) {
     do {
-      left++;
-    } while (compare(arr_p+(left*size), arr_p+(pivot*size)) < 0);
+      left += size;
+    } while (compare(arr_p+(left), arr_p+(pivot)) < 0);
 
     do {
-      right--;
-    } while (compare(arr_p+(right*size), arr_p+(pivot*size)) > 0);
+      right -= size;
+    } while (compare(arr_p+(right), arr_p+(pivot)) > 0);
 
     if (left >= right) {
       return right;
     }
 
-    swap(arr_p+(left*size), arr_p+(right*size), size);
+    swap(arr_p+(left), arr_p+(right), size);
     if (left == pivot || right == pivot) {
       pivot = (left == pivot) ? right : left;
     }
@@ -1205,6 +1202,10 @@ timsort_binary_search(void* arr, size_t size,
 /**
  * @brief Swap the values referenced by two pointers.
  *
+ * To speed up swaps, the function uses different strategies for standard typed
+ * elements (e.g. elements whose size is at most 64 (minimum size of long
+ * long)) and larger elements.
+ *
  * @param a First pointer.
  * @param b Second pointer.
  * @param size Size of the values referenced by the pointers.
@@ -1213,13 +1214,19 @@ timsort_binary_search(void* arr, size_t size,
 void
 swap(void* a, void* b, size_t size)
 {
-  void* tmp = malloc(sizeof(size));
-
-  memcpy(tmp, a, size);
-  memcpy(a, b, size);
-  memcpy(b, tmp, size);
-
-  free(tmp);
+  enum { max_size = 64 };
+  if (size <= max_size) {
+    char tmp[size];
+    memcpy(tmp, a, size);
+    memcpy(a, b, size);
+    memcpy(b, tmp, size);
+  } else {
+    void* tmp = malloc(sizeof(size));
+    memcpy(tmp, a, size);
+    memcpy(a, b, size);
+    memcpy(b, tmp, size);
+    free(tmp);
+  }
 }
 
 /**
@@ -1240,19 +1247,19 @@ size_t
 median_three(void* arr, size_t size, size_t a, size_t b, size_t c, 
              int (*compare)(const void*, const void*))
 {
-  char* arr_p = (char*)arr;
-  if (compare(arr_p+(a*size), arr_p+(b*size)) > 0) {
-    if (compare(arr_p+(b*size), arr_p+(c*size)) > 0) {
+  char* arr_p = (char*) arr;
+  if (compare(arr_p+(a), arr_p+(b)) > 0) {
+    if (compare(arr_p+(b), arr_p+(c)) > 0) {
       return b;
-    } else if (compare(arr_p+(a*size), arr_p+(c*size)) > 0) {
+    } else if (compare(arr_p+(a), arr_p+(c)) > 0) {
       return c;
     } else {
       return a;
     }
   } else {
-    if (compare(arr_p+(a*size), arr_p+(c*size)) > 0) {
+    if (compare(arr_p+(a), arr_p+(c)) > 0) {
       return a;
-    } else if (compare(arr_p+(b*size), arr_p+(c*size)) > 0) {
+    } else if (compare(arr_p+(b), arr_p+(c)) > 0) {
       return c;
     } else {
       return b;
