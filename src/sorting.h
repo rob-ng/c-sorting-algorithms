@@ -28,14 +28,14 @@ typedef struct TimsortMergeState TimsortMergeState;
 void insert_sort(void* arr, size_t nelems, size_t size, 
                  int (*compare)(const void*, const void*));
 
-void insert_sort_partial(void* arr, size_t size, 
+static void insert_sort_partial(void* arr, size_t size, 
                          int (*compare)(const void*, const void*), 
                          size_t lo, size_t hi);
 
 void binary_insert_sort(void* arr, size_t nelems, size_t size, 
                         int (*compare)(const void*, const void*)); 
 
-void binary_insert_sort_partial(void* arr, size_t size, 
+static void binary_insert_sort_partial(void* arr, size_t size, 
                                 int (*compare)(const void*, const void*), 
                                 size_t lo, size_t hi);
 
