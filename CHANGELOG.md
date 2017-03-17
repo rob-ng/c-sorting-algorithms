@@ -7,6 +7,20 @@ The format is based on [Keep a Changelog]() and this project adheres to
 
 ## [Unreleased]
 
+## [2017-03-16]
+
+### Changed
+
+- Refactored merge_sort().
+- Renamed merge_sort_sort() to more descriptive merge_sort_recursive().
+- Refactored insert_sort() and insert_sort_partial().
+- Split binary_insert_sort() into binary_insert_sort() and
+  binary_insert_sort_partial().
+- Refactored quick_sort().
+- Renamed quick_sort_sort() to more descriptive quick_sort_recursive().
+- Refactored swap(). New function now behaves differently depending on the size
+  of the elements being swapped and is consequently faster for smaller elements.
+
 ## [2017-03-15] 0.0.7
 
 ### Added
