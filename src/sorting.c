@@ -57,7 +57,10 @@ void
 insert_sort(void* arr, size_t nelems, size_t size, 
             int (*compare)(const void*, const void*))
 {
-  insert_sort_partial(arr, size, compare, 0, nelems);
+  if (nelems == 0) {
+    return;
+  }
+  insert_sort_partial(arr, size, compare, 0, (nelems - 1) * size);
 }
 
 /**
@@ -67,7 +70,7 @@ insert_sort(void* arr, size_t nelems, size_t size,
  * @param size Size of each element in the array.
  * @param compare Function to compare elements.
  * @param lo Lower bound of subarray (inclusive).
- * @param hi Upper bound of subarray (exclusive).
+ * @param hi Upper bound of subarray (inclusive).
  * @return Void.
  */
 void
@@ -76,21 +79,19 @@ insert_sort_partial(void* arr, size_t size,
                     size_t lo, size_t hi) 
 {
   char* arr_p = (char*) arr;
-  void* a;
-  void* b;
+  void* curr = malloc(size);
   size_t j;
-  for (size_t i = lo + 1; i < hi; i++) {
-    j = i + 1;
-    while (j --> lo + 1) {
-      a = arr_p+(j * size);
-      b = arr_p+((j-1) * size);
-      if (compare(a, b) < 0) {
-        swap(a, b, size);
-      } else {
-        break;
-      }
+  for (size_t i = lo + size; i <= hi; i += size) {
+    memcpy(curr, arr_p+(i), size);
+    j = i - size;
+    while ((j >= lo && j <= hi) && compare(arr_p+(j), curr) > 0) {
+      j -= size;
     }
+    j = (j > hi) ? lo : j + size;
+    memmove(arr_p+(j + size), arr_p+(j), i - j);
+    memcpy(arr_p+(j), curr, size);
   }
+  free(curr);
 }
 
 /**
