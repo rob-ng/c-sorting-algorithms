@@ -95,6 +95,27 @@ insert_sort_partial(void* arr, size_t size,
 }
 
 /**
+ * @brief Sort generic array using binary insertion sort.
+ *
+ * @param arr Array containing the subarray.
+ * @param size Size of each element in the array.
+ * @param compare Function to compare elements.
+ * @param lo Lower bound of subarray (inclusive).
+ * @param hi Upper bound of subarray (inclusive).
+ * @return Void.
+ */
+void 
+binary_insert_sort(void* arr, size_t nelems, size_t size, 
+                   int (*compare)(const void*, const void*)) 
+{
+  if (nelems == 0) {
+    return;
+  }
+  binary_insert_sort_partial(arr, size, compare, 0, (nelems - 1) * size);
+}
+
+
+/**
  * @brief Sort generic contiguous subarray using binary insertion sort.
  *
  * Uses binary search (via bin_search_loc()) to find proper index of each
@@ -117,19 +138,19 @@ insert_sort_partial(void* arr, size_t size,
  * @return Void.
  */
 void
-binary_insert_sort(void* arr, size_t size, 
-                   int (*compare)(const void*, const void*), 
-                   size_t lo, size_t hi)
+binary_insert_sort_partial(void* arr, size_t size, 
+                           int (*compare)(const void*, const void*), 
+                           size_t lo, size_t hi)
 {
   char* arr_p = (char*) arr;
   size_t loc;
   void* selected = malloc(size);
   
-  for (size_t i = lo + 1; i <= hi; i++) {
-    memcpy(selected, arr_p+(i * size), size);
-    loc = bin_search_loc(arr, size, compare, lo, i - 1, selected);
-    memmove(arr_p+((loc + 1) * size), arr_p+(loc * size), (i - loc) * size);
-    memcpy(arr_p+(loc * size), selected, size);
+  for (size_t i = lo + size; i <= hi; i += size) {
+    memcpy(selected, arr_p+(i), size);
+    loc = bin_search_loc(arr, size, compare, lo, i - size, selected);
+    memmove(arr_p+(loc + size), arr_p+(loc), i - loc);
+    memcpy(arr_p+(loc), selected, size);
   }
 
   free(selected);
@@ -536,7 +557,7 @@ timsort(void* arr, size_t nelems, size_t size,
 {
   const size_t MIN_NELEMS = 64;
   if (nelems < MIN_NELEMS) {
-    binary_insert_sort(arr, size, compare, 0, nelems - 1);
+    //binary_insert_sort(arr, size, compare, 0, nelems - 1);
   } else {
     size_t minrun = timsort_minrun(nelems);
     const size_t MAX_RUNS = nelems / minrun;
@@ -621,10 +642,10 @@ timsort_find_runs(void* arr, size_t nelems, size_t size,
                                           : minrun;
         i = merge_state->runs[curr_run].start 
           + merge_state->runs[curr_run].len - 1;
-        binary_insert_sort(arr, size, compare, 
+        /*binary_insert_sort(arr, size, compare, 
                            merge_state->runs[curr_run].start, 
                            (merge_state->runs[curr_run].start 
-                            + merge_state->runs[curr_run].len - 1));
+                            + merge_state->runs[curr_run].len - 1));*/
       }
       stack_push(merge_state->runs_stack, &merge_state->runs[curr_run]);
       curr_run++;
@@ -1298,6 +1319,18 @@ bin_search(void* arr, size_t size, int (*compare)(const void*, const void*),
 
 /**
  * @brief Find location of target value in array using binary search.
+ *
+ * @note In the case that the target element is not actually located in the 
+ * array, the search returns where the target element would be located were it
+ * in the array.
+ *
+ * @param arr Array to be searched.
+ * @param size Size of each element in array.
+ * @param compare Function to compare elements.
+ * @param lo Lower bound for search (inclusive).
+ * @param hi Upper bound for search (inclusive).
+ * @param target Element to search for.
+ * @return
  */
 size_t
 bin_search_loc(void* arr, size_t size, 
@@ -1308,17 +1341,18 @@ bin_search_loc(void* arr, size_t size,
   size_t l = lo;
   size_t m = 0;
   size_t r = hi;
+
   while (1) {
     if (r > hi || r <= l) {
-      return compare(target, arr_p+(l * size)) > 0 ? (l + 1) : l;
+      return compare(target, arr_p+(l)) > 0 ? (l + size) : l;
     }
-    m = floor(l + ((r - l) / 2));
-    if (compare(target, arr_p+(m * size)) > 0) {
-      l = m + 1;
-    } else if (compare(target, arr_p+(m * size)) < 0) {
-      r = m - 1;
+    m = ((r + l) / 2 / size) * size;
+    if (compare(target, arr_p+(m)) > 0) {
+      l = m + size;
+    } else if (compare(target, arr_p+(m)) < 0) {
+      r = m - size;
     } else {
-      return m + 1;
+      return m + size;
     }
   }
 }

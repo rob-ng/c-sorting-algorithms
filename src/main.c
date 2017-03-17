@@ -56,14 +56,16 @@ main(int argc, char* argv[])
   srand(time(NULL));
   clock_t start, end;
 
-  char arr_char[SIZE];
-  int arr_int[SIZE];
-  int arr_int_rev[SIZE];
-  int i, sort_ind;
-  int wrong_int = 0, wrong_char = 0;
-  for (sort_ind = 0; sort_ind < 1; sort_ind++) {
-    for (i = 0; i < SIZE; i++) {
-      arr_int[i] = rand() % 10000;
+  //char arr_char[SIZE];
+  int arr_int_me[SIZE];
+  int arr_int_cmp[SIZE];
+  int rand_int = 0;
+  //int arr_int_rev[SIZE];
+  for (int sort_ind = 0; sort_ind < 1; sort_ind++) {
+    for (int i = 0; i < SIZE; i++) {
+      rand_int = rand() % 10000;
+      arr_int_me[i] = rand_int;
+      arr_int_cmp[i] = rand_int;
     }
     /*for (i = 0; i < SIZE; i++) {
       arr_char[i] = 'A' + (rand() % 26);
@@ -71,13 +73,15 @@ main(int argc, char* argv[])
     for (i = SIZE; i --> 0;) {
       arr_int_rev[i] = i;
     }*/
+    qsort(arr_int_cmp, sizeof(arr_int_cmp)/sizeof(int), sizeof(int),
+          compare_ints);
     clock_t start = clock();
-    insert_sort(arr_int, sizeof(arr_int)/sizeof(int), sizeof(int), 
+    binary_insert_sort(arr_int_me, sizeof(arr_int_me)/sizeof(int), sizeof(int), 
                 compare_ints);
     clock_t end = clock();
     printf("Elapsed: %f\n", (double) (end - start) / CLOCKS_PER_SEC);
-    for (i = 0; i < SIZE-1; i++) {
-      assert(arr_int[i] <= arr_int[i+1]);
+    for (int i = 0; i < SIZE; i++) {
+      assert(arr_int_me[i] == arr_int_cmp[i]);
     }
   }
   return 0;

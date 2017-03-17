@@ -273,7 +273,7 @@ static char* all_tests() {
 
   // Sorts
   mu_run_test_on_arg(test_sort_no_bounds, insert_sort, "insert_sort");
-  mu_run_test_on_arg(test_sort_bounds, binary_insert_sort, 
+  mu_run_test_on_arg(test_sort_no_bounds, binary_insert_sort, 
                      "binary_insert_sort");
   mu_run_test_on_arg(test_sort_no_bounds, select_sort, "select_sort");
   mu_run_test_on_arg(test_sort_no_bounds, comb_sort, "comb_sort");
