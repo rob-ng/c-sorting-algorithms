@@ -13,7 +13,7 @@
  * @def SIZE
  * @brief Size of test arrays.
  */
-#define SIZE 100000
+#define SIZE 500000
 
 /**
  * @brief Compare function for integers.
@@ -79,7 +79,7 @@ main(int argc, char* argv[])
     clock_t cmp_end = clock();
     printf("Elapsed: %f\n", (double) (cmp_end - cmp_start) / CLOCKS_PER_SEC);
     clock_t start = clock();
-    quick_sort(arr_int_me, sizeof(arr_int_me)/sizeof(int), sizeof(int), 
+    merge_sort(arr_int_me, sizeof(arr_int_me)/sizeof(int), sizeof(int), 
                 compare_ints);
     clock_t end = clock();
     printf("Elapsed: %f\n", (double) (end - start) / CLOCKS_PER_SEC);

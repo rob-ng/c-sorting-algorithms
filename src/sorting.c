@@ -350,10 +350,9 @@ merge_sort_recursive(void* arr, void* aux, size_t size,
 {
   if (hi <= lo) {
     return;
-  }// else if (hi - lo <= (LENGTH_THRESHOLD * size)) {
-    //insert_sort_partial(aux, size, compare, lo, hi + 1);//+ size);
-  //} 
-  else {
+  } else if (hi - lo <= (LENGTH_THRESHOLD * size)) {
+    insert_sort_partial(aux, size, compare, lo, hi);
+  } else {
     size_t mid = ((hi + lo) / 2 / size) * size;
     merge_sort_recursive(aux, arr, size, compare, lo, mid);
     merge_sort_recursive(aux, arr, size, compare, mid + size, hi);
