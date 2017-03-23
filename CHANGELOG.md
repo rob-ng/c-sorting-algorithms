@@ -6,8 +6,25 @@ The format is based on [Keep a Changelog]() and this project adheres to
 [Semantic Versioning]().
 
 ## [Unreleased]
+ 
+## [2017-03-23] 0.1.0
 
-## [2017-03-16]
+### Changed
+
+- Moved stress tests from main file to spec file.
+- Made final (whatever that means) changes to Timsort-related functions.
+- Renamed timort_check_invariants() to timsort_maintain_invariants() as latter
+  is more descriptive of the function.
+
+## [2017-03-19] 0.0.9
+
+### Changed
+
+- Massively overhauled Timsort-related functions. See git log for detailed list
+  of changes.
+- Improved documentation structure and updated it to reflect recent changes.
+
+## [2017-03-16] 0.0.8
 
 ### Changed
 

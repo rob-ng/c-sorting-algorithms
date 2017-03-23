@@ -12,7 +12,9 @@ void \hyperlink{group__InsertionSort_ga262ca6566c76d4587cba88441880a293}{insert\
 \begin{DoxyCompactList}\small\item\em Sort generic array using insertion sort. \end{DoxyCompactList}\item 
 void \hyperlink{group__InsertionSort_gad147d05ac7625135f328ce4924ac2553}{insert\+\_\+sort\+\_\+partial} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$), size\+\_\+t lo, size\+\_\+t hi)
 \begin{DoxyCompactList}\small\item\em Sort generic contiguous subarray using insertion sort. \end{DoxyCompactList}\item 
-void \hyperlink{group__InsertionSort_gaac4076ef31a1984eb307e21d3ce5df0a}{binary\+\_\+insert\+\_\+sort} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$), size\+\_\+t lo, size\+\_\+t hi)
+void \hyperlink{group__InsertionSort_ga53e65861396bb4c67c0142dd41374727}{binary\+\_\+insert\+\_\+sort} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$))
+\begin{DoxyCompactList}\small\item\em Sort generic array using binary insertion sort. \end{DoxyCompactList}\item 
+void \hyperlink{group__InsertionSort_gaa1e9e7c741dc66065d4ce604ad02f38c}{binary\+\_\+insert\+\_\+sort\+\_\+partial} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$), size\+\_\+t lo, size\+\_\+t hi)
 \begin{DoxyCompactList}\small\item\em Sort generic contiguous subarray using binary insertion sort. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -22,17 +24,41 @@ Insertion sort implementations.
 
 
 \subsection{Function Documentation}
-\mbox{\Hypertarget{group__InsertionSort_gaac4076ef31a1984eb307e21d3ce5df0a}\label{group__InsertionSort_gaac4076ef31a1984eb307e21d3ce5df0a}} 
+\mbox{\Hypertarget{group__InsertionSort_ga53e65861396bb4c67c0142dd41374727}\label{group__InsertionSort_ga53e65861396bb4c67c0142dd41374727}} 
 \index{Insertion Sorts@{Insertion Sorts}!binary\+\_\+insert\+\_\+sort@{binary\+\_\+insert\+\_\+sort}}
 \index{binary\+\_\+insert\+\_\+sort@{binary\+\_\+insert\+\_\+sort}!Insertion Sorts@{Insertion Sorts}}
 \subsubsection{\texorpdfstring{binary\+\_\+insert\+\_\+sort()}{binary\_insert\_sort()}}
-{\footnotesize\ttfamily void binary\+\_\+insert\+\_\+sort (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{hi }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void binary\+\_\+insert\+\_\+sort (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{nelems,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare }\end{DoxyParamCaption})}
+
+
+
+Sort generic array using binary insertion sort. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arr} & Array to be sorted. \\
+\hline
+{\em nelems} & Number of elements in array. \\
+\hline
+{\em size} & Size of each element in the array. \\
+\hline
+{\em compare} & Function to compare elements. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{group__InsertionSort_gaa1e9e7c741dc66065d4ce604ad02f38c}\label{group__InsertionSort_gaa1e9e7c741dc66065d4ce604ad02f38c}} 
+\index{Insertion Sorts@{Insertion Sorts}!binary\+\_\+insert\+\_\+sort\+\_\+partial@{binary\+\_\+insert\+\_\+sort\+\_\+partial}}
+\index{binary\+\_\+insert\+\_\+sort\+\_\+partial@{binary\+\_\+insert\+\_\+sort\+\_\+partial}!Insertion Sorts@{Insertion Sorts}}
+\subsubsection{\texorpdfstring{binary\+\_\+insert\+\_\+sort\+\_\+partial()}{binary\_insert\_sort\_partial()}}
+{\footnotesize\ttfamily void binary\+\_\+insert\+\_\+sort\+\_\+partial (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{hi }\end{DoxyParamCaption})}
 
 
 
 Sort generic contiguous subarray using binary insertion sort. 
 
-Uses binary search (via \hyperlink{group__SortingHelper_ga347d3eac5748d59424afd8566181fc27}{bin\+\_\+search\+\_\+loc()}) to find proper index of each element in subarray. Once the index of an element has been found, the elements beginning at that index and ending before the current index of the element are shifted to the right by one to make room for the element\textquotesingle{}s insertion.
+Uses binary search to find proper index of each element in subarray. Once the index of an element has been found, the elements beginning at that index and ending before the current index of the element are shifted to the right by one to make room for the element\textquotesingle{}s insertion.
 
 \begin{DoxyNote}{Note}
 As shifting elements involves overlapping memory, the function uses memmove() rather than memcpy(). While memcpy() is typically faster than memmove(), being able to copy memory in bulk via memmove() (rather than one at a time, as we would need to with memcpy() to prevent problems with overlapping memory) results in an enormous performance boost.
@@ -100,7 +126,7 @@ Sort generic contiguous subarray using insertion sort.
 \hline
 {\em lo} & Lower bound of subarray (inclusive). \\
 \hline
-{\em hi} & Upper bound of subarray (exclusive). \\
+{\em hi} & Upper bound of subarray (inclusive). \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}

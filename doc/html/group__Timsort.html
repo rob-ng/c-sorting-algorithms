@@ -60,6 +60,7 @@ $(function() {
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Data Structures</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Timsorts<div class="ingroups"><a class="el" href="group__SortingAlgorithm.html">Sorting Algorithms</a> &raquo; <a class="el" href="group__HybridSort.html">Hybrid Sorts</a></div></div>  </div>
@@ -69,41 +70,47 @@ $(function() {
 <p>Timsort implementations.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Data Structures</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structTimsortRun.html">TimsortRun</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct to represent run during Timsort.  <a href="structTimsortRun.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structTimsortMergeState.html">TimsortMergeState</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct to represent merge state during Timsort.  <a href="structTimsortMergeState.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ga1c9fca70060e37617156b89b387aa4d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3">timsort</a> (void *arr, size_t nelems, size_t size, int(*compare)(const void *, const void *))</td></tr>
 <tr class="memdesc:ga1c9fca70060e37617156b89b387aa4d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sort generic array using Timsort.  <a href="#ga1c9fca70060e37617156b89b387aa4d3">More...</a><br /></td></tr>
 <tr class="separator:ga1c9fca70060e37617156b89b387aa4d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gabdbb9c8c9cff36ac260a15b51080e47b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#gabdbb9c8c9cff36ac260a15b51080e47b">timsort_find_runs</a> (void *arr, size_t nelems, size_t size, int(*compare)(const void *, const void *), size_t minrun, <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
-<tr class="memdesc:gabdbb9c8c9cff36ac260a15b51080e47b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find runs of either strictly descending or non-descending elements.  <a href="#gabdbb9c8c9cff36ac260a15b51080e47b">More...</a><br /></td></tr>
-<tr class="separator:gabdbb9c8c9cff36ac260a15b51080e47b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga77b690ab2bb67a139ba32a6715834952"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga77b690ab2bb67a139ba32a6715834952">timsort_check_invariants</a> (void *arr, size_t size, int(*compare)(const void *, const void *), <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
-<tr class="memdesc:ga77b690ab2bb67a139ba32a6715834952"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check that run invariants hold and update runs stack if they do not.  <a href="#ga77b690ab2bb67a139ba32a6715834952">More...</a><br /></td></tr>
-<tr class="separator:ga77b690ab2bb67a139ba32a6715834952"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga3978be9f06411c3f9cd0bd597d64b555"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga3978be9f06411c3f9cd0bd597d64b555">timsort_collapse_runs</a> (void *arr, size_t size, int(*compare)(const void *, const void *), <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
-<tr class="memdesc:ga3978be9f06411c3f9cd0bd597d64b555"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge top two runs in run stack until only one run remains.  <a href="#ga3978be9f06411c3f9cd0bd597d64b555">More...</a><br /></td></tr>
-<tr class="separator:ga3978be9f06411c3f9cd0bd597d64b555"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga62d32e069756222c797c569f08220237"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structTimsortRun.html">TimsortRun</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga62d32e069756222c797c569f08220237">timsort_merge_runs</a> (void *arr, size_t size, int(*compare)(const void *, const void *), <a class="el" href="structTimsortRun.html">TimsortRun</a> *frst, <a class="el" href="structTimsortRun.html">TimsortRun</a> *scnd, <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
-<tr class="memdesc:ga62d32e069756222c797c569f08220237"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge 2 consecutive runs.  <a href="#ga62d32e069756222c797c569f08220237">More...</a><br /></td></tr>
-<tr class="separator:ga62d32e069756222c797c569f08220237"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga67d92f57e1b421c1110d15ea25492bb4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga67d92f57e1b421c1110d15ea25492bb4">timsort_merge_runs_lo</a> (void *arr, size_t size, int(*compare)(const void *, const void *), size_t lo, size_t lo_len, size_t hi, size_t hi_len, <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
-<tr class="memdesc:ga67d92f57e1b421c1110d15ea25492bb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge runs from left to right.  <a href="#ga67d92f57e1b421c1110d15ea25492bb4">More...</a><br /></td></tr>
-<tr class="separator:ga67d92f57e1b421c1110d15ea25492bb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga59524f2247f32032582b8f17ab93a1f6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga59524f2247f32032582b8f17ab93a1f6">timsort_gallop_right</a> (void *src, size_t size, int(*compare)(const void *, const void *), int base, int limit, void *target)</td></tr>
-<tr class="memdesc:ga59524f2247f32032582b8f17ab93a1f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gallop left-&gt;right to find number of elements in source array less than target.  <a href="#ga59524f2247f32032582b8f17ab93a1f6">More...</a><br /></td></tr>
-<tr class="separator:ga59524f2247f32032582b8f17ab93a1f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gab79f5bad70cecab915e4a564516cf5a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#gab79f5bad70cecab915e4a564516cf5a8">timsort_merge_runs_hi</a> (void *arr, size_t size, int(*compare)(const void *, const void *), size_t lo, size_t lo_len, size_t hi, size_t hi_len, <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *merge_state)</td></tr>
-<tr class="memdesc:gab79f5bad70cecab915e4a564516cf5a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge runs from right to left.  <a href="#gab79f5bad70cecab915e4a564516cf5a8">More...</a><br /></td></tr>
-<tr class="separator:gab79f5bad70cecab915e4a564516cf5a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac60918d0e6930ae4dd66dc5376b74649"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#gac60918d0e6930ae4dd66dc5376b74649">timsort_gallop_left</a> (void *src, size_t size, int(*compare)(const void *, const void *), int base, int limit, void *target)</td></tr>
-<tr class="memdesc:gac60918d0e6930ae4dd66dc5376b74649"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gallop right-&gt;left to find number of elements in source array greater than target.  <a href="#gac60918d0e6930ae4dd66dc5376b74649">More...</a><br /></td></tr>
-<tr class="separator:gac60918d0e6930ae4dd66dc5376b74649"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga17b4bb9f7e1875e9e9e4c250b5b83482"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga17b4bb9f7e1875e9e9e4c250b5b83482">timsort_find_runs</a> (void *arr, size_t nelems, size_t size, int(*compare)(const void *, const void *), size_t minrun, <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *ms)</td></tr>
+<tr class="memdesc:ga17b4bb9f7e1875e9e9e4c250b5b83482"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find runs of elements in the array.  <a href="#ga17b4bb9f7e1875e9e9e4c250b5b83482">More...</a><br /></td></tr>
+<tr class="separator:ga17b4bb9f7e1875e9e9e4c250b5b83482"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga739626860caf26ad6fbe52f9dcb0806c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga739626860caf26ad6fbe52f9dcb0806c">timsort_check_invariants</a> (void *arr, size_t size, int(*compare)(const void *, const void *), <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *ms)</td></tr>
+<tr class="memdesc:ga739626860caf26ad6fbe52f9dcb0806c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maintain run invariants to ensure stable, balanced merges.  <a href="#ga739626860caf26ad6fbe52f9dcb0806c">More...</a><br /></td></tr>
+<tr class="separator:ga739626860caf26ad6fbe52f9dcb0806c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf7991b9ef4ee31db5ae9f1fba5c04a15"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#gaf7991b9ef4ee31db5ae9f1fba5c04a15">timsort_collapse_runs</a> (void *arr, size_t size, int(*compare)(const void *, const void *), <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *ms)</td></tr>
+<tr class="memdesc:gaf7991b9ef4ee31db5ae9f1fba5c04a15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge top two runs in run stack until only one run remains.  <a href="#gaf7991b9ef4ee31db5ae9f1fba5c04a15">More...</a><br /></td></tr>
+<tr class="separator:gaf7991b9ef4ee31db5ae9f1fba5c04a15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga08929ad9e29cde3f24660fef3b08191c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga08929ad9e29cde3f24660fef3b08191c">timsort_merge_runs</a> (void *arr, size_t size, int(*compare)(const void *, const void *), <a class="el" href="structTimsortRun.html">TimsortRun</a> *left, <a class="el" href="structTimsortRun.html">TimsortRun</a> *right, <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *ms)</td></tr>
+<tr class="memdesc:ga08929ad9e29cde3f24660fef3b08191c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge two consecutive runs.  <a href="#ga08929ad9e29cde3f24660fef3b08191c">More...</a><br /></td></tr>
+<tr class="separator:ga08929ad9e29cde3f24660fef3b08191c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9ed838122eff00630e9551003d73a56f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga9ed838122eff00630e9551003d73a56f">timsort_merge_runs_lo</a> (void *arr, size_t size, int(*compare)(const void *, const void *), size_t lo, size_t lo_len, size_t hi, size_t hi_len, <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *ms)</td></tr>
+<tr class="memdesc:ga9ed838122eff00630e9551003d73a56f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge two consecutive runs from left to right.  <a href="#ga9ed838122eff00630e9551003d73a56f">More...</a><br /></td></tr>
+<tr class="separator:ga9ed838122eff00630e9551003d73a56f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf272b7c7b32279bc6aa2010330e7d980"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#gaf272b7c7b32279bc6aa2010330e7d980">timsort_gallop_right</a> (void *src, size_t size, int(*compare)(const void *, const void *), size_t base, size_t limit, void *target)</td></tr>
+<tr class="memdesc:gaf272b7c7b32279bc6aa2010330e7d980"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gallop left to right to find slice of elements in source array less than target.  <a href="#gaf272b7c7b32279bc6aa2010330e7d980">More...</a><br /></td></tr>
+<tr class="separator:gaf272b7c7b32279bc6aa2010330e7d980"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5f8c1d718a58791f523430113eb5616e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga5f8c1d718a58791f523430113eb5616e">timsort_merge_runs_hi</a> (void *arr, size_t size, int(*compare)(const void *, const void *), size_t lo, size_t lo_len, size_t hi, size_t hi_len, <a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *ms)</td></tr>
+<tr class="memdesc:ga5f8c1d718a58791f523430113eb5616e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge two consecutive runs from right to left.  <a href="#ga5f8c1d718a58791f523430113eb5616e">More...</a><br /></td></tr>
+<tr class="separator:ga5f8c1d718a58791f523430113eb5616e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga61e102d0fe24f871260f90f9e40ba807"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga61e102d0fe24f871260f90f9e40ba807">timsort_gallop_left</a> (void *src, size_t size, int(*compare)(const void *, const void *), size_t base, size_t limit, void *target)</td></tr>
+<tr class="memdesc:ga61e102d0fe24f871260f90f9e40ba807"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gallop right to left to find slice of elements in source array greater than target.  <a href="#ga61e102d0fe24f871260f90f9e40ba807">More...</a><br /></td></tr>
+<tr class="separator:ga61e102d0fe24f871260f90f9e40ba807"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7d1b40d5d91736aa4b5362896cdc68f3"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#ga7d1b40d5d91736aa4b5362896cdc68f3">timsort_minrun</a> (size_t nelems)</td></tr>
 <tr class="memdesc:ga7d1b40d5d91736aa4b5362896cdc68f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find minimum run size to use in timsort.  <a href="#ga7d1b40d5d91736aa4b5362896cdc68f3">More...</a><br /></td></tr>
 <tr class="separator:ga7d1b40d5d91736aa4b5362896cdc68f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac9b25eb89bf429f324330ee07a9c9400"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Timsort.html#gac9b25eb89bf429f324330ee07a9c9400">timsort_binary_search</a> (void *arr, size_t size, int(*compare)(const void *, const void *), size_t lo, size_t hi, void *target)</td></tr>
-<tr class="memdesc:gac9b25eb89bf429f324330ee07a9c9400"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find position of element within array using binary search.  <a href="#gac9b25eb89bf429f324330ee07a9c9400">More...</a><br /></td></tr>
-<tr class="separator:gac9b25eb89bf429f324330ee07a9c9400"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Timsort implementations. </p>
@@ -147,10 +154,13 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sort generic array using Timsort. </p>
-<p>Timsort (developed by Tim Peters) is a hybrid stable sorting algorithm. Timsort uses a combination of insertion sort and merge sort to first organize the array into roughly equal length runs of ascending elements and then merge those runs into a single sorted run. The algorithm proceeds through the following steps:</p>
+<p>Timsort (developed by Tim Peters) is a hybrid stable sorting algorithm, combining insertion sort and an optimized merge sort. The algorithm proceeds as follows:</p>
 <ul>
 <li>If array to sort is shorter than 64 elements:<ol type="1">
-<li>Defer to insertion sort.</li>
+<li>Defer to insertion sort.<ul>
+<li>When array is this short, minrun will equal the length of the array. As such, timsort offers no benefit over insertion sort in this case.</li>
+</ul>
+</li>
 </ol>
 </li>
 <li>Otherwise<ol type="1">
@@ -160,13 +170,14 @@ Functions</h2></td></tr>
 </li>
 <li>Initialize a struct to represent merge state for the duration of the sort.</li>
 <li>Find (or create if necessary) runs of at least minrun length. All runs are sorted to be ascending if they aren't already.<ul>
-<li>On finding a run, push it onto the runs stack and check to see if run invariants still hold. Merge runs until they do.</li>
+<li>On finding a run, push it onto the runs stack. Once there, check that the run invariants still hold. If they do not, perform specific merge operations until they do. Maintaining run invariants ensures that the runs stack is kept small, that the sort is stable, and that runs are kept at similar sizes for more balanced merges.</li>
 </ul>
 </li>
-<li>Collapse the remaining runs in the runs stack into a single sorted run.</li>
+<li>Merge the remaining runs in the runs stack into a single sorted run.</li>
 </ol>
 </li>
 </ul>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>The runs array is much larger than it needs to be. Technically, the number of unmerged runs shouldn't grow larger than log base phi of N, where phi = (1 + sqrt(5))/2 (golden ratio). However, computing this for large N is expensive, and so for the moment I've opted only to use (N / minrun) + 1. This value is the maximum number of unmerged runs that could exist in the array without merging. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">arr</td><td>Array to be sorted. </td></tr>
@@ -177,90 +188,20 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Void.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga7d1b40d5d91736aa4b5362896cdc68f3" title="Find minimum run size to use in timsort. ">timsort_minrun</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga7d1b40d5d91736aa4b5362896cdc68f3" title="Find minimum run size to use in timsort. ">timsort_minrun()</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#gabdbb9c8c9cff36ac260a15b51080e47b" title="Find runs of either strictly descending or non-descending elements. ">timsort_find_runs</a> </dd>
+<a class="el" href="group__Timsort.html#ga17b4bb9f7e1875e9e9e4c250b5b83482" title="Find runs of elements in the array. ">timsort_find_runs()</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga77b690ab2bb67a139ba32a6715834952" title="Check that run invariants hold and update runs stack if they do not. ">timsort_check_invariants</a> </dd>
+<a class="el" href="group__Timsort.html#ga739626860caf26ad6fbe52f9dcb0806c" title="Maintain run invariants to ensure stable, balanced merges. ">timsort_check_invariants()</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga3978be9f06411c3f9cd0bd597d64b555" title="Merge top two runs in run stack until only one run remains. ">timsort_collapse_runs</a> </dd></dl>
+<a class="el" href="group__Timsort.html#gaf7991b9ef4ee31db5ae9f1fba5c04a15" title="Merge top two runs in run stack until only one run remains. ">timsort_collapse_runs()</a> </dd>
+<dd>
+<a class="el" href="group__InsertionSort.html#ga53e65861396bb4c67c0142dd41374727" title="Sort generic array using binary insertion sort. ">binary_insert_sort()</a> </dd></dl>
 
 </div>
 </div>
-<a id="gac9b25eb89bf429f324330ee07a9c9400"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gac9b25eb89bf429f324330ee07a9c9400">&#9670;&nbsp;</a></span>timsort_binary_search()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int timsort_binary_search </td>
-          <td>(</td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>arr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>size</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int(*)(const void *, const void *)&#160;</td>
-          <td class="paramname"><em>compare</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>lo</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>hi</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>target</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Find position of element within array using binary search. </p>
-<p>Used in Timsort when galloping. When this version of binary search fails to find the element being search for, it just returns 'l'. Comparisons between the target and the value at arr[l] are left to galloping functions.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">arr</td><td>Array to be searched. </td></tr>
-    <tr><td class="paramname">size</td><td>Size of each element in array. </td></tr>
-    <tr><td class="paramname">compare</td><td>Function for comparing elements. </td></tr>
-    <tr><td class="paramname">lo</td><td>Lower index bound for searching. </td></tr>
-    <tr><td class="paramname">hi</td><td>Upper index bound for searching. </td></tr>
-    <tr><td class="paramname">target</td><td>Element to search for. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Index where element either is, or should be, located in the array.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
-<dd>
-<a class="el" href="group__Timsort.html#gac60918d0e6930ae4dd66dc5376b74649" title="Gallop right-&gt;left to find number of elements in source array greater than target. ">timsort_gallop_left</a> </dd>
-<dd>
-<a class="el" href="group__Timsort.html#ga59524f2247f32032582b8f17ab93a1f6" title="Gallop left-&gt;right to find number of elements in source array less than target. ">timsort_gallop_right</a> </dd></dl>
-
-</div>
-</div>
-<a id="ga77b690ab2bb67a139ba32a6715834952"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga77b690ab2bb67a139ba32a6715834952">&#9670;&nbsp;</a></span>timsort_check_invariants()</h2>
+<a id="ga739626860caf26ad6fbe52f9dcb0806c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga739626860caf26ad6fbe52f9dcb0806c">&#9670;&nbsp;</a></span>timsort_check_invariants()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -287,7 +228,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *&#160;</td>
-          <td class="paramname"><em>merge_state</em>&#160;</td>
+          <td class="paramname"><em>ms</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -297,29 +238,30 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Check that run invariants hold and update runs stack if they do not. </p>
-<p>Suppose the runs stack has at least 3 runs and let X, Y and Z be the top 3 runs, ordered from right to left. Then the following must hold:</p><ol type="1">
+<p>Maintain run invariants to ensure stable, balanced merges. </p>
+<p>Let X, Y and Z be the top 3 runs in the run stack, ordered from left to right. Then the following must hold:</p><ol type="1">
 <li>|X| &gt; |Y| + |Z|</li>
 <li>|Y| &gt; |Z| If either invariant fails to hold, merge Y with smaller of X and Z and push new merged value onto stack, maintaing order.</li>
 </ol>
+<dl class="section note"><dt>Note</dt><dd>If the runs stack contains only 2 runs, we still check that the second invariant holds.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">arr</td><td>Array containing runs. </td></tr>
     <tr><td class="paramname">size</td><td>Size of each element in array. </td></tr>
     <tr><td class="paramname">compare</td><td>Function to compare elements. </td></tr>
-    <tr><td class="paramname">merge_state</td><td>Struct containing information about merges and runs. </td></tr>
+    <tr><td class="paramname">ms</td><td>Struct containing information about merges and runs. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Void.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort()</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga77b690ab2bb67a139ba32a6715834952" title="Check that run invariants hold and update runs stack if they do not. ">timsort_check_invariants</a> </dd></dl>
+<a class="el" href="group__Timsort.html#ga17b4bb9f7e1875e9e9e4c250b5b83482" title="Find runs of elements in the array. ">timsort_find_runs()</a> </dd></dl>
 
 </div>
 </div>
-<a id="ga3978be9f06411c3f9cd0bd597d64b555"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga3978be9f06411c3f9cd0bd597d64b555">&#9670;&nbsp;</a></span>timsort_collapse_runs()</h2>
+<a id="gaf7991b9ef4ee31db5ae9f1fba5c04a15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf7991b9ef4ee31db5ae9f1fba5c04a15">&#9670;&nbsp;</a></span>timsort_collapse_runs()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -346,7 +288,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *&#160;</td>
-          <td class="paramname"><em>merge_state</em>&#160;</td>
+          <td class="paramname"><em>ms</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -363,19 +305,19 @@ Functions</h2></td></tr>
     <tr><td class="paramname">arr</td><td>Array containing runs. </td></tr>
     <tr><td class="paramname">size</td><td>Size of each element in array. </td></tr>
     <tr><td class="paramname">compare</td><td>Function to compare elements. </td></tr>
-    <tr><td class="paramname">merge_state</td><td>Struct containing information about merges and runs. </td></tr>
+    <tr><td class="paramname">ms</td><td>Struct containing information about merges and runs. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Void.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort()</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga62d32e069756222c797c569f08220237" title="Merge 2 consecutive runs. ">timsort_merge_runs</a> </dd></dl>
+<a class="el" href="group__Timsort.html#ga08929ad9e29cde3f24660fef3b08191c" title="Merge two consecutive runs. ">timsort_merge_runs()</a> </dd></dl>
 
 </div>
 </div>
-<a id="gabdbb9c8c9cff36ac260a15b51080e47b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gabdbb9c8c9cff36ac260a15b51080e47b">&#9670;&nbsp;</a></span>timsort_find_runs()</h2>
+<a id="ga17b4bb9f7e1875e9e9e4c250b5b83482"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga17b4bb9f7e1875e9e9e4c250b5b83482">&#9670;&nbsp;</a></span>timsort_find_runs()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -414,7 +356,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *&#160;</td>
-          <td class="paramname"><em>merge_state</em>&#160;</td>
+          <td class="paramname"><em>ms</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -424,10 +366,11 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Find runs of either strictly descending or non-descending elements. </p>
+<p>Find runs of elements in the array. </p>
+<p>A run is a sequence of either either strictly descending or non-descending elements. Because for any sequence of elements {i, i+1}, either arr[i] &gt; arr[i + 1] or arr[i] &lt;= arr[i +1], a run is always occuring.</p>
 <p>Runs must be at least minrun elements long. If a run is shorter than this, it is extended using consecutive elements. There is one exception; the last run may be shorter if there are not enough elements to pad out its length.</p>
 <p>Importantly, all runs must be non-descending before they can be pushed onto the runs stack - runs which are descending are reveresed before they are pushed.</p>
-<p>Once a new run has been found and pushed on the runs stack, the function calls <a class="el" href="group__Timsort.html#ga77b690ab2bb67a139ba32a6715834952" title="Check that run invariants hold and update runs stack if they do not. ">timsort_check_invariants()</a> to ensure that the run invariants still hold.</p>
+<p>Once a new run has been found and pushed on the runs stack, the function calls <a class="el" href="group__Timsort.html#ga739626860caf26ad6fbe52f9dcb0806c" title="Maintain run invariants to ensure stable, balanced merges. ">timsort_check_invariants()</a> to ensure that the run invariants still hold.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">arr</td><td>Array to search for runs. </td></tr>
@@ -435,25 +378,25 @@ Functions</h2></td></tr>
     <tr><td class="paramname">size</td><td>Size of each element in array. </td></tr>
     <tr><td class="paramname">compare</td><td>Function to compare elements. </td></tr>
     <tr><td class="paramname">minrun</td><td>Minimum acceptable run length. </td></tr>
-    <tr><td class="paramname">merge_state</td><td>Struct containing information about merges and runs. </td></tr>
+    <tr><td class="paramname">ms</td><td>Struct containing information about merges and runs. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Void.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort()</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga77b690ab2bb67a139ba32a6715834952" title="Check that run invariants hold and update runs stack if they do not. ">timsort_check_invariants</a> </dd></dl>
+<a class="el" href="group__Timsort.html#ga739626860caf26ad6fbe52f9dcb0806c" title="Maintain run invariants to ensure stable, balanced merges. ">timsort_check_invariants()</a> </dd></dl>
 
 </div>
 </div>
-<a id="gac60918d0e6930ae4dd66dc5376b74649"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gac60918d0e6930ae4dd66dc5376b74649">&#9670;&nbsp;</a></span>timsort_gallop_left()</h2>
+<a id="ga61e102d0fe24f871260f90f9e40ba807"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga61e102d0fe24f871260f90f9e40ba807">&#9670;&nbsp;</a></span>timsort_gallop_left()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int timsort_gallop_left </td>
+          <td class="memname">size_t timsort_gallop_left </td>
           <td>(</td>
           <td class="paramtype">void *&#160;</td>
           <td class="paramname"><em>src</em>, </td>
@@ -473,13 +416,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>base</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>limit</em>, </td>
         </tr>
         <tr>
@@ -496,33 +439,39 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Gallop right-&gt;left to find number of elements in source array greater than target. </p>
+<p>Gallop right to left to find slice of elements in source array greater than target. </p>
+<p>In order to find this slice, we need to find the number of elements in the source array greater than the target. Given that the source array is sorted and ascending, it suffices to find where the target would be located in the source array.</p>
+<p>To determine this location, we perform a pair of searches:</p><ol type="1">
+<li>We first perform an exponential search to find the value k such that base - ((2^(k) - 1) * size &lt; target &lt;= base - ((2^(k-1) - 1) * size). This condenses the range of values in which the target must lie.</li>
+<li>We then perform binary search using this range.</li>
+</ol>
+<dl class="section note"><dt>Note</dt><dd>The slice is a memory offset corresponding to the total size of these elements.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">src</td><td>Array to gallop over. </td></tr>
     <tr><td class="paramname">size</td><td>Size of each element in array. </td></tr>
     <tr><td class="paramname">compare</td><td>Function to compare elements. </td></tr>
-    <tr><td class="paramname">base</td><td>Index to begin gallop. </td></tr>
-    <tr><td class="paramname">limit</td><td>Index limit for galloping. </td></tr>
+    <tr><td class="paramname">base</td><td>Initial offset to begin gallop. </td></tr>
+    <tr><td class="paramname">limit</td><td>Maximum offset for galloping (inclusive). </td></tr>
     <tr><td class="paramname">target</td><td>Target element. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Number of elements in souce array greater than target.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
+<dl class="section return"><dt>Returns</dt><dd>Total size of elements in souce array greater than target.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort()</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#gab79f5bad70cecab915e4a564516cf5a8" title="Merge runs from right to left. ">timsort_merge_runs_hi</a> </dd></dl>
+<a class="el" href="group__Timsort.html#ga5f8c1d718a58791f523430113eb5616e" title="Merge two consecutive runs from right to left. ">timsort_merge_runs_hi()</a> </dd></dl>
 
 </div>
 </div>
-<a id="ga59524f2247f32032582b8f17ab93a1f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga59524f2247f32032582b8f17ab93a1f6">&#9670;&nbsp;</a></span>timsort_gallop_right()</h2>
+<a id="gaf272b7c7b32279bc6aa2010330e7d980"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf272b7c7b32279bc6aa2010330e7d980">&#9670;&nbsp;</a></span>timsort_gallop_right()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int timsort_gallop_right </td>
+          <td class="memname">size_t timsort_gallop_right </td>
           <td>(</td>
           <td class="paramtype">void *&#160;</td>
           <td class="paramname"><em>src</em>, </td>
@@ -542,13 +491,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>base</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>limit</em>, </td>
         </tr>
         <tr>
@@ -565,33 +514,39 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Gallop left-&gt;right to find number of elements in source array less than target. </p>
+<p>Gallop left to right to find slice of elements in source array less than target. </p>
+<p>In order to find this slice, we need to find the number of elements in the source array smaller than the target. Given that the source array is sorted and ascendingr, it suffices to find where the target would be located in the source array.</p>
+<p>To determine this location, we perform a pair of searches:</p><ol type="1">
+<li>We first perform an exponential search to find the value k such that base + ((2^(k-1) - 1) * size &lt; target &lt;= base + ((2^k - 1) * size). This condenses the range of values in which the target must lie.</li>
+<li>We then perform binary search using this range.</li>
+</ol>
+<dl class="section note"><dt>Note</dt><dd>The slice is a memory offset corresponding to the total size of these elements.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">src</td><td>Array to gallop over. </td></tr>
     <tr><td class="paramname">size</td><td>Size of each element in array. </td></tr>
     <tr><td class="paramname">compare</td><td>Function to compare elements. </td></tr>
-    <tr><td class="paramname">base</td><td>Index to begin gallop. </td></tr>
-    <tr><td class="paramname">limit</td><td>Index limit for galloping. </td></tr>
+    <tr><td class="paramname">base</td><td>Initial offset to begin gallop. </td></tr>
+    <tr><td class="paramname">limit</td><td>Maximum offset for galloping (inclusive). </td></tr>
     <tr><td class="paramname">target</td><td>Target element. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Number of elements in source array less than target.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
+<dl class="section return"><dt>Returns</dt><dd>Total size of elements in source array less than target.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort()</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga67d92f57e1b421c1110d15ea25492bb4" title="Merge runs from left to right. ">timsort_merge_runs_lo</a> </dd></dl>
+<a class="el" href="group__Timsort.html#ga9ed838122eff00630e9551003d73a56f" title="Merge two consecutive runs from left to right. ">timsort_merge_runs_lo()</a> </dd></dl>
 
 </div>
 </div>
-<a id="ga62d32e069756222c797c569f08220237"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga62d32e069756222c797c569f08220237">&#9670;&nbsp;</a></span>timsort_merge_runs()</h2>
+<a id="ga08929ad9e29cde3f24660fef3b08191c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga08929ad9e29cde3f24660fef3b08191c">&#9670;&nbsp;</a></span>timsort_merge_runs()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structTimsortRun.html">TimsortRun</a>* timsort_merge_runs </td>
+          <td class="memname">void timsort_merge_runs </td>
           <td>(</td>
           <td class="paramtype">void *&#160;</td>
           <td class="paramname"><em>arr</em>, </td>
@@ -612,19 +567,19 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structTimsortRun.html">TimsortRun</a> *&#160;</td>
-          <td class="paramname"><em>frst</em>, </td>
+          <td class="paramname"><em>left</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structTimsortRun.html">TimsortRun</a> *&#160;</td>
-          <td class="paramname"><em>scnd</em>, </td>
+          <td class="paramname"><em>right</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *&#160;</td>
-          <td class="paramname"><em>merge_state</em>&#160;</td>
+          <td class="paramname"><em>ms</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -634,33 +589,36 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Merge 2 consecutive runs. </p>
+<p>Merge two consecutive runs. </p>
+<p>To optimize merges, the function first finds the locations of right[0] in left[] (lo), and left[max] in right[] (hi). As runs are increasing, all values in left[] before 'lo' are smaller than all value in right[], and likewise all values in right above 'hi' are greater than all values in left[]. These values can be ignored during the merge.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">arr</td><td>Array containing runs. </td></tr>
     <tr><td class="paramname">size</td><td>Size of each element in array. </td></tr>
     <tr><td class="paramname">compare</td><td>Function to compare elements. </td></tr>
-    <tr><td class="paramname">frst</td><td>Leftmost run. </td></tr>
-    <tr><td class="paramname">scnd</td><td>Rightmost run. </td></tr>
-    <tr><td class="paramname">merge_state</td><td>Struct containing information about merges and runs. </td></tr>
+    <tr><td class="paramname">left</td><td>Leftmost run. </td></tr>
+    <tr><td class="paramname">right</td><td>Rightmost run. </td></tr>
+    <tr><td class="paramname">ms</td><td>Struct containing information about merges and runs. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to first run, now with length updated to include second's.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to left run, now with length updated to include right's.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort()</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga77b690ab2bb67a139ba32a6715834952" title="Check that run invariants hold and update runs stack if they do not. ">timsort_check_invariants</a> </dd>
+<a class="el" href="group__Timsort.html#ga739626860caf26ad6fbe52f9dcb0806c" title="Maintain run invariants to ensure stable, balanced merges. ">timsort_check_invariants()</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga3978be9f06411c3f9cd0bd597d64b555" title="Merge top two runs in run stack until only one run remains. ">timsort_collapse_runs</a> </dd>
+<a class="el" href="group__Timsort.html#gaf7991b9ef4ee31db5ae9f1fba5c04a15" title="Merge top two runs in run stack until only one run remains. ">timsort_collapse_runs()</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga67d92f57e1b421c1110d15ea25492bb4" title="Merge runs from left to right. ">timsort_merge_runs_lo</a> </dd>
+<a class="el" href="group__Timsort.html#ga9ed838122eff00630e9551003d73a56f" title="Merge two consecutive runs from left to right. ">timsort_merge_runs_lo()</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#gab79f5bad70cecab915e4a564516cf5a8" title="Merge runs from right to left. ">timsort_merge_runs_hi</a> </dd></dl>
+<a class="el" href="group__Timsort.html#ga5f8c1d718a58791f523430113eb5616e" title="Merge two consecutive runs from right to left. ">timsort_merge_runs_hi()</a> </dd>
+<dd>
+<a class="el" href="group__SortingHelper.html#ga347d3eac5748d59424afd8566181fc27" title="Find location of target value in array using binary search. ">bin_search_loc()</a> </dd></dl>
 
 </div>
 </div>
-<a id="gab79f5bad70cecab915e4a564516cf5a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gab79f5bad70cecab915e4a564516cf5a8">&#9670;&nbsp;</a></span>timsort_merge_runs_hi()</h2>
+<a id="ga5f8c1d718a58791f523430113eb5616e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga5f8c1d718a58791f523430113eb5616e">&#9670;&nbsp;</a></span>timsort_merge_runs_hi()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -711,7 +669,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *&#160;</td>
-          <td class="paramname"><em>merge_state</em>&#160;</td>
+          <td class="paramname"><em>ms</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -721,8 +679,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Merge runs from right to left. </p>
-<p>Called when the rightmost run is smaller than the leftmost run.</p>
+<p>Merge two consecutive runs from right to left. </p>
+<p>This function is called when the rightmost run is smaller than the leftmost run. There are two modes in which merges can be performed:</p>
+<p>Standard mode: Standard merge sort where elements are compared one-to-one. During this mode, we keep track of the "winning" array. If an array has "won" more than the ms-&gt;min_gallop, we enter galloping mode.</p>
+<p>Galloping Mode (galloping left): In galloping mode, merges are performed as a pair of operations:</p><ol type="1">
+<li>Find the location of right[max] in left[]. Merge all values (slice1) in left[] down to this point and then merge right[max].</li>
+<li>Find the location of left[max] in right[]. Merge all values (slice2) in right[] down to this point and then merge left[max]. Note: The runs left[] and right[] are altered between these operations.</li>
+</ol>
+<p>Galloping mode lets us take advantage of subruns in data, and by performing merges in bulk, can be quite efficient for certain types of data. However, galloping is not always effective. In particular, it is not at all efficient with random data.</p>
+<p>To account for this, we check after the above operations that slice1 and slice2 are both sufficiently large - at least as large as ms-&gt;min_gallop * element_size. If this is the case, then galloping mode was effective and we decrement ms-&gt;min_gallop to make subsequent returns to galloping mode easier. If this wasn't the case, we exit galloping mode and increment ms-&gt;min_gallop to make entering galloping mode harder. In this way, the algorithm quickly reacts to data for which galloping is ill-suited and limits its effect on performance.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">arr</td><td>Array containing runs. </td></tr>
@@ -732,21 +697,21 @@ Functions</h2></td></tr>
     <tr><td class="paramname">lo_len</td><td>Length of larger leftmost run. </td></tr>
     <tr><td class="paramname">hi</td><td>Upper bound of merge (inclusive). </td></tr>
     <tr><td class="paramname">hi_len</td><td>Length of smaller rightmost run. </td></tr>
-    <tr><td class="paramname">merge_state</td><td>Struct containing information about merges and runs. </td></tr>
+    <tr><td class="paramname">ms</td><td>Struct containing information about merges and runs. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Void.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort()</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga62d32e069756222c797c569f08220237" title="Merge 2 consecutive runs. ">timsort_merge_runs</a> </dd>
+<a class="el" href="group__Timsort.html#ga08929ad9e29cde3f24660fef3b08191c" title="Merge two consecutive runs. ">timsort_merge_runs()</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#gac60918d0e6930ae4dd66dc5376b74649" title="Gallop right-&gt;left to find number of elements in source array greater than target. ">timsort_gallop_left</a> </dd></dl>
+<a class="el" href="group__Timsort.html#ga61e102d0fe24f871260f90f9e40ba807" title="Gallop right to left to find slice of elements in source array greater than target. ">timsort_gallop_left()</a> </dd></dl>
 
 </div>
 </div>
-<a id="ga67d92f57e1b421c1110d15ea25492bb4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga67d92f57e1b421c1110d15ea25492bb4">&#9670;&nbsp;</a></span>timsort_merge_runs_lo()</h2>
+<a id="ga9ed838122eff00630e9551003d73a56f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga9ed838122eff00630e9551003d73a56f">&#9670;&nbsp;</a></span>timsort_merge_runs_lo()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -797,7 +762,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structTimsortMergeState.html">TimsortMergeState</a> *&#160;</td>
-          <td class="paramname"><em>merge_state</em>&#160;</td>
+          <td class="paramname"><em>ms</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -807,29 +772,34 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Merge runs from left to right. </p>
-<p>Called when the leftmost run is smaller than the rightmost run. There are two modes in which merges can be performed:</p>
-<p>Standard mode: Standard merge sort where elements are compared one-to-one. During this mode, we keep track of the "winning" array. If an array has "won" more than the merge_state-&gt;min_gallop, we enter galloping mode.</p>
-<p>Galloping Mode: Let A and B be two runs, A the smaller run. Let k be the index to merge into in the main array, l be the initial index of A, and r the initial index of B. We first find the location of A[l] in B. We then merge values from B up to this index into the main array (the number of elements is slice1). We then merge A[l]. We then increment k, l, and r to account for the merged elements. Next, we find the location of B[r] in A and perform a similar operation (number of elements from A is slice2). Again, we increment k, l and r to account for the merged elements. After all of this, we check that slice1 and slice2 are both &gt;= merge_state-&gt;min_run. If so, we decrement merge_state-&gt;min_run to make entering into galloping mode easier. If not, we increment merge_state-&gt;min_run to make entering galloping mode harder and we exit out of galloping mode.</p>
+<p>Merge two consecutive runs from left to right. </p>
+<p>This function is called when the leftmost run is smaller than the rightmost run. There are two modes in which merges can be performed:</p>
+<p>Standard mode: Standard merge sort where elements are compared one-to-one. During this mode, we keep track of the "winning" array. If an array has "won" more than the ms-&gt;min_gallop, we enter galloping mode.</p>
+<p>Galloping Mode (galloping right): In galloping mode, merges are performed as a pair of operations:</p><ol type="1">
+<li>Find the location of left[0] in right[]. Merge all values (slice1) in right[] up to this point and then merge left[0].</li>
+<li>Find the location of right[0] in left[]. Merge all values (slice2) in left[] up to this point and then merge right[0]. Note: The runs left[] and right[] are altered between these operations.</li>
+</ol>
+<p>Galloping mode lets us take advantage of subruns in data, and by performing merges in bulk, can be quite efficient for certain types of data. However, galloping is not always effective. In particular, it is not at all efficient with random data.</p>
+<p>To account for this, we check after the above operations that slice1 and slice2 are both sufficiently large - at least as large as ms-&gt;min_gallop * element_size. If this is the case, then galloping mode was effective and we decrement ms-&gt;min_gallop to make subsequent returns to galloping mode easier. If this wasn't the case, we exit galloping mode and increment ms-&gt;min_gallop to make entering galloping mode harder. In this way, the algorithm quickly reacts to data for which galloping is ill-suited and limits its effect on performance.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">arr</td><td>Array containing runs. </td></tr>
     <tr><td class="paramname">size</td><td>Size of each element in array. </td></tr>
     <tr><td class="paramname">compare</td><td>Function to compare elements. </td></tr>
-    <tr><td class="paramname">lo</td><td>Lower index bound of merge (inclusive). </td></tr>
+    <tr><td class="paramname">lo</td><td>Lower bound of merge (inclusive). </td></tr>
     <tr><td class="paramname">lo_len</td><td>Length of smaller leftmost run. </td></tr>
-    <tr><td class="paramname">hi</td><td>Upper index bound of merge (inclusive). </td></tr>
+    <tr><td class="paramname">hi</td><td>Upper bound of merge (inclusive). </td></tr>
     <tr><td class="paramname">hi_len</td><td>Length of larger rightmost run. </td></tr>
-    <tr><td class="paramname">merge_state</td><td>Struct containing information about merges and runs. </td></tr>
+    <tr><td class="paramname">ms</td><td>Struct containing information about merges and runs. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Void.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort()</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga62d32e069756222c797c569f08220237" title="Merge 2 consecutive runs. ">timsort_merge_runs</a> </dd>
+<a class="el" href="group__Timsort.html#ga08929ad9e29cde3f24660fef3b08191c" title="Merge two consecutive runs. ">timsort_merge_runs()</a> </dd>
 <dd>
-<a class="el" href="group__Timsort.html#ga59524f2247f32032582b8f17ab93a1f6" title="Gallop left-&gt;right to find number of elements in source array less than target. ">timsort_gallop_right</a> </dd></dl>
+<a class="el" href="group__Timsort.html#gaf272b7c7b32279bc6aa2010330e7d980" title="Gallop left to right to find slice of elements in source array less than target. ">timsort_gallop_right()</a> </dd></dl>
 
 </div>
 </div>
@@ -858,7 +828,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Size of minimum run.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__Timsort.html#ga1c9fca70060e37617156b89b387aa4d3" title="Sort generic array using Timsort. ">timsort()</a> </dd></dl>
 
 </div>
 </div>

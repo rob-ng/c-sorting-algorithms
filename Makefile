@@ -1,5 +1,5 @@
 CC := gcc
-CFLAGS := -std=c99 -pedantic -Wpointer-arith
+CFLAGS := -std=c99 -pedantic -Wpointer-arith -O3
 # LD - Linker for bundling object files into executable.
 LD := gcc
 # LDLIBS - Libraries to link with.

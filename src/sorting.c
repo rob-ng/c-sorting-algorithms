@@ -8,41 +8,37 @@
 #include <limits.h>
 #include <math.h>
 
+#include <assert.h>
+
 #include "sorting.h"
 #include "stack.h"
 #include "doxygen.h"
 
 /**
+ * @ingroup Timsort
  * @struct TimsortRun.
  * @brief Struct to represent run during Timsort.
  */
 struct TimsortRun {
-  size_t start; ///< Start index of run.
-  size_t len; ///< Length of run.
+  size_t start; ///< Memory offset corresponding to start of run in array.
+  size_t len; ///< Total size of run.
 };
 
 /**
+ * @ingroup Timsort
  * @struct TimsortMergeState.
  * @brief Struct to represent merge state during Timsort.
  */
 struct TimsortMergeState {
-  Stack* runs_stack; ///< Stack containing discovered runs.
-  TimsortRun* runs; ///< Array of initialized runs.
+  TimsortRun* runs; ///< Array representing stack of runs.
+  int nruns; ///< Current number of unmerged runs.
   size_t max_runs; ///< Max number of runs.
   int min_gallop; ///< Current galloping threshold.
-  int galloping; ///< Whether or not in galloping mode.
+  int galloping; ///< Current status of galloping mode ( 0: off, 1: on).
 };
 
 /**
- * @addtogroup SortingAlgorithm
- * @{
- * @addtogroup SimpleSort
- * @{
- * @addtogroup InsertionSort
- * @{
- */
-
-/**
+ * @ingroup InsertionSort
  * @brief Sort generic array using insertion sort.
  *
  * @param arr Array to be sorted.
@@ -64,6 +60,7 @@ insert_sort(void* arr, size_t nelems, size_t size,
 }
 
 /**
+ * @ingroup InsertionSort
  * @brief Sort generic contiguous subarray using insertion sort.
  *
  * @param arr Array containing the subarray.
@@ -95,13 +92,13 @@ insert_sort_partial(void* arr, size_t size,
 }
 
 /**
+ * @ingroup InsertionSort
  * @brief Sort generic array using binary insertion sort.
  *
- * @param arr Array containing the subarray.
+ * @param arr Array to be sorted.
+ * @param nelems Number of elements in array.
  * @param size Size of each element in the array.
  * @param compare Function to compare elements.
- * @param lo Lower bound of subarray (inclusive).
- * @param hi Upper bound of subarray (inclusive).
  * @return Void.
  */
 void 
@@ -116,13 +113,13 @@ binary_insert_sort(void* arr, size_t nelems, size_t size,
 
 
 /**
+ * @ingroup InsertionSort
  * @brief Sort generic contiguous subarray using binary insertion sort.
  *
- * Uses binary search (via bin_search_loc()) to find proper index of each
- * element in subarray. Once the index of an element has been found, 
- * the elements beginning at that index and ending before the current index of 
- * the element are shifted to the right by one to make room for the element's
- * insertion.
+ * Uses binary search to find proper index of each element in subarray. 
+ * Once the index of an element has been found, the elements beginning at that 
+ * index and ending before the current index of the element are shifted to the 
+ * right by one to make room for the element's insertion.
  *
  * @note As shifting elements involves overlapping memory, the function uses
  * memmove() rather than memcpy(). While memcpy() is typically faster than
@@ -143,27 +140,30 @@ binary_insert_sort_partial(void* arr, size_t size,
                            size_t lo, size_t hi)
 {
   char* arr_p = (char*) arr;
-  size_t loc;
   void* selected = malloc(size);
   
+  size_t m;
+  size_t l;
+  size_t r;
   for (size_t i = lo + size; i <= hi; i += size) {
     memcpy(selected, arr_p+(i), size);
-    loc = bin_search_loc(arr, size, compare, lo, i - size, selected);
-    memmove(arr_p+(loc + size), arr_p+(loc), i - loc);
-    memcpy(arr_p+(loc), selected, size);
+    for (l = lo - size, r = i; r > l + size;) {
+      m = ((r + l) / 2 / size) * size;
+      if (compare(selected, arr_p+(m)) < 0) {
+        r = m;
+      } else {
+        l = m;
+      }
+    }
+    memmove(arr_p+(r + size), arr_p+(r), i - r);
+    memcpy(arr_p+(r), selected, size);
   }
 
   free(selected);
 }
 
-/** @} */ // End InsertionSort
-
 /**
- * @addtogroup SelectionSort
- * @{
- */
-
-/**
+ * @ingroup SelectionSort
  * @brief Sort generic array using selection sort.
  *
  * @param arr Array to be sorted.
@@ -198,19 +198,8 @@ select_sort(void* arr, size_t nelems, size_t size,
   }
 }
 
-/** 
- * @}
- * @}
- */ // End SelectionSort, End SimpleSort 
-
 /**
- * @addtogroup BubbleSort
- * @{
- * @addtogroup CombSort
- * @{
- */
-
-/**
+ * @ingroup CombSort
  * @brief Sort generic array using comb sort.
  *
  * Comb sort is an improvement over standard bubble sort. As in bubble sort,
@@ -267,18 +256,7 @@ comb_sort(void* arr, size_t nelems, size_t size,
 }
 
 /**
- * @}
- * @}
- */ // End CombSort, End BubbleSort
-
-/**
- * @addtogroup EfficientSort
- * @{
- * @addtogroup MergeSort
- * @{
- */
-
-/**
+ * @ingroup MergeSort
  * @brief Sort generic array using merge sort.
  *
  * Merge sort is not efficient for small arrays. As such, merge sort is only
@@ -317,6 +295,7 @@ merge_sort(void* arr, size_t nelems, size_t size,
 }
 
 /**
+ * @ingroup MergeSort
  * @brief Recursively perform merge sort.
  *
  * Merge sort is only perfomed if current index interval [lo, hi] is
@@ -361,6 +340,7 @@ merge_sort_recursive(void* arr, void* aux, size_t size,
 }
 
 /**
+ * @ingroup MergeSort
  * @brief Merge subarrays by updating aux with sorted values taken from arr.
  *
  * @param arr Array from which values are copied.
@@ -392,14 +372,8 @@ merge_sort_merge(void* arr, void* aux, size_t size,
   }
 }
 
-/** @} */ // End MergeSort
-
 /**
- * @addtogroup QuickSort
- * @{
- */
-
-/**
+ * @ingroup QuickSort
  * @brief Sort generic array using quicksort.
  *
  * @param arr Array to be sorted.
@@ -421,6 +395,7 @@ quick_sort(void* arr, size_t nelems, size_t size,
 }
 
 /**
+ * @ingroup QuickSort
  * @brief Recursively perform quicksort.
  *
  * Quicksort is not efficient for small arrays. As such, insertion sort is used
@@ -453,6 +428,7 @@ quick_sort_recursive(void* arr, size_t size,
 }
 
 /**
+ * @ingroup QuickSort
  * @brief Partition subarray around pivot element.
  *
  * Smaller elements are moved to left of pivot, larger to right of pivot.
@@ -499,42 +475,42 @@ quick_sort_partition(void* arr, size_t size,
   }
 }
 
-/** 
- * @}
- * @}
- */ // End QuickSort, End EfficientSort
-
 /**
- * @addtogroup HybridSort
- * @{
- * @addtogroup Timsort
- * @{
- */
-
-/**
+ * @ingroup Timsort
  * @brief Sort generic array using Timsort.
  *
- * Timsort (developed by Tim Peters) is a hybrid stable sorting algorithm.
- * Timsort uses a combination of insertion sort and merge sort to first
- * organize the array into roughly equal length runs of ascending elements and
- * then merge those runs into a single sorted run.
- * The algorithm proceeds through the following steps:
+ * Timsort (developed by Tim Peters) is a hybrid stable sorting algorithm,
+ * combining insertion sort and an optimized merge sort. 
+ * The algorithm proceeds as follows:
  *
  * - If array to sort is shorter than 64 elements:
  *   -# Defer to insertion sort.
+ *      - When array is this short, minrun will equal the length of the array.
+ *        As such, timsort offers no benefit over insertion sort in this case.
  * - Otherwise
  *   -# Calculate the minimum run length.
- *        - Minimum run length is chosen such that (array length / minimum run)
- *          is equal to (or slightly less than) 2 to some power. Doing so
- *          ensures that merges remain balanced for random data (where most
- *          runs are likely to have length equal to the minimum run).
+ *      - Minimum run length is chosen such that (array length / minimum run)
+ *      is equal to (or slightly less than) 2 to some power. Doing so
+ *      ensures that merges remain balanced for random data (where most
+ *      runs are likely to have length equal to the minimum run).
  *   -# Initialize a struct to represent merge state for the duration of the
  *      sort.
  *   -# Find (or create if necessary) runs of at least minrun length. All runs
  *      are sorted to be ascending if they aren't already. 
- *        - On finding a run, push it onto the runs stack and check to see 
- *          if run invariants still hold. Merge runs until they do.
- *   -# Collapse the remaining runs in the runs stack into a single sorted run.
+ *      - On finding a run, push it onto the runs stack. Once there, check
+ *        that the run invariants still hold. If they do not, perform
+ *        specific merge operations until they do.
+ *        Maintaining run invariants ensures that the runs stack is kept
+ *        small, that the sort is stable, and that runs are kept at similar
+ *        sizes for more balanced merges.
+ *   -# Merge the remaining runs in the runs stack into a single sorted run.
+ *
+ * @todo The runs array is much larger than it needs to be. Technically,
+ * the number of unmerged runs shouldn't grow larger than log base phi of N,
+ * where phi = (1 + sqrt(5))/2 (golden ratio). However, computing this for
+ * large N is expensive, and so for the moment I've opted only to use (N /
+ * minrun) + 1. This value is the maximum number of unmerged runs that could
+ * exist in the array without merging.  
  *
  * @param arr Array to be sorted.
  * @param nelems Number of elements in array.
@@ -542,42 +518,54 @@ quick_sort_partition(void* arr, size_t size,
  * @param compare Function to compare elements.
  * @return Void.
  *
- * @see timsort_minrun
- * @see timsort_find_runs
- * @see timsort_check_invariants
- * @see timsort_collapse_runs
+ * @see timsort_minrun()
+ * @see timsort_find_runs()
+ * @see timsort_check_invariants()
+ * @see timsort_collapse_runs()
+ * @see binary_insert_sort()
  */
 void 
 timsort(void* arr, size_t nelems, size_t size, 
         int (*compare)(const void*, const void*))
 {
-  const size_t MIN_NELEMS = 64;
-  if (nelems < MIN_NELEMS) {
-    //binary_insert_sort(arr, size, compare, 0, nelems - 1);
+  enum { TIMSORT_MIN_NELEMS = 64 };
+  if (nelems < TIMSORT_MIN_NELEMS) {
+    binary_insert_sort(arr, nelems, size, compare);
   } else {
-    size_t minrun = timsort_minrun(nelems);
-    const size_t MAX_RUNS = nelems / minrun;
-    TimsortRun runs[MAX_RUNS];
-    size_t run_ind;
-    for (run_ind = 0; run_ind <= MAX_RUNS; run_ind++) {
-      TimsortRun run = { 0, 0 };
-      runs[run_ind] = run;
-    }
+    const size_t minrun = timsort_minrun(nelems);
+    /*
+     * By maintaining the run invariants, we ensure that the unmerged run
+     * lengths produce a Fibonacci-esque series. Moreover, we can guarantee
+     * that this series will grow faster than the Fibonacci numbers. Because of
+     * this, the number of Fibonacci numbers which sum to roughly 'nelems' is 
+     * guaranteed to be larger than the number of runs in an array of size 
+     * 'nelems'. We can therefore use the below approximation of that value to 
+     * cap the size of the runs array.
+     *
+     * NOTE: Problem with this is that computing log for large numbers is
+     * expensive. So much so that it slows down function by noticeable amount.
+     */
+    const size_t max_runs = (nelems / minrun) + 1;
+    TimsortRun runs[max_runs];
+    memset(&runs, 0, (max_runs) * sizeof(TimsortRun));
     TimsortMergeState merge_state = { 
-      stack_init(), 
-      runs, 
-      MAX_RUNS, 
-      MIN_GALLOP, 
-      0 
+      runs,
+      0,
+      max_runs,
+      MIN_GALLOP,
+      0
     };
-
     timsort_find_runs(arr, nelems, size, compare, minrun, &merge_state);
     timsort_collapse_runs(arr, size, compare, &merge_state);
-    stack_free(&merge_state.runs_stack);
   }
 }
 /**
- * @brief Find runs of either strictly descending or non-descending elements.
+ * @ingroup Timsort
+ * @brief Find runs of elements in the array.
+ *
+ * A run is a sequence of either either strictly descending or non-descending 
+ * elements. Because for any sequence of elements {i, i+1}, either 
+ * arr[i] > arr[i + 1] or arr[i] <= arr[i +1], a run is always occuring.
  *
  * Runs must be at least minrun elements long. If a run is shorter than this,
  * it is extended using consecutive elements. There is one exception; the last
@@ -596,123 +584,119 @@ timsort(void* arr, size_t nelems, size_t size,
  * @param size Size of each element in array.
  * @param compare Function to compare elements.
  * @param minrun Minimum acceptable run length.
- * @param merge_state Struct containing information about merges and runs.
+ * @param ms Struct containing information about merges and runs.
  * @return Void.
  *
- * @see timsort
- * @see timsort_check_invariants
+ * @see timsort()
+ * @see timsort_check_invariants()
  */
 void
 timsort_find_runs(void* arr, size_t nelems, size_t size, 
                   int (*compare)(const void*, const void*), 
-                  size_t minrun, TimsortMergeState* merge_state)
+                  size_t minrun, TimsortMergeState* ms)
 {
-  char* arr_p = (char*)arr;
-  // The curr_run value is the index of the run in 'runs' array. When a run
-  // terminates, this value is incremented and the next run begins.
-  size_t i, curr_run = 0;
-  // Iterate through the array and look for runs. Runs occur either when
-  // consecutive values are strictly descending (i+1 < i) or non-descending
-  // (i+1 >= i). Because one of these relationships must always be true, a run
-  // is always occuring. 
+  char* arr_p = (char*) arr;
+  size_t minrun_size = minrun * size;
+  size_t nelems_size = nelems * size;
+
+  // Result of comparison between previous element and current element.
+  int vs_prev = -1; 
+  // Result of comparison between current element and next element.
+  int vs_next = -1; 
+  // Indicate beginning of new run.
   int new_run = 1;
-  for (i = 0; i < nelems-1; i++) {
-    if (new_run || (compare(arr_p+(i*size), arr_p+((i+1)*size)) 
-                    == compare(arr_p+((i-1)*size), arr_p+(i*size)))) {
-      if (new_run) {
-        merge_state->runs[curr_run].start = i;
-      }
-      merge_state->runs[curr_run].len++;
+
+  for (size_t i = 0, max_size = nelems_size - size; i <= max_size; i += size) {
+    vs_next = i < max_size ? compare(arr_p+(i), arr_p+(i + size)) : -999;
+    if (i < max_size
+        /*
+         * Note: Previously only checked first condition. However, first
+         * condition doesn't fully account for non-descending series (e.g.
+         * going from strict increase to equality and back).
+         */
+        && (((vs_next == vs_prev) || (vs_next + vs_prev < 0)) || new_run)) {
+      vs_prev = vs_next;
       new_run = 0;
     } else {
-      if (compare(arr_p+((i-1)*size), arr_p+(i*size)) < 0) {
-        reverse_array(arr, merge_state->runs[curr_run].start, 
-                      merge_state->runs[curr_run].start + 
-                      merge_state->runs[curr_run].len - 1, 
+      ms->runs[ms->nruns].len = i - ms->runs[ms->nruns].start + size;
+      if (vs_prev > 0) {
+        reverse_array(arr, ms->runs[ms->nruns].start,
+                      ms->runs[ms->nruns].start 
+                      + ms->runs[ms->nruns].len - size, 
                       size);
       }
-      if (merge_state->runs[curr_run].len < minrun) {
-        merge_state->runs[curr_run].len = merge_state->runs[curr_run].start + 
-                                          minrun - 1 >= nelems 
-                                          ? nelems - merge_state->runs[curr_run].start 
-                                          : minrun;
-        i = merge_state->runs[curr_run].start 
-          + merge_state->runs[curr_run].len - 1;
-        /*binary_insert_sort(arr, size, compare, 
-                           merge_state->runs[curr_run].start, 
-                           (merge_state->runs[curr_run].start 
-                            + merge_state->runs[curr_run].len - 1));*/
+      if (ms->runs[ms->nruns].len < minrun_size) {
+        ms->runs[ms->nruns].len = ms->runs[ms->nruns].start + minrun_size - size 
+                                  >= nelems_size 
+                                  ? nelems_size - ms->runs[ms->nruns].start 
+                                  : minrun_size;
+        i = ms->runs[ms->nruns].start + ms->runs[ms->nruns].len - size;
+        insert_sort_partial(arr, size, compare, ms->runs[ms->nruns].start, 
+                            (ms->runs[ms->nruns].start 
+                             + ms->runs[ms->nruns].len - size));
       }
-      stack_push(merge_state->runs_stack, &merge_state->runs[curr_run]);
-      curr_run++;
-      if (curr_run > merge_state->max_runs) { break; }
+      ms->nruns++;
+      timsort_check_invariants(arr, size, compare, ms);
+      ms->runs[ms->nruns].start = i + size;
       new_run = 1;
-    }
-    
-    if (new_run) {
-      timsort_check_invariants(arr, size, compare, merge_state);
     }
   }
 }
 
 /**
- * @brief Check that run invariants hold and update runs stack if they do not.
+ * @ingroup Timsort
+ * @brief Maintain run invariants to ensure stable, balanced merges.
  * 
- * Suppose the runs stack has at least 3 runs and let X, Y and Z be the top 3 
- * runs, ordered from right to left. Then the following must hold:
+ * Let X, Y and Z be the top 3 runs in the run stack, ordered from left to 
+ * right. Then the following must hold:
  * 1. |X| > |Y| + |Z|
  * 2. |Y| > |Z|
  * If either invariant fails to hold, merge Y with smaller of X and Z and
  * push new merged value onto stack, maintaing order.
  *
+ * @note If the runs stack contains only 2 runs, we still check that the second
+ * invariant holds.
+ *
  * @param arr Array containing runs.
  * @param size Size of each element in array.
  * @param compare Function to compare elements.
- * @param merge_state Struct containing information about merges and runs.
+ * @param ms Struct containing information about merges and runs.
  * @return Void.
  *
- * @see timsort
- * @see timsort_check_invariants
+ * @see timsort()
+ * @see timsort_find_runs()
  */
 void
 timsort_check_invariants(void* arr, size_t size, 
                          int (*compare)(const void*, const void*), 
-                         TimsortMergeState* merge_state)
+                         TimsortMergeState* ms)
 {
-  while (1) {
-    if (merge_state->runs_stack->len >= 3) {
-      TimsortRun* x = (TimsortRun*)stack_pop_return(merge_state->runs_stack);
-      TimsortRun* y = (TimsortRun*)stack_pop_return(merge_state->runs_stack);
-      TimsortRun* z = (TimsortRun*)stack_pop_return(merge_state->runs_stack);
-
-      if ((x->len <= y->len + z->len) || (y->len <= z->len)) {
-        if (x->len < z->len) {
-          // PUSH Z BACK ONTO STACK
-          stack_push(merge_state->runs_stack, z);
-          // MERGE AND PUSH X AND Y
-          stack_push(merge_state->runs_stack, 
-                     timsort_merge_runs(arr, size, compare, y, x, merge_state));
-        } else {
-          // MERGE AND PUSH Y AND Z
-          stack_push(merge_state->runs_stack, 
-                     timsort_merge_runs(arr, size, compare, z, y, merge_state));
-          // PUSH X BACK ONTO STACK
-          stack_push(merge_state->runs_stack, x);
-        }
+  while (ms->nruns > 1) {
+    int n = ms->nruns - 2;
+    if (n >= 1 
+        && (ms->runs[n - 1].len <= ms->runs[n].len + ms->runs[n + 1].len)) {
+      if (ms->runs[n - 1].len < ms->runs[n + 1].len) {
+        timsort_merge_runs(arr, size, compare, 
+                           &ms->runs[n - 1], &ms->runs[n], ms);
+        ms->runs[n] = ms->runs[n + 1];
+        ms->nruns--;
       } else {
-        stack_push(merge_state->runs_stack, z);
-        stack_push(merge_state->runs_stack, y);
-        stack_push(merge_state->runs_stack, x);
-        return;
+        timsort_merge_runs(arr, size, compare, 
+                           &ms->runs[n], &ms->runs[n + 1], ms);
+        ms->nruns--;
       }
+    } else if (n >= 0 && (ms->runs[n].len <= ms->runs[n + 1].len)) {
+      timsort_merge_runs(arr, size, compare, 
+                         &ms->runs[n], &ms->runs[n + 1], ms);
+      ms->nruns--;
     } else {
-      return;
-    }
+      break;
+    } 
   }
-
 }
 
 /**
+ * @ingroup Timsort
  * @brief Merge top two runs in run stack until only one run remains.
  *
  * Once all the runs have been merged, the array will be fully sorted.
@@ -720,189 +704,209 @@ timsort_check_invariants(void* arr, size_t size,
  * @param arr Array containing runs.
  * @param size Size of each element in array.
  * @param compare Function to compare elements.
- * @param merge_state Struct containing information about merges and runs.
+ * @param ms Struct containing information about merges and runs.
  * @return Void.
  *
- * @see timsort
- * @see timsort_merge_runs
+ * @see timsort()
+ * @see timsort_merge_runs()
  */
 void
 timsort_collapse_runs(void* arr, size_t size, 
                       int (*compare)(const void*, const void*), 
-                      TimsortMergeState* merge_state)
+                      TimsortMergeState* ms)
 {
-  while (merge_state->runs_stack->len > 1) {
-    TimsortRun* second = (TimsortRun*)stack_pop_return(merge_state->runs_stack);
-    TimsortRun* first = (TimsortRun*)stack_pop_return(merge_state->runs_stack);
-    stack_push(merge_state->runs_stack, 
-               timsort_merge_runs(arr, size, compare, first, second, 
-                                  merge_state));
+  while (ms->nruns > 1) {
+    timsort_merge_runs(arr, size, compare, &ms->runs[ms->nruns - 2], 
+                       &ms->runs[ms->nruns - 1], ms);
+    ms->nruns--;
   }
 }
 
 /**
- * @brief Merge 2 consecutive runs.
+ * @ingroup Timsort
+ * @brief Merge two consecutive runs.
+ *
+ * To optimize merges, the function first finds the locations of right[0] in
+ * left[] (lo), and left[max] in right[] (hi). As runs are increasing, all 
+ * values in left[] before 'lo' are smaller than all value in right[], and 
+ * likewise all values in right above 'hi' are greater than all values in 
+ * left[]. These values can be ignored during the merge.
  *
  * @param arr Array containing runs.
  * @param size Size of each element in array.
  * @param compare Function to compare elements.
- * @param frst Leftmost run. 
- * @param scnd Rightmost run.
- * @param merge_state Struct containing information about merges and runs.
- * @return Pointer to first run, now with length updated to include second's.
+ * @param left Leftmost run. 
+ * @param right Rightmost run.
+ * @param ms Struct containing information about merges and runs.
+ * @return Pointer to left run, now with length updated to include right's.
  *
- * @see timsort
- * @see timsort_check_invariants
- * @see timsort_collapse_runs
- * @see timsort_merge_runs_lo
- * @see timsort_merge_runs_hi
+ * @see timsort()
+ * @see timsort_check_invariants()
+ * @see timsort_collapse_runs()
+ * @see timsort_merge_runs_lo()
+ * @see timsort_merge_runs_hi()
+ * @see bin_search_loc()
  */
-TimsortRun*
+void
 timsort_merge_runs(void* arr, size_t size, 
                    int (*compare)(const void*, const void*), 
-                   TimsortRun* frst, TimsortRun* scnd, 
-                   TimsortMergeState* merge_state)
+                   TimsortRun* left, TimsortRun* right, 
+                   TimsortMergeState* ms)
 {
-  char* arr_p = (char*)arr;
-  if (frst->start > scnd->start) { 
-    swap(frst, scnd, sizeof(TimsortRun)); 
-  }
+  char* arr_p = (char*) arr;
 
-  int lo = bin_search(arr, size, compare, frst->start, 
-                      frst->start + frst->len - 1, 
-                      arr_p+(scnd->start*size));
-  int hi = bin_search(arr, size, compare, scnd->start, 
-                      scnd->start + scnd->len - 1, 
-                      arr_p+((frst->start + frst->len - 1)*size));
-  lo = lo >= 0 ? lo : frst->start;
-  hi = hi >= 0 ? hi : scnd->start + scnd->len - 1;
-  size_t frst_len_adj = frst->len - (lo - frst->start);
-  size_t scnd_len_adj = hi - scnd->start + 1;
+  size_t lo = bin_search_loc(arr, size, compare, 
+                             left->start, left->start + left->len - size, 
+                             arr_p+(right->start));
+  size_t hi = bin_search_loc(arr, size, compare, 
+                             right->start, right->start + right->len - size, 
+                             arr_p+(left->start + left->len - size));
 
-  size_t i, j, k;
-  if (frst_len_adj < scnd_len_adj) {
-    timsort_merge_runs_lo(arr, size, compare, lo, frst_len_adj, 
-                          hi, scnd_len_adj, merge_state);
+  size_t left_len_adj = left->len - (lo - left->start);
+  size_t right_len_adj = hi - right->start + size;
+
+  if (left_len_adj < right_len_adj) {
+    timsort_merge_runs_lo(arr, size, compare, lo, left_len_adj, 
+                          hi, right_len_adj, ms);
   } else {
-    timsort_merge_runs_hi(arr, size, compare, lo, frst_len_adj, 
-                          hi, scnd_len_adj, merge_state);
+    timsort_merge_runs_hi(arr, size, compare, lo, left_len_adj, 
+                          hi, right_len_adj, ms);
   }
 
-  frst->len = frst->len + scnd->len;
-  return frst;
+  left->len = left->len + right->len;
+  return;
 }
 
 /**
- * @brief Merge runs from left to right.
+ * @ingroup Timsort
+ * @brief Merge two consecutive runs from left to right.
  *
- * Called when the leftmost run is smaller than the rightmost run.
- * There are two modes in which merges can be performed:
+ * This function is called when the leftmost run is smaller than the rightmost 
+ * run. There are two modes in which merges can be performed:
  *
  * Standard mode:
  * Standard merge sort where elements are compared one-to-one.
  * During this mode, we keep track of the "winning" array. If an array has
- * "won" more than the merge_state->min_gallop, we enter galloping mode.
+ * "won" more than the ms->min_gallop, we enter galloping mode.
  *
- * Galloping Mode:
- * Let A and B be two runs, A the smaller run.
- * Let k be the index to merge into in the main array, l be the initial index
- * of A, and r the initial index of B.
- * We first find the location of A[l] in B. We then merge
- * values from B up to this index into the main array (the number of elements
- * is slice1). We then merge A[l]. We then increment k, l, and r to account 
- * for the merged elements. Next, we find the location of B[r] in A and 
- * perform a similar operation (number of elements from A is slice2). 
- * Again, we increment k, l and r to account  for the merged elements. 
- * After all of this, we check that slice1 and slice2 are both >=
- * merge_state->min_run. If so, we decrement merge_state->min_run to make
- * entering into galloping mode easier. If not, we increment
- * merge_state->min_run to make entering galloping mode harder and we exit out
- * of galloping mode.
+ * Galloping Mode (galloping right):
+ * In galloping mode, merges are performed as a pair of operations:
+ * -# Find the location of left[0] in right[]. Merge all values (slice1) in 
+ *    right[] up to this point and then merge left[0].
+ * -# Find the location of right[0] in left[]. Merge all values (slice2) in
+ *    left[] up to this point and then merge right[0].
+ * Note: The runs left[] and right[] are altered between these operations.
+ *
+ * Galloping mode lets us take advantage of subruns in data, and by performing
+ * merges in bulk, can be quite efficient for certain types of data. However, 
+ * galloping is not always effective. In particular, it is not at all efficient
+ * with random data. 
+ *
+ * To account for this, we check after the above operations that slice1 and 
+ * slice2 are both sufficiently large - at least as large as
+ * ms->min_gallop * element_size. If this is the case, then galloping mode was
+ * effective and we decrement ms->min_gallop to make subsequent returns to
+ * galloping mode easier. If this wasn't the case, we exit galloping mode and
+ * increment ms->min_gallop to make entering galloping mode harder. In this
+ * way, the algorithm quickly reacts to data for which galloping is ill-suited
+ * and limits its effect on performance.
  * 
  * @param arr Array containing runs.
  * @param size Size of each element in array.
  * @param compare Function to compare elements.
- * @param lo Lower index bound of merge (inclusive).
+ * @param lo Lower bound of merge (inclusive).
  * @param lo_len Length of smaller leftmost run.
- * @param hi Upper index bound of merge (inclusive).
+ * @param hi Upper bound of merge (inclusive).
  * @param hi_len Length of larger rightmost run.
- * @param merge_state Struct containing information about merges and runs.
+ * @param ms Struct containing information about merges and runs.
  * @return Void.
  *
- * @see timsort
- * @see timsort_merge_runs
- * @see timsort_gallop_right
+ * @see timsort()
+ * @see timsort_merge_runs()
+ * @see timsort_gallop_right()
  */
 void
 timsort_merge_runs_lo(void* arr, size_t size, 
-                      int (*compare)(const void*, const void*), size_t lo, size_t lo_len, 
-                      size_t hi, size_t hi_len, TimsortMergeState* merge_state) 
+                      int (*compare)(const void*, const void*), 
+                      size_t lo, size_t lo_len, 
+                      size_t hi, size_t hi_len, 
+                      TimsortMergeState* ms) 
 {
-  char* arr_p = (char*)arr;
-  char* temp = malloc(size * lo_len);
-  memcpy(temp, arr_p+(lo*size), lo_len * size);
+  char* arr_p = (char*) arr;
+  char* temp = malloc(lo_len);
+  memcpy(temp, arr_p+(lo), lo_len);
 
-  int winner = -1, prev_winner = -1, count = 0;
-  size_t srch_lo, srch_hi;
-  size_t slice1, slice2, gallop_ind, gallop_exp;
+  const size_t min_gallop_size = ms->min_gallop * size;
 
-  size_t k, l = 0, r = hi - hi_len + 1;
-  for (k = lo; k <= hi; k++) {
-    if ((l < lo_len && r <= hi) && merge_state->galloping) {
-      slice1 = timsort_gallop_right(arr, size, compare, r, hi, temp+(l * size));
-      memcpy(arr_p+(k * size), arr_p+(r * size), (slice1) * size);
-      memcpy(arr_p+((k + slice1) * size), temp+(l * size), size);
-      k += slice1;
-      l += 1;
-      r += slice1;
+  int l_won = 0;
+  int r_won = 0;
 
-      if (k >= hi || r > hi || l >= lo_len) {
-        merge_state->galloping = 0;
-        merge_state->min_gallop++;
-        continue;
-      }
+  size_t slice1;
+  size_t slice2;
 
-      k++;
+  size_t l = 0;
+  size_t r = hi - hi_len + size;
 
-      slice2 = timsort_gallop_right(temp, size, compare, l, lo_len, 
-                                    arr_p+(r * size));
-      memcpy(arr_p+(k * size), temp+(l * size), (slice2) * size);
-      memcpy(arr_p+((k + slice2) * size), arr_p+(r * size), size);
-      k += slice2;
-      r += 1;
-      l += slice2;
+  for (size_t k = lo; k <= hi; k += size) {
+    if (ms->galloping) {
+      if (l < lo_len && r <= hi) {
+        slice1 = timsort_gallop_right(arr, size, compare, r, hi, temp+(l));
+        memmove(arr_p+(k), arr_p+(r), slice1);
+        memcpy(arr_p+(k + slice1), temp+(l), size);
+        k += slice1;
+        l += size;
+        r += slice1;
 
-      if (slice1 < merge_state->min_gallop 
-          || slice2 < merge_state->min_gallop) {
-        merge_state->galloping = 0;
-        merge_state->min_gallop++;
-      } else {
-        merge_state->min_gallop--;
-      }
-    } else {
-      if (l < lo_len 
-          && (r > hi || compare(temp+(l * size), arr_p+(r * size)) < 0)) {
-        memcpy(arr_p+(k * size), temp+(l * size), size);
-        l++;
-        winner = 0;
-      } else {
-        memcpy(arr_p+(k * size), arr_p+(r * size), size);
-        r++;
-        winner = 1;
-      }
-
-      if (prev_winner == -1 || prev_winner == winner) {
-        count++;
-        if (count >= merge_state->min_gallop) {
-          merge_state->galloping = 1;
-          count = 0;
-          prev_winner = winner = -1;
+        // If any of these conditions hold, the next gallop operation will fail.
+        // Hence we should exit.
+        if (r > hi || l >= lo_len || k >= hi) {
+          ms->galloping = 0;
+          ms->min_gallop++;
           continue;
         }
+
+        k += size;
+
+        slice2 = timsort_gallop_right(temp, size, compare, l, lo_len - size, 
+                                      arr_p+(r));
+        memmove(arr_p+(k), temp+(l), slice2);
+        memcpy(arr_p+(k + slice2), arr_p+(r), size);
+        k += slice2;
+        r += size;
+        l += slice2;
+
+        if (slice1 < min_gallop_size || slice2 < min_gallop_size) {
+          ms->galloping = 0;
+          ms->min_gallop++;
+        } else {
+          ms->min_gallop--;
+        }
       } else {
-        count = 0;
+        slice1 = (r <= hi) ? hi - r + size : 0;
+        slice2 = (l < lo_len) ? lo_len - l : 0;
+        memmove(arr_p+(k), arr_p+(r), slice1); 
+        memmove(arr_p+(k), temp+(l), slice2);
+        ms->galloping = 0;
+        ms->min_gallop++;
+        // Done with merge so break
+        break;
       }
-      prev_winner = winner;
+    } else {
+      if (l < lo_len && (r > hi || compare(temp+(l), arr_p+(r)) < 0)) {
+        memcpy(arr_p+(k), temp+(l), size);
+        l += size;
+        l_won++;
+        r_won = 0;
+      } else {
+        memcpy(arr_p+(k), arr_p+(r), size);
+        r += size;
+        l_won = 0;
+        r_won++;
+      }
+      if (l_won > ms->min_gallop || r_won > ms->min_gallop) {
+        ms->galloping = 1;
+        l_won = r_won = 0;
+      }
     }
   }
 
@@ -910,59 +914,117 @@ timsort_merge_runs_lo(void* arr, size_t size,
 }
 
 /**
- * @brief Gallop left->right to find number of elements in source array less
+ * @ingroup Timsort
+ * @brief Gallop left to right to find slice of elements in source array less
  * than target.
+ *
+ * In order to find this slice, we need to find the number of elements in the
+ * source array smaller than the target. Given that the source array
+ * is sorted and ascendingr, it suffices to find where the target would be
+ * located in the source array.
+ *
+ * To determine this location, we perform a pair of searches:
+ * -# We first perform an exponential search to find the value k such that 
+ *    base + ((2^(k-1) - 1) * size < target <= base + ((2^k - 1) * size).
+ *    This condenses the range of values in which the target must lie.
+ * -# We then perform binary search using this range.
+ *
+ * @note The slice is a memory offset corresponding to the total size of 
+ * these elements.
  *
  * @param src Array to gallop over.
  * @param size Size of each element in array.
  * @param compare Function to compare elements.
- * @param base Index to begin gallop.
- * @param limit Index limit for galloping.
+ * @param base Initial offset to begin gallop.
+ * @param limit Maximum offset for galloping (inclusive).
  * @param target Target element.
- * @return Number of elements in source array less than target.
+ * @return Total size of elements in source array less than target.
  *
- * @see timsort
- * @see timsort_merge_runs_lo
+ * @see timsort()
+ * @see timsort_merge_runs_lo()
  */
-int
+size_t
 timsort_gallop_right(void* src, size_t size, 
-                     int (*compare)(const void*, const void*), int base, 
-                     int limit, void* target)
+                     int (*compare)(const void*, const void*), 
+                     size_t base, size_t limit, void* target)
 {
-  char* src_p = (char*)src;
-  int srch_lo = 0, srch_hi = 0, gallop_exp = 1, gallop_ind = 0, slice = 0;
-  if (compare(target, src_p+(base * size)) <= 0) {
-    slice = 0;
-  } else {
+  char* src_p = (char*) src;
+
+  size_t slice = 0;
+  if (compare(target, src_p+(base)) > 0) {
+    size_t srch_lo = base;
+    size_t srch_hi = base;
+    // Power of 2 used for exponential search.
+    size_t gallop_exp = 2;
+    size_t gallop_ind;
     while (1) {
-      srch_lo = base + ((int)pow(2, gallop_exp - 1) - 1);
-      srch_hi = base + ((int)pow(2, gallop_exp) - 1);
-      if (srch_lo > limit || srch_hi > limit) {
-        srch_lo = srch_lo > limit ? limit : srch_lo;
+      srch_hi = base + ((gallop_exp - 1) * size);
+      // Only srch_hi needs to be checked, as srch_lo contains previous value
+      // of srch_hi which was valid.
+      if (srch_hi > limit) {
         srch_hi = limit;
         break;
       }
-      if (!((compare(target, src_p+(srch_lo * size)) > 0) 
-            && (compare(target, src_p+(srch_hi * size)) <= 0))) {
-        gallop_exp++;
+      // Note: Because we assign srch_hi to srch_lo if the comparison fails, we
+      // know compare(target, src_p+(srch_lo) > 0 for the next search.
+      if (!(compare(target, src_p+(srch_hi)) <= 0)) {
+        gallop_exp *= 2;
+        srch_lo = srch_hi;
       } else {
         break;
       }
     }
-    gallop_ind = timsort_binary_search(src, size, compare, 
-                                       srch_lo, srch_hi, target);
+    gallop_ind = bin_search_loc(src, size, compare, srch_lo, srch_hi, target);
     slice = gallop_ind - base;
-    if (compare(target, src_p+(gallop_ind * size)) > 0) {
-      slice++;
+    /*
+     * The bin_search_loc() function can at most return the offset of the last
+     * element of the array that it is searching. While this is fine if the 
+     * target is less than or equal to the last element (as the slice need not 
+     * include the final element), it means that the slice will be off by one 
+     * if the target element is larger than all elements in the array
+     * (as gallop_ind - slice can be at most array_size - size).
+     * This conditional is needed to account for this possibility.
+    */
+    if (gallop_ind == limit && compare(target, src_p+(gallop_ind)) > 0) {
+      slice += size;
     }
   }
   return slice;
 }
 
 /**
- * @brief Merge runs from right to left.
+ * @ingroup Timsort
+ * @brief Merge two consecutive runs from right to left.
  *
- * Called when the rightmost run is smaller than the leftmost run.
+ * This function is called when the rightmost run is smaller than the leftmost 
+ * run. There are two modes in which merges can be performed:
+ *
+ * Standard mode:
+ * Standard merge sort where elements are compared one-to-one.
+ * During this mode, we keep track of the "winning" array. If an array has
+ * "won" more than the ms->min_gallop, we enter galloping mode.
+ *
+ * Galloping Mode (galloping left):
+ * In galloping mode, merges are performed as a pair of operations:
+ * -# Find the location of right[max] in left[]. Merge all values (slice1) in 
+ *    left[] down to this point and then merge right[max].
+ * -# Find the location of left[max] in right[]. Merge all values (slice2) in
+ *    right[] down to this point and then merge left[max].
+ * Note: The runs left[] and right[] are altered between these operations.
+ *
+ * Galloping mode lets us take advantage of subruns in data, and by performing
+ * merges in bulk, can be quite efficient for certain types of data. However, 
+ * galloping is not always effective. In particular, it is not at all efficient
+ * with random data. 
+ *
+ * To account for this, we check after the above operations that slice1 and 
+ * slice2 are both sufficiently large - at least as large as
+ * ms->min_gallop * element_size. If this is the case, then galloping mode was
+ * effective and we decrement ms->min_gallop to make subsequent returns to
+ * galloping mode easier. If this wasn't the case, we exit galloping mode and
+ * increment ms->min_gallop to make entering galloping mode harder. In this
+ * way, the algorithm quickly reacts to data for which galloping is ill-suited
+ * and limits its effect on performance.
  *
  * @param arr Array containing runs.
  * @param size Size of each element in array.
@@ -971,87 +1033,101 @@ timsort_gallop_right(void* src, size_t size,
  * @param lo_len Length of larger leftmost run.
  * @param hi Upper bound of merge (inclusive).
  * @param hi_len Length of smaller rightmost run.
- * @param merge_state Struct containing information about merges and runs.
+ * @param ms Struct containing information about merges and runs.
  * @return Void.
  *
- * @see timsort
- * @see timsort_merge_runs
- * @see timsort_gallop_left
+ * @see timsort()
+ * @see timsort_merge_runs()
+ * @see timsort_gallop_left()
  */
 void
 timsort_merge_runs_hi(void* arr, size_t size, 
-                      int (*compare)(const void*, const void*), size_t lo, size_t lo_len, 
-                      size_t hi, size_t hi_len, TimsortMergeState* merge_state) 
+                      int (*compare)(const void*, const void*), 
+                      size_t lo, size_t lo_len, 
+                      size_t hi, size_t hi_len, 
+                      TimsortMergeState* ms) 
 {
-  char* arr_p = (char*)arr;
-  char* temp = malloc(size * hi_len);
-  memcpy(temp, arr_p+((hi - hi_len + 1) * size), hi_len * size);
+  char* arr_p = (char*) arr;
+  char* temp = malloc(hi_len);
+  memcpy(temp, arr_p+(hi - hi_len + size), hi_len);
 
-  int winner = -1, prev_winner = -1, count = 0;
-  int srch_lo, srch_hi;
-  int slice1, slice2, gallop_ind, gallop_exp;
+  const size_t min_gallop_size = ms->min_gallop * size;
 
-  int k, l = lo + lo_len - 1, r = hi_len - 1;
-  for (k = hi + 1; k --> lo;) {
-    if ((r >= 0 && (l >= 0 && l >= lo)) && merge_state->galloping) {
-      slice1 = timsort_gallop_left(arr, size, compare, l, lo, temp+(r * size));
-      if (slice1 > 0) {
-        memcpy(arr_p+((k - slice1 + 1) * size), arr_p+((l - slice1 + 1) * size),
-               slice1 * size);
-      }
-      memcpy(arr_p+((k - slice1) * size), temp+(r * size), size);
-      k -= slice1;
-      r -= 1;
-      l -= slice1;
+  int l_won = 0;
+  int r_won = 0;
 
-      if (k <= lo || r < 0 || (l < 0 || l < lo)) {
-        merge_state->galloping = 0;
-        merge_state->min_gallop++;
-        continue;
-      }
+  size_t slice1; 
+  size_t slice2; 
 
-      k--;
+  size_t l = lo + lo_len - size; 
+  size_t r = hi_len - size;
 
-      slice2 = timsort_gallop_left(temp, size, compare, r, 0, arr_p+(l * size));
-      if (slice2 > 0) {
-        memcpy(arr_p+((k - slice2 + 1) * size), temp+((r - slice2 + 1) * size),
-               slice2 * size);
-      }
-      memcpy(arr_p+((k - slice2) * size), arr_p+(l * size), size);
-      k -= slice2;
-      l -= 1;
-      r -= slice2;
+  for (size_t k = hi; k >= lo && k <= hi; k -= size) {
+    if (ms->galloping) {
+      // Condition given that indices are size_t
+      if (r <= hi && (l >= lo && l <= hi)) {
+        slice1 = timsort_gallop_left(arr, size, compare, l, lo, temp+(r));
+        // To avoid going out of bounds, check that slice is at least 1.
+        if (slice1 > 0) {
+          memmove(arr_p+(k - slice1 + size), arr_p+(l - slice1 + size), slice1);
+        }
+        memcpy(arr_p+(k - slice1), temp+(r), size);
+        k -= slice1;
+        r -= size;
+        l -= slice1;
 
-      if (slice1 < merge_state->min_gallop 
-          || slice2 < merge_state->min_gallop) {
-        merge_state->galloping = 0;
-        merge_state->min_gallop++;
-      } else {
-        merge_state->min_gallop--;
-      }
-    } else {
-      if (r >= 0 && ((l < 0 || l < lo) 
-                     || compare(temp+(r * size), arr_p+(l * size)) > 0)) {
-        memcpy(arr_p+(k * size), temp+(r * size), size);
-        r--;
-        winner = 0;
-      } else {
-        memcpy(arr_p+(k * size), arr_p+(l * size), size);
-        l--;
-        winner = 1;
-      }
-      if (prev_winner == -1 || prev_winner == winner) {
-        count++;
-        if (count >= merge_state->min_gallop) {
-          merge_state->galloping = 1;
-          count = 0;
-          prev_winner = winner = -1;
+        // If any of these conditions hold, the next gallop operation will fail.
+        // Hence we should exit.
+        if ((r > hi) || (l < lo || l > lo) || (k <= lo || k > hi)) {
+          ms->galloping = 0;
+          ms->min_gallop++;
           continue;
         }
+
+        k -= size;
+
+        slice2 = timsort_gallop_left(temp, size, compare, r, 0, arr_p+(l));
+        // To avoid going out of bounds, check that slice is at least 1.
+        if (slice2 > 0) {
+          memmove(arr_p+(k - slice2 + size), temp+(r - slice2 + size), slice2);
+        }
+        memcpy(arr_p+(k - slice2), arr_p+(l), size);
+        k -= slice2;
+        l -= size;
+        r -= slice2;
+
+        if (slice1 < min_gallop_size || slice2 < min_gallop_size) {
+          ms->galloping = 0;
+          ms->min_gallop++;
+        } else {
+          ms->min_gallop--;
+        }
       } else {
-        count = 0;
+        slice1 = (l >= lo && l <= hi) ? lo_len - l + size : 0;
+        slice2 = (r <= hi) ? r + size : 0;
+        memmove(arr_p+(k - slice1 + size), arr_p+(l - slice1 + size), slice1); 
+        memmove(arr_p+(k - slice2 + size), temp+(r - slice2 + size), slice2);
+        ms->galloping = 0;
+        ms->min_gallop++;
+        break;
       }
-      prev_winner = winner;
+    } else {
+      if (r <= hi 
+          && ((l < lo || l > hi) || compare(temp+(r), arr_p+(l)) > 0)) {
+        memcpy(arr_p+(k), temp+(r), size);
+        r -= size;
+        r_won++;
+        l_won = 0;
+      } else {
+        memcpy(arr_p+(k), arr_p+(l), size);
+        l -= size;
+        r_won = 0;
+        l_won++;
+      }
+      if (l_won > ms->min_gallop || r_won > ms->min_gallop) {
+        ms->galloping = 1;
+        l_won = r_won = 0;
+      }
     }
   }
 
@@ -1059,56 +1135,84 @@ timsort_merge_runs_hi(void* arr, size_t size,
 }
 
 /**
- * @brief Gallop right->left to find number of elements in source array greater
+ * @ingroup Timsort
+ * @brief Gallop right to left to find slice of elements in source array greater
  * than target.
+ *
+ * In order to find this slice, we need to find the number of elements in the
+ * source array greater than the target. Given that the source array
+ * is sorted and ascending, it suffices to find where the target would be
+ * located in the source array.
+ *
+ * To determine this location, we perform a pair of searches:
+ * -# We first perform an exponential search to find the value k such that 
+ *    base - ((2^(k) - 1) * size < target <= base - ((2^(k-1) - 1) * size).
+ *    This condenses the range of values in which the target must lie.
+ * -# We then perform binary search using this range.
+ *
+ * @note The slice is a memory offset corresponding to the total size of 
+ * these elements.
  *
  * @param src Array to gallop over.
  * @param size Size of each element in array.
  * @param compare Function to compare elements.
- * @param base Index to begin gallop.
- * @param limit Index limit for galloping.
+ * @param base Initial offset to begin gallop.
+ * @param limit Maximum offset for galloping (inclusive).
  * @param target Target element.
- * @return Number of elements in souce array greater than target.
+ * @return Total size of elements in souce array greater than target.
  *
- * @see timsort
- * @see timsort_merge_runs_hi
+ * @see timsort()
+ * @see timsort_merge_runs_hi()
  */
-int 
+size_t 
 timsort_gallop_left(void* src, size_t size, 
                     int (*compare)(const void*, const void*), 
-                    int base, int limit, void* target) {
-  char* src_p = (char*)src;
-  int srch_lo = 0, srch_hi = 0, gallop_exp = 1, gallop_ind = 0, slice = 0;
-  if (compare(target, src_p+(base * size)) >= 0) { 
-    slice = 0;
-  } else {
+                    size_t base, size_t limit, void* target) 
+{
+  char* src_p = (char*) src;
+
+  size_t slice = 0;
+  if (compare(target, src_p+(base)) < 0) {
+    size_t srch_lo = base;
+    size_t srch_hi = base;
+    // A power of 2 to use in exponential search.
+    size_t gallop_exp = 2; 
+    size_t gallop_ind;
     while (1) {
-      srch_lo = base - ((int)pow(2, gallop_exp) - 1);
-      srch_hi = base - ((int)pow(2, gallop_exp - 1) - 1);
-      if ((srch_lo < 0 || srch_lo < limit) 
-          || (srch_hi < 0 || srch_hi < limit)) {
+      srch_lo = base - ((gallop_exp - 1) * size);
+      // Only srch_lo needs to be checked, as srch_hi contains previous value
+      // of srch_lo which was valid.
+      if (srch_lo < limit || srch_lo > base) {
         srch_lo = limit;
-        srch_hi = (srch_hi < 0 || srch_hi < limit) ? limit : srch_hi;
         break;
       }
-      if (!((compare(target, src_p+(srch_lo * size)) > 0) 
-            && (compare(target, src_p+(srch_hi * size)) <= 0))) {
-        gallop_exp++;
+      // Note: Because we assign srch_lo to srch_hi if the comparison fails, we
+      // know compare(target, src_p+(srch_hi) <= 0 for the next search.
+      if (!(compare(target, src_p+(srch_lo)) > 0)) {
+        gallop_exp *= 2;
+        srch_hi = srch_lo;
       } else {
         break;
       }
     }
-    gallop_ind = timsort_binary_search(src, size, compare, srch_lo, srch_hi, 
-                                       target);
+    gallop_ind = bin_search_loc(src, size, compare, srch_lo, srch_hi, target);
     slice = base - gallop_ind;
-    if (compare(target, src_p+(gallop_ind * size)) < 0) {
-      slice++;
+    /*
+     * The bin_search_loc() function must return a non-negative offset. As
+     * such, the size of slice is at most array_size - size. However, when the 
+     * target is less than first value in the source array, the slice ought to
+     * include all elements in the array and therefore be equal to array_size.
+     * This conditional accounts for this.
+     */
+    if (compare(target, src_p+(gallop_ind)) < 0) {
+      slice += size;
     }
   }
   return slice;
 }
 
 /**
+ * @ingroup Timsort
  * @brief Find minimum run size to use in timsort.
  *
  * The minimum run size is given by the 6 most significant bits of the array's
@@ -1119,26 +1223,28 @@ timsort_gallop_left(void* src, size_t size,
  * @param nelems Number of elements in array.
  * @return Size of minimum run.
  *
- * @see timsort
+ * @see timsort()
  */
 size_t
 timsort_minrun(size_t nelems)
 {
-  const size_t SIZE_T_SIZE = sizeof(nelems);
-  const size_t MAX_BITS = SIZE_T_SIZE * CHAR_BIT;
-  int lead_zeros;
-  if (MAX_BITS == 32) {
+  const size_t total_bits = sizeof(nelems) * CHAR_BIT;
+  int lead_zeros = 0;
+  if (total_bits == 32) {
     lead_zeros = __builtin_clzl(nelems);
-  } else if (MAX_BITS == 64) {
+  } else if (total_bits == 64) {
     lead_zeros = __builtin_clzll(nelems);
-  }
-  // Indicates number of bits which will be shifted.
-  int shifts = (MAX_BITS - lead_zeros) - 6;
-  int i, pad = 0;
-  for (i = 0; i < shifts; i++) {
-    // If any bits not in 6 most significant are set, pad final result by 1. 
-    // The & operator selects only bits that share the same 'index'. As such, 
-    // this operation returns 1 iff the bit and index i in nelems is set.
+  } 
+  assert(lead_zeros != 0);
+  // Number of bits which will be shifted.
+  int shifts = (total_bits - lead_zeros) - 6;
+  size_t pad = 0;
+  for (int i = 0; i < shifts; i++) {
+    /*
+     * If any bits not in 6 most significant are set, pad final result by 1. 
+     * The & operator selects only bits that share the same 'index'. As such, 
+     * this operation returns 1 iff the bit and index i in nelems is set.
+     */
     if (nelems & (1 << i)) {
       pad = 1;
     }
@@ -1148,61 +1254,11 @@ timsort_minrun(size_t nelems)
 }
 
 /**
- * @brief Find position of element within array using binary search.
- *
- * Used in Timsort when galloping. When this version of binary search fails to
- * find the element being search for, it just returns 'l'. Comparisons between
- * the target and the value at arr[l] are left to galloping functions.
- *
- * @param arr Array to be searched.
- * @param size Size of each element in array.
- * @param compare Function for comparing elements.
- * @param lo Lower index bound for searching.
- * @param hi Upper index bound for searching.
- * @param target Element to search for.
- * @return Index where element either is, or should be, located in the array.
- *
- * @see timsort
- * @see timsort_gallop_left
- * @see timsort_gallop_right
- */
-int
-timsort_binary_search(void* arr, size_t size, 
-                      int (*compare)(const void*, const void*), 
-                      size_t lo, size_t hi, void* target)
-{
-  char* arr_p = (char*)arr;
-  int m, l = lo, r = hi;
-  while (1) {
-    if (r <= l) {
-      return l;
-    }
-    m = floor(l + ((r - l) / 2));
-    if (compare(target, arr_p+(m * size)) > 0) {
-      l = m + 1;
-    } else if (compare(target, arr_p+(m * size)) < 0) {
-      r = m - 1;
-    } else {
-      return m + 1;
-    }
-  }
-}
-
-/**
- * @}
- * @}
- */ // End Timsort, End HybridSort
-
-/**
- * @addtogroup SortingHelper
- * @{
- */
-
-/**
+ * @ingroup SortingHelper
  * @brief Swap the values referenced by two pointers.
  *
  * To speed up swaps, the function uses different strategies for standard typed
- * elements (e.g. elements whose size is at most 64 (minimum size of long
+ * elements (e.g. elements whose size is at most 8 bytes (minimum size of long
  * long)) and larger elements.
  *
  * @param a First pointer.
@@ -1213,7 +1269,7 @@ timsort_binary_search(void* arr, size_t size,
 void
 swap(void* a, void* b, size_t size)
 {
-  enum { max_size = 64 };
+  enum { max_size = 8 };
   if (size <= max_size) {
     char tmp[size];
     memcpy(tmp, a, size);
@@ -1229,10 +1285,13 @@ swap(void* a, void* b, size_t size)
 }
 
 /**
- * @brief Find median of three elements in given array and return its index.
+ * @ingroup SortingHelper
+ * @brief Find median of three elements in given array and return its location.
  *
- * When attempting to find a pivot point (e.g. in quicksort), the median is a
- * better option than using a fixed position (e.g. always first element).
+ * @note Location is given as memory offset.
+ *
+ * @note When attempting to find a pivot point (e.g. in quicksort), the median 
+ * is a better option than using a fixed position (e.g. always first element).
  *
  * @param arr Array containing the elements.
  * @param size Size of each element.
@@ -1240,7 +1299,7 @@ swap(void* a, void* b, size_t size)
  * @param b Second element.
  * @param c Third element.
  * @param compare Function to compare elements.
- * @return Index of the median element.
+ * @return Location of the median element in array.
  */
 size_t
 median_three(void* arr, size_t size, size_t a, size_t b, size_t c, 
@@ -1267,6 +1326,7 @@ median_three(void* arr, size_t size, size_t a, size_t b, size_t c,
 }
 
 /**
+ * @ingroup SortingHelper
  * @brief Reverse given array.
  *
  * @param arr Array to reverse.
@@ -1281,54 +1341,29 @@ reverse_array(void* arr, size_t start, size_t end, size_t size)
   if (start >= end) { 
     return;
   }
-  char* arr_p = (char*)arr;
+  char* arr_p = (char*) arr;
   while (start < end) {
-    swap(arr_p+(start*size), arr_p+(end*size), size);
-    start++;
-    end--;
+    swap(arr_p+(start), arr_p+(end), size);
+    start += size;
+    end -= size;
   }
 }
 
 /**
- * @brief Search for an element using binary search in a contiguous subarray.
- *
- * @param arr Array containing the subarray.
- * @param size Size of each element in array.
- * @param compare Function to compare elements.
- * @param lo Lower bound of subarray (inclusive).
- * @param hi Upper bound of subarray (inclusive).
- * @param target Item to search for.
- * @return Index of item if found, else -1.
- *
- */
-int
-bin_search(void* arr, size_t size, int (*compare)(const void*, const void*), 
-           size_t lo, size_t hi, void* target)
-{
-  char* arr_p = (char*)arr;
-  int m, l = lo, r = hi;
-  while (1) {
-    if (r < l || (r < 0 || l < 0)) {
-      return -1;
-    } else {
-      m = floor(l + ((r - l) / 2));
-      if (compare(arr_p+(m*size), target) > 0) {
-        l = m + 1;
-      } else if (compare(arr_p+(m*size), target) < 0) {
-        r = m - 1;
-      } else {
-        return m;
-      }
-    }
-  }
-}
-
-/**
+ * @ingroup SortingHelper
  * @brief Find location of target value in array using binary search.
+ *
+ * To account for duplicate values, the function performs a final linear search
+ * once a location has been found until it finds the final duplicate.
+ *
+ * @note Location is given as a a memory offset. 
  *
  * @note In the case that the target element is not actually located in the 
  * array, the search returns where the target element would be located were it
  * in the array.
+ *
+ * @todo Use second binary search instead of linear search to find either first
+ * or last instance of duplicate.
  *
  * @param arr Array to be searched.
  * @param size Size of each element in array.
@@ -1336,7 +1371,7 @@ bin_search(void* arr, size_t size, int (*compare)(const void*, const void*),
  * @param lo Lower bound for search (inclusive).
  * @param hi Upper bound for search (inclusive).
  * @param target Element to search for.
- * @return
+ * @return Location where element belongs in the array.
  */
 size_t
 bin_search_loc(void* arr, size_t size, 
@@ -1347,23 +1382,39 @@ bin_search_loc(void* arr, size_t size,
   size_t l = lo;
   size_t m = 0;
   size_t r = hi;
+  int cmp;
 
   while (1) {
     if (r > hi || r <= l) {
-      return compare(target, arr_p+(l)) > 0 ? (l + size) : l;
+      cmp = compare(target, arr_p+(l));
+      if (cmp == 0) {
+        return l;
+      } else if (cmp < 0) {
+        do {
+          l -= size;
+        } while ((l <= hi && l >= lo) && compare(target, arr_p+(l)) < 0);
+        return (l >= hi || l < lo) ? lo : l + size;
+      } else {
+        do {
+          l += size;
+        } while (l <= hi && compare(target, arr_p+(l)) > 0);
+        return l > hi ? hi : l;
+      }
     }
+    // Note that value in parantheses is truncated before being multiplied by
+    // size.
     m = ((r + l) / 2 / size) * size;
-    if (compare(target, arr_p+(m)) > 0) {
+    cmp = compare(target, arr_p+(m));
+    if (cmp > 0) {
       l = m + size;
-    } else if (compare(target, arr_p+(m)) < 0) {
+    } else if (cmp < 0) {
       r = m - size;
     } else {
-      return m + size;
+      do {
+        m += size;
+      } while (m <= hi && compare(target, arr_p+(m)) == 0);
+      return m > hi ? hi : m;
     }
   }
 }
-/** 
- * @}
- * @}
- */ // End SortingHelper, End SortingAlgorithm
 

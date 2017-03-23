@@ -8,12 +8,12 @@ Struct to represent merge state during Timsort.
 \subsection*{Data Fields}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{structTimsortMergeState_a4cde6b50acb89f6a6d71b19475502209}\label{structTimsortMergeState_a4cde6b50acb89f6a6d71b19475502209}} 
-\hyperlink{structStack}{Stack} $\ast$ \hyperlink{structTimsortMergeState_a4cde6b50acb89f6a6d71b19475502209}{runs\+\_\+stack}
-\begin{DoxyCompactList}\small\item\em \hyperlink{structStack}{Stack} containing discovered runs. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{structTimsortMergeState_a4eb61fa3007911eeeabe210681e05a16}\label{structTimsortMergeState_a4eb61fa3007911eeeabe210681e05a16}} 
 \hyperlink{structTimsortRun}{Timsort\+Run} $\ast$ \hyperlink{structTimsortMergeState_a4eb61fa3007911eeeabe210681e05a16}{runs}
-\begin{DoxyCompactList}\small\item\em Array of initialized runs. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Array representing stack of runs. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structTimsortMergeState_a8def51eaf93ba3835c693325cfc53c08}\label{structTimsortMergeState_a8def51eaf93ba3835c693325cfc53c08}} 
+int \hyperlink{structTimsortMergeState_a8def51eaf93ba3835c693325cfc53c08}{nruns}
+\begin{DoxyCompactList}\small\item\em Current number of unmerged runs. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{structTimsortMergeState_a7a2c909e984e074738fec5870da174aa}\label{structTimsortMergeState_a7a2c909e984e074738fec5870da174aa}} 
 size\+\_\+t \hyperlink{structTimsortMergeState_a7a2c909e984e074738fec5870da174aa}{max\+\_\+runs}
 \begin{DoxyCompactList}\small\item\em Max number of runs. \end{DoxyCompactList}\item 
@@ -22,7 +22,7 @@ int \hyperlink{structTimsortMergeState_a382c0762f06c680bb4fec455f8823bf1}{min\+\
 \begin{DoxyCompactList}\small\item\em Current galloping threshold. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{structTimsortMergeState_ab45c7800608ba6dd2b3d7f7b68bafb68}\label{structTimsortMergeState_ab45c7800608ba6dd2b3d7f7b68bafb68}} 
 int \hyperlink{structTimsortMergeState_ab45c7800608ba6dd2b3d7f7b68bafb68}{galloping}
-\begin{DoxyCompactList}\small\item\em Whether or not in galloping mode. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Current status of galloping mode ( 0\+: off, 1\+: on). \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}

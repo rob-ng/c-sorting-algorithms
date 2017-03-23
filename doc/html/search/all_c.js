@@ -4,7 +4,6 @@ var searchData=
   ['select_5fsort',['select_sort',['../group__SelectionSort.html#ga95d65a1979dccdbd2b5b599d0eeef339',1,'select_sort(void *arr, size_t nelems, size_t size, int(*compare)(const void *, const void *)):&#160;sorting.c'],['../group__SelectionSort.html#ga95d65a1979dccdbd2b5b599d0eeef339',1,'select_sort(void *arr, size_t nelems, size_t size, int(*compare)(const void *, const void *)):&#160;sorting.c']]],
   ['selection_20sorts',['Selection Sorts',['../group__SelectionSort.html',1,'']]],
   ['simple_20sorts',['Simple Sorts',['../group__SimpleSort.html',1,'']]],
-  ['size',['SIZE',['../main_8c.html#a70ed59adcb4159ac551058053e649640',1,'main.c']]],
   ['sorting_2ec',['sorting.c',['../sorting_8c.html',1,'']]],
   ['sorting_2eh',['sorting.h',['../sorting_8h.html',1,'']]],
   ['sorting_20algorithms',['Sorting Algorithms',['../group__SortingAlgorithm.html',1,'']]],

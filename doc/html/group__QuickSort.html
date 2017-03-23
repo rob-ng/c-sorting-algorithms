@@ -74,9 +74,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gacc1abed6e3519de02d60503e0b214932"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__QuickSort.html#gacc1abed6e3519de02d60503e0b214932">quick_sort</a> (void *arr, size_t nelems, size_t size, int(*compare)(const void *, const void *))</td></tr>
 <tr class="memdesc:gacc1abed6e3519de02d60503e0b214932"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sort generic array using quicksort.  <a href="#gacc1abed6e3519de02d60503e0b214932">More...</a><br /></td></tr>
 <tr class="separator:gacc1abed6e3519de02d60503e0b214932"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga4a465523bf71478872301ee552edb403"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__QuickSort.html#ga4a465523bf71478872301ee552edb403">quick_sort_sort</a> (void *arr, size_t size, int(*compare)(const void *, const void *), size_t lo, size_t hi)</td></tr>
-<tr class="memdesc:ga4a465523bf71478872301ee552edb403"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recursively perform quicksort.  <a href="#ga4a465523bf71478872301ee552edb403">More...</a><br /></td></tr>
-<tr class="separator:ga4a465523bf71478872301ee552edb403"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab75f75c672e70afad6178c3055547777"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__QuickSort.html#gab75f75c672e70afad6178c3055547777">quick_sort_recursive</a> (void *arr, size_t size, int(*compare)(const void *, const void *), size_t lo, size_t hi)</td></tr>
+<tr class="memdesc:gab75f75c672e70afad6178c3055547777"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recursively perform quicksort.  <a href="#gab75f75c672e70afad6178c3055547777">More...</a><br /></td></tr>
+<tr class="separator:gab75f75c672e70afad6178c3055547777"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae45617fa4741c13bc601fe2a984fdc2c"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__QuickSort.html#gae45617fa4741c13bc601fe2a984fdc2c">quick_sort_partition</a> (void *arr, size_t size, int(*compare)(const void *, const void *), size_t lo, size_t hi)</td></tr>
 <tr class="memdesc:gae45617fa4741c13bc601fe2a984fdc2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Partition subarray around pivot element.  <a href="#gae45617fa4741c13bc601fe2a984fdc2c">More...</a><br /></td></tr>
 <tr class="separator:gae45617fa4741c13bc601fe2a984fdc2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,7 +123,6 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sort generic array using quicksort. </p>
-<p>If array is small enough, defers to insertion sort instead.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">arr</td><td>Array to be sorted. </td></tr>
@@ -134,7 +133,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Void.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__QuickSort.html#ga4a465523bf71478872301ee552edb403" title="Recursively perform quicksort. ">quick_sort_sort()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd>quick_sort_sort() </dd></dl>
 
 </div>
 </div>
@@ -199,14 +198,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga4a465523bf71478872301ee552edb403"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga4a465523bf71478872301ee552edb403">&#9670;&nbsp;</a></span>quick_sort_sort()</h2>
+<a id="gab75f75c672e70afad6178c3055547777"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab75f75c672e70afad6178c3055547777">&#9670;&nbsp;</a></span>quick_sort_recursive()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void quick_sort_sort </td>
+          <td class="memname">void quick_sort_recursive </td>
           <td>(</td>
           <td class="paramtype">void *&#160;</td>
           <td class="paramname"><em>arr</em>, </td>

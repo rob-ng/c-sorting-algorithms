@@ -74,9 +74,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga9e7f6cf0117297b84135e76a00711d82"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__MergeSort.html#ga9e7f6cf0117297b84135e76a00711d82">merge_sort</a> (void *arr, size_t nelems, size_t size, int(*compare)(const void *, const void *))</td></tr>
 <tr class="memdesc:ga9e7f6cf0117297b84135e76a00711d82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sort generic array using merge sort.  <a href="#ga9e7f6cf0117297b84135e76a00711d82">More...</a><br /></td></tr>
 <tr class="separator:ga9e7f6cf0117297b84135e76a00711d82"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga04476f6fd4b5920aab75a4f58c0d9af1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__MergeSort.html#ga04476f6fd4b5920aab75a4f58c0d9af1">merge_sort_sort</a> (void *arr, void *aux, size_t size, int(*compare)(const void *, const void *), size_t lo, size_t hi)</td></tr>
-<tr class="memdesc:ga04476f6fd4b5920aab75a4f58c0d9af1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recursively perform merge sort.  <a href="#ga04476f6fd4b5920aab75a4f58c0d9af1">More...</a><br /></td></tr>
-<tr class="separator:ga04476f6fd4b5920aab75a4f58c0d9af1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4094395ddbe4c74b46b6f011a83ceb46"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__MergeSort.html#ga4094395ddbe4c74b46b6f011a83ceb46">merge_sort_recursive</a> (void *arr, void *aux, size_t size, int(*compare)(const void *, const void *), size_t lo, size_t hi)</td></tr>
+<tr class="memdesc:ga4094395ddbe4c74b46b6f011a83ceb46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recursively perform merge sort.  <a href="#ga4094395ddbe4c74b46b6f011a83ceb46">More...</a><br /></td></tr>
+<tr class="separator:ga4094395ddbe4c74b46b6f011a83ceb46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1b4d8f0a083e4f0d30291ce8829ba6fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__MergeSort.html#ga1b4d8f0a083e4f0d30291ce8829ba6fe">merge_sort_merge</a> (void *arr, void *aux, size_t size, int(*compare)(const void *, const void *), size_t lo, size_t mid, size_t hi)</td></tr>
 <tr class="memdesc:ga1b4d8f0a083e4f0d30291ce8829ba6fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge subarrays by updating aux with sorted values taken from arr.  <a href="#ga1b4d8f0a083e4f0d30291ce8829ba6fe">More...</a><br /></td></tr>
 <tr class="separator:ga1b4d8f0a083e4f0d30291ce8829ba6fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -125,7 +125,7 @@ Functions</h2></td></tr>
 <p>Sort generic array using merge sort. </p>
 <p>Merge sort is not efficient for small arrays. As such, merge sort is only performed if the length of the array is above LENGTH_THRESHOLD.</p>
 <p>The function creates an auxillary array to make merging more efficient. Without the auxillary array, each merge would require updating the auxillary array with the current values of the main array in the interval [lo, hi] before performing comparisons. By instead alternating the roles of the main and auxillary array between merges, we can skip this process entirely, as the array which is used for comparisons in the next call is the array to which values were copied in the previous call.</p>
-<p>Because of this, we also need make the initial call to <a class="el" href="group__MergeSort.html#ga04476f6fd4b5920aab75a4f58c0d9af1" title="Recursively perform merge sort. ">merge_sort_sort()</a> with the main and auxillary arrays swapped. This is so that the first merge involves copying values into the main array from the auxillary array.</p>
+<p>Because of this, we also need make the initial call to merge_sort_sort() with the main and auxillary arrays swapped. This is so that the first merge involves copying values into the main array from the auxillary array.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">arr</td><td>Array to be sorted. </td></tr>
@@ -212,14 +212,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga04476f6fd4b5920aab75a4f58c0d9af1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga04476f6fd4b5920aab75a4f58c0d9af1">&#9670;&nbsp;</a></span>merge_sort_sort()</h2>
+<a id="ga4094395ddbe4c74b46b6f011a83ceb46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4094395ddbe4c74b46b6f011a83ceb46">&#9670;&nbsp;</a></span>merge_sort_recursive()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void merge_sort_sort </td>
+          <td class="memname">void merge_sort_recursive </td>
           <td>(</td>
           <td class="paramtype">void *&#160;</td>
           <td class="paramname"><em>arr</em>, </td>
@@ -264,8 +264,8 @@ Functions</h2></td></tr>
 
 <p>Recursively perform merge sort. </p>
 <p>Merge sort is only perfomed if current index interval [lo, hi] is sufficiently large. If it isn't, insertion sort is used to sort the array in that interval.</p>
-<p>Note that the <a class="el" href="group__MergeSort.html#ga04476f6fd4b5920aab75a4f58c0d9af1" title="Recursively perform merge sort. ">merge_sort_sort()</a> and <a class="el" href="group__MergeSort.html#ga1b4d8f0a083e4f0d30291ce8829ba6fe" title="Merge subarrays by updating aux with sorted values taken from arr. ">merge_sort_merge()</a> calls swap the order of arr and aux. This ensures that the aux array (INTO which values are copied from arr in merge) is the array FROM which values are copied in the next merge. See <a class="el" href="group__MergeSort.html#ga9e7f6cf0117297b84135e76a00711d82" title="Sort generic array using merge sort. ">merge_sort()</a> documentation for why this is done.</p>
-<p>Note: we use lo + (hi - lo) / 2 rather than (hi + lo) / 2 to guard against overflow.</p>
+<p>Note that the merge_sort_sort() and <a class="el" href="group__MergeSort.html#ga1b4d8f0a083e4f0d30291ce8829ba6fe" title="Merge subarrays by updating aux with sorted values taken from arr. ">merge_sort_merge()</a> calls swap the order of arr and aux. This ensures that the aux array (INTO which values are copied from arr in merge) is the array FROM which values are copied in the next merge. See <a class="el" href="group__MergeSort.html#ga9e7f6cf0117297b84135e76a00711d82" title="Sort generic array using merge sort. ">merge_sort()</a> documentation for why this is done.</p>
+<dl class="section note"><dt>Note</dt><dd>The parameters 'hi' and 'lo' are multiples of 'size'. As such, calculating 'mid' is slightly more involved as it must also be a multiple of 'size'.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">arr</td><td>Array from which values will be copied. </td></tr>
