@@ -13,8 +13,6 @@ The format is based on [Keep a Changelog]() and this project adheres to
 
 - Moved stress tests from main file to spec file.
 - Made final (whatever that means) changes to Timsort-related functions.
-- Renamed timort_check_invariants() to timsort_maintain_invariants() as latter
-  is more descriptive of the function.
 
 ## [2017-03-19] 0.0.9
 

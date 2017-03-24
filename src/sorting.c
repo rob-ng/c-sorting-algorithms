@@ -228,15 +228,15 @@ comb_sort(void* arr, size_t nelems, size_t size,
           int (*compare)(const void*, const void*))
 {
   char* arr_p = (char*) arr;
-  const size_t MAX_MEM = nelems * size;
-  const double SHRINK = 1.3 * size;
+  const size_t max_mem = nelems * size;
+  const double shrink = 1.3 * size;
 
-  size_t gap = MAX_MEM;
+  size_t gap = max_mem;
   size_t i = 0;
   int sorted = 0;
 
   while (!sorted) {
-    gap = floor(gap / SHRINK) * size;
+    gap = floor(gap / shrink) * size;
     if (gap > size) {
       sorted = 0;
     } else {
@@ -245,7 +245,7 @@ comb_sort(void* arr, size_t nelems, size_t size,
     }
 
     i = 0;
-    while (i + gap < MAX_MEM) {
+    while (i + gap < max_mem) {
       if (compare(arr_p+(i), arr_p+(i + gap)) > 0) {
         swap(arr_p+(i), arr_p+(i + gap), size);
         sorted = 0;
@@ -1269,8 +1269,8 @@ timsort_minrun(size_t nelems)
 void
 swap(void* a, void* b, size_t size)
 {
-  enum { max_size = 8 };
-  if (size <= max_size) {
+  enum { SWAP_THRESHOLD = 8 };
+  if (size <= SWAP_THRESHOLD) {
     char tmp[size];
     memcpy(tmp, a, size);
     memcpy(a, b, size);
