@@ -8,6 +8,7 @@
 #include <stdlib.h>
 
 /**
+ * @ingroup StackFrame
  * @struct StackFrame
  * @brief Struct to represent a frame in a stack.
  */
@@ -17,6 +18,7 @@ typedef struct StackFrame {
 } StackFrame;
 
 /**
+ * @ingroup Stack
  * @struct Stack
  * @brief Struct to represent a stack.
  */

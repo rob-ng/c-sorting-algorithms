@@ -1,0 +1,9 @@
+
+\begin{DoxyRefList}
+\item[\label{todo__todo000002}%
+\Hypertarget{todo__todo000002}%
+Global \hyperlink{group__SortingHelper_ga347d3eac5748d59424afd8566181fc27}{bin\+\_\+search\+\_\+loc} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$), size\+\_\+t lo, size\+\_\+t hi, void $\ast$target)]Use second binary search instead of linear search to find either first or last instance of duplicate. 
+\item[\label{todo__todo000001}%
+\Hypertarget{todo__todo000001}%
+Global \hyperlink{group__Timsort_ga1c9fca70060e37617156b89b387aa4d3}{timsort} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$))]The runs array is much larger than it needs to be. Technically, the number of unmerged runs shouldn\textquotesingle{}t grow larger than log base phi of N, where phi = (1 + sqrt(5))/2 (golden ratio). However, computing this for large N is expensive, and so for the moment I\textquotesingle{}ve opted only to use (N / minrun) + 1. This value is the maximum number of unmerged runs that could exist in the array without merging. 
+\end{DoxyRefList}

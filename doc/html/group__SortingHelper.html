@@ -74,27 +74,27 @@ Functions</h2></td></tr>
 <tr class="memitem:gac005eaa05ec80dbf1a0984d3d4fa80a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SortingHelper.html#gac005eaa05ec80dbf1a0984d3d4fa80a8">swap</a> (void *a, void *b, size_t size)</td></tr>
 <tr class="memdesc:gac005eaa05ec80dbf1a0984d3d4fa80a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Swap the values referenced by two pointers.  <a href="#gac005eaa05ec80dbf1a0984d3d4fa80a8">More...</a><br /></td></tr>
 <tr class="separator:gac005eaa05ec80dbf1a0984d3d4fa80a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga64dc225cd385660f0c413520416e8d40"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SortingHelper.html#ga64dc225cd385660f0c413520416e8d40">median_three</a> (void *arr, size_t size, size_t a, size_t b, size_t c, int(*compare)(void *, void *))</td></tr>
-<tr class="memdesc:ga64dc225cd385660f0c413520416e8d40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find median of three elements in given array and return its index.  <a href="#ga64dc225cd385660f0c413520416e8d40">More...</a><br /></td></tr>
-<tr class="separator:ga64dc225cd385660f0c413520416e8d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7ca72135e6d6f9e7af0ea60d653efb09"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SortingHelper.html#ga7ca72135e6d6f9e7af0ea60d653efb09">median_three</a> (void *arr, size_t size, size_t a, size_t b, size_t c, int(*compare)(const void *, const void *))</td></tr>
+<tr class="memdesc:ga7ca72135e6d6f9e7af0ea60d653efb09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find median of three elements in given array and return its location.  <a href="#ga7ca72135e6d6f9e7af0ea60d653efb09">More...</a><br /></td></tr>
+<tr class="separator:ga7ca72135e6d6f9e7af0ea60d653efb09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae26181b67ffd4261a676f39624c3ce68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SortingHelper.html#gae26181b67ffd4261a676f39624c3ce68">reverse_array</a> (void *arr, size_t start, size_t end, size_t size)</td></tr>
 <tr class="memdesc:gae26181b67ffd4261a676f39624c3ce68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reverse given array.  <a href="#gae26181b67ffd4261a676f39624c3ce68">More...</a><br /></td></tr>
 <tr class="separator:gae26181b67ffd4261a676f39624c3ce68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga5f3f53398f1206d95119c4ba54faab58"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SortingHelper.html#ga5f3f53398f1206d95119c4ba54faab58">bin_search</a> (void *arr, size_t size, int(*compare)(void *, void *), size_t lo, size_t hi, void *target)</td></tr>
-<tr class="memdesc:ga5f3f53398f1206d95119c4ba54faab58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Search for an element using binary search in a contiguous subarray.  <a href="#ga5f3f53398f1206d95119c4ba54faab58">More...</a><br /></td></tr>
-<tr class="separator:ga5f3f53398f1206d95119c4ba54faab58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga347d3eac5748d59424afd8566181fc27"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SortingHelper.html#ga347d3eac5748d59424afd8566181fc27">bin_search_loc</a> (void *arr, size_t size, int(*compare)(const void *, const void *), size_t lo, size_t hi, void *target)</td></tr>
+<tr class="memdesc:ga347d3eac5748d59424afd8566181fc27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find location of target value in array using binary search.  <a href="#ga347d3eac5748d59424afd8566181fc27">More...</a><br /></td></tr>
+<tr class="separator:ga347d3eac5748d59424afd8566181fc27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Helpers for sorting algorithms. </p>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ga5f3f53398f1206d95119c4ba54faab58"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga5f3f53398f1206d95119c4ba54faab58">&#9670;&nbsp;</a></span>bin_search()</h2>
+<a id="ga347d3eac5748d59424afd8566181fc27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga347d3eac5748d59424afd8566181fc27">&#9670;&nbsp;</a></span>bin_search_loc()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int bin_search </td>
+          <td class="memname">size_t bin_search_loc </td>
           <td>(</td>
           <td class="paramtype">void *&#160;</td>
           <td class="paramname"><em>arr</em>, </td>
@@ -108,7 +108,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int(*)(void *, void *)&#160;</td>
+          <td class="paramtype">int(*)(const void *, const void *)&#160;</td>
           <td class="paramname"><em>compare</em>, </td>
         </tr>
         <tr>
@@ -137,24 +137,29 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Search for an element using binary search in a contiguous subarray. </p>
+<p>Find location of target value in array using binary search. </p>
+<p>To account for duplicate values, the function performs a final linear search once a location has been found until it finds the final duplicate.</p>
+<dl class="section note"><dt>Note</dt><dd>Location is given as a a memory offset.</dd>
+<dd>
+In the case that the target element is not actually located in the array, the search returns where the target element would be located were it in the array.</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd>Use second binary search instead of linear search to find either first or last instance of duplicate.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">arr</td><td>Array containing the subarray. </td></tr>
+    <tr><td class="paramname">arr</td><td>Array to be searched. </td></tr>
     <tr><td class="paramname">size</td><td>Size of each element in array. </td></tr>
     <tr><td class="paramname">compare</td><td>Function to compare elements. </td></tr>
-    <tr><td class="paramname">lo</td><td>Lower bound of subarray (inclusive). </td></tr>
-    <tr><td class="paramname">hi</td><td>Upper bound of subarray (inclusive). </td></tr>
-    <tr><td class="paramname">target</td><td>Item to search for. </td></tr>
+    <tr><td class="paramname">lo</td><td>Lower bound for search (inclusive). </td></tr>
+    <tr><td class="paramname">hi</td><td>Upper bound for search (inclusive). </td></tr>
+    <tr><td class="paramname">target</td><td>Element to search for. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Index of item if found, else -1. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Location where element belongs in the array. </dd></dl>
 
 </div>
 </div>
-<a id="ga64dc225cd385660f0c413520416e8d40"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga64dc225cd385660f0c413520416e8d40">&#9670;&nbsp;</a></span>median_three()</h2>
+<a id="ga7ca72135e6d6f9e7af0ea60d653efb09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7ca72135e6d6f9e7af0ea60d653efb09">&#9670;&nbsp;</a></span>median_three()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -192,7 +197,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int(*)(void *, void *)&#160;</td>
+          <td class="paramtype">int(*)(const void *, const void *)&#160;</td>
           <td class="paramname"><em>compare</em>&#160;</td>
         </tr>
         <tr>
@@ -203,8 +208,10 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Find median of three elements in given array and return its index. </p>
-<p>When attempting to find a pivot point (e.g. in quicksort), the median is a better option than using a fixed position (e.g. always first element).</p>
+<p>Find median of three elements in given array and return its location. </p>
+<dl class="section note"><dt>Note</dt><dd>Location is given as memory offset.</dd>
+<dd>
+When attempting to find a pivot point (e.g. in quicksort), the median is a better option than using a fixed position (e.g. always first element).</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">arr</td><td>Array containing the elements. </td></tr>
@@ -216,7 +223,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Index of the median element. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Location of the median element in array. </dd></dl>
 
 </div>
 </div>
@@ -305,6 +312,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Swap the values referenced by two pointers. </p>
+<p>To speed up swaps, the function uses different strategies for standard typed elements (e.g. elements whose size is at most 8 bytes (minimum size of long long)) and larger elements.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">a</td><td>First pointer. </td></tr>

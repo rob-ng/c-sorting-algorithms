@@ -62,7 +62,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-attribs">Data Fields</a>  </div>
   <div class="headertitle">
-<div class="title">TimsortMergeState Struct Reference</div>  </div>
+<div class="title">TimsortMergeState Struct Reference<div class="ingroups"><a class="el" href="group__SortingAlgorithm.html">Sorting Algorithms</a> &raquo; <a class="el" href="group__HybridSort.html">Hybrid Sorts</a> &raquo; <a class="el" href="group__Timsort.html">Timsorts</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -71,14 +71,14 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
-<tr class="memitem:a4cde6b50acb89f6a6d71b19475502209"><td class="memItemLeft" align="right" valign="top"><a id="a4cde6b50acb89f6a6d71b19475502209"></a>
-<a class="el" href="structStack.html">Stack</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structTimsortMergeState.html#a4cde6b50acb89f6a6d71b19475502209">runs_stack</a></td></tr>
-<tr class="memdesc:a4cde6b50acb89f6a6d71b19475502209"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structStack.html" title="Struct to represent a stack. ">Stack</a> containing discovered runs. <br /></td></tr>
-<tr class="separator:a4cde6b50acb89f6a6d71b19475502209"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4eb61fa3007911eeeabe210681e05a16"><td class="memItemLeft" align="right" valign="top"><a id="a4eb61fa3007911eeeabe210681e05a16"></a>
 <a class="el" href="structTimsortRun.html">TimsortRun</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structTimsortMergeState.html#a4eb61fa3007911eeeabe210681e05a16">runs</a></td></tr>
-<tr class="memdesc:a4eb61fa3007911eeeabe210681e05a16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of initialized runs. <br /></td></tr>
+<tr class="memdesc:a4eb61fa3007911eeeabe210681e05a16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array representing stack of runs. <br /></td></tr>
 <tr class="separator:a4eb61fa3007911eeeabe210681e05a16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8def51eaf93ba3835c693325cfc53c08"><td class="memItemLeft" align="right" valign="top"><a id="a8def51eaf93ba3835c693325cfc53c08"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structTimsortMergeState.html#a8def51eaf93ba3835c693325cfc53c08">nruns</a></td></tr>
+<tr class="memdesc:a8def51eaf93ba3835c693325cfc53c08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current number of unmerged runs. <br /></td></tr>
+<tr class="separator:a8def51eaf93ba3835c693325cfc53c08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a2c909e984e074738fec5870da174aa"><td class="memItemLeft" align="right" valign="top"><a id="a7a2c909e984e074738fec5870da174aa"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structTimsortMergeState.html#a7a2c909e984e074738fec5870da174aa">max_runs</a></td></tr>
 <tr class="memdesc:a7a2c909e984e074738fec5870da174aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Max number of runs. <br /></td></tr>
@@ -89,7 +89,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struc
 <tr class="separator:a382c0762f06c680bb4fec455f8823bf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab45c7800608ba6dd2b3d7f7b68bafb68"><td class="memItemLeft" align="right" valign="top"><a id="ab45c7800608ba6dd2b3d7f7b68bafb68"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structTimsortMergeState.html#ab45c7800608ba6dd2b3d7f7b68bafb68">galloping</a></td></tr>
-<tr class="memdesc:ab45c7800608ba6dd2b3d7f7b68bafb68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether or not in galloping mode. <br /></td></tr>
+<tr class="memdesc:ab45c7800608ba6dd2b3d7f7b68bafb68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current status of galloping mode ( 0: off, 1: on). <br /></td></tr>
 <tr class="separator:ab45c7800608ba6dd2b3d7f7b68bafb68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>

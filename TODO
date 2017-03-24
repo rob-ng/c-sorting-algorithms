@@ -1,6 +1,6 @@
-1. Implement Galloping mode for merging.
-
-Working version of galloping mode added. However, want to add tests to make
-sure everything is absolutely correct. In particular, check that indices given
-by binary search are correct - conditionals in merge_lo don't ever seem to
-succeed.
+Timsort is nearly up to snuff. Their are only two things which warrant being
+addressed in the future:
+- Why is insertion sort faster than binary insertion sort during the run
+  finding phase?
+- Can bin_search_loc() function be improved using second binary search to find
+  first / last duplicate rather than linear search?

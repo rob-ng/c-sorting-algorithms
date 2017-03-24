@@ -5,31 +5,36 @@
 Timsort implementations.  
 
 
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structTimsortRun}{Timsort\+Run}
+\begin{DoxyCompactList}\small\item\em Struct to represent run during Timsort. \end{DoxyCompactList}\item 
+struct \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State}
+\begin{DoxyCompactList}\small\item\em Struct to represent merge state during Timsort. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \hyperlink{group__Timsort_gae421187852c6c109058362a81539de0f}{timsort} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$))
+void \hyperlink{group__Timsort_ga1c9fca70060e37617156b89b387aa4d3}{timsort} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$))
 \begin{DoxyCompactList}\small\item\em Sort generic array using Timsort. \end{DoxyCompactList}\item 
-void \hyperlink{group__Timsort_ga95a12fa41d6574d3350a908cf0fcb63d}{timsort\+\_\+find\+\_\+runs} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t minrun, \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$merge\+\_\+state)
-\begin{DoxyCompactList}\small\item\em Find runs of either strictly descending or non-\/descending elements. \end{DoxyCompactList}\item 
-void \hyperlink{group__Timsort_gac2adf9d2399deb49f6c8bb71ef13829f}{timsort\+\_\+check\+\_\+invariants} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$merge\+\_\+state)
-\begin{DoxyCompactList}\small\item\em Check that run invariants hold and update runs stack if they do not. \end{DoxyCompactList}\item 
-void \hyperlink{group__Timsort_gabbc386bb95547fd09350b3aaf72c8e26}{timsort\+\_\+collapse\+\_\+runs} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$merge\+\_\+state)
+void \hyperlink{group__Timsort_ga17b4bb9f7e1875e9e9e4c250b5b83482}{timsort\+\_\+find\+\_\+runs} (void $\ast$arr, size\+\_\+t nelems, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$), size\+\_\+t minrun, \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$ms)
+\begin{DoxyCompactList}\small\item\em Find runs of elements in the array. \end{DoxyCompactList}\item 
+void \hyperlink{group__Timsort_ga739626860caf26ad6fbe52f9dcb0806c}{timsort\+\_\+check\+\_\+invariants} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$), \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$ms)
+\begin{DoxyCompactList}\small\item\em Maintain run invariants to ensure stable, balanced merges. \end{DoxyCompactList}\item 
+void \hyperlink{group__Timsort_gaf7991b9ef4ee31db5ae9f1fba5c04a15}{timsort\+\_\+collapse\+\_\+runs} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$), \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$ms)
 \begin{DoxyCompactList}\small\item\em Merge top two runs in run stack until only one run remains. \end{DoxyCompactList}\item 
-\hyperlink{structTimsortRun}{Timsort\+Run} $\ast$ \hyperlink{group__Timsort_ga0be2dffcafd8880d305fd0c7d9f87fd7}{timsort\+\_\+merge\+\_\+runs} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), \hyperlink{structTimsortRun}{Timsort\+Run} $\ast$frst, \hyperlink{structTimsortRun}{Timsort\+Run} $\ast$scnd, \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$merge\+\_\+state)
-\begin{DoxyCompactList}\small\item\em Merge 2 consecutive runs. \end{DoxyCompactList}\item 
-void \hyperlink{group__Timsort_ga18534dcb0fb5689af44c3309a44a4968}{timsort\+\_\+merge\+\_\+runs\+\_\+lo} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t lo\+\_\+len, size\+\_\+t hi, size\+\_\+t hi\+\_\+len, \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$merge\+\_\+state)
-\begin{DoxyCompactList}\small\item\em Merge runs from left to right. \end{DoxyCompactList}\item 
-int \hyperlink{group__Timsort_gaa2295bcc1b001663881a0ad6c20d6d7a}{timsort\+\_\+gallop\+\_\+right} (void $\ast$src, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), int base, int limit, void $\ast$target)
-\begin{DoxyCompactList}\small\item\em Gallop left-\/$>$right to find number of elements in source array less than target. \end{DoxyCompactList}\item 
-void \hyperlink{group__Timsort_ga82043845fa8abc3c91332008ddbb4b55}{timsort\+\_\+merge\+\_\+runs\+\_\+hi} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t lo\+\_\+len, size\+\_\+t hi, size\+\_\+t hi\+\_\+len, \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$merge\+\_\+state)
-\begin{DoxyCompactList}\small\item\em Merge runs from right to left. \end{DoxyCompactList}\item 
-int \hyperlink{group__Timsort_ga503a8e66f4c150e73b2b37980996cae0}{timsort\+\_\+gallop\+\_\+left} (void $\ast$src, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), int base, int limit, void $\ast$target)
-\begin{DoxyCompactList}\small\item\em Gallop right-\/$>$left to find number of elements in source array greater than target. \end{DoxyCompactList}\item 
+void \hyperlink{group__Timsort_ga08929ad9e29cde3f24660fef3b08191c}{timsort\+\_\+merge\+\_\+runs} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$), \hyperlink{structTimsortRun}{Timsort\+Run} $\ast$left, \hyperlink{structTimsortRun}{Timsort\+Run} $\ast$right, \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$ms)
+\begin{DoxyCompactList}\small\item\em Merge two consecutive runs. \end{DoxyCompactList}\item 
+void \hyperlink{group__Timsort_ga9ed838122eff00630e9551003d73a56f}{timsort\+\_\+merge\+\_\+runs\+\_\+lo} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$), size\+\_\+t lo, size\+\_\+t lo\+\_\+len, size\+\_\+t hi, size\+\_\+t hi\+\_\+len, \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$ms)
+\begin{DoxyCompactList}\small\item\em Merge two consecutive runs from left to right. \end{DoxyCompactList}\item 
+size\+\_\+t \hyperlink{group__Timsort_gaf272b7c7b32279bc6aa2010330e7d980}{timsort\+\_\+gallop\+\_\+right} (void $\ast$src, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$), size\+\_\+t base, size\+\_\+t limit, void $\ast$target)
+\begin{DoxyCompactList}\small\item\em Gallop left to right to find slice of elements in source array less than target. \end{DoxyCompactList}\item 
+void \hyperlink{group__Timsort_ga5f8c1d718a58791f523430113eb5616e}{timsort\+\_\+merge\+\_\+runs\+\_\+hi} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$), size\+\_\+t lo, size\+\_\+t lo\+\_\+len, size\+\_\+t hi, size\+\_\+t hi\+\_\+len, \hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$ms)
+\begin{DoxyCompactList}\small\item\em Merge two consecutive runs from right to left. \end{DoxyCompactList}\item 
+size\+\_\+t \hyperlink{group__Timsort_ga61e102d0fe24f871260f90f9e40ba807}{timsort\+\_\+gallop\+\_\+left} (void $\ast$src, size\+\_\+t size, int($\ast$compare)(const void $\ast$, const void $\ast$), size\+\_\+t base, size\+\_\+t limit, void $\ast$target)
+\begin{DoxyCompactList}\small\item\em Gallop right to left to find slice of elements in source array greater than target. \end{DoxyCompactList}\item 
 size\+\_\+t \hyperlink{group__Timsort_ga7d1b40d5d91736aa4b5362896cdc68f3}{timsort\+\_\+minrun} (size\+\_\+t nelems)
-\begin{DoxyCompactList}\small\item\em Find minimum run size to use in timsort. \end{DoxyCompactList}\item 
-int \hyperlink{group__Timsort_gac83afa31d70a068091adc4a017b08602}{timsort\+\_\+binary\+\_\+search} (void $\ast$arr, size\+\_\+t size, int($\ast$compare)(void $\ast$, void $\ast$), size\+\_\+t lo, size\+\_\+t hi, void $\ast$target)
-\begin{DoxyCompactList}\small\item\em Find position of element within array using binary search. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Find minimum run size to use in timsort. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -38,23 +43,26 @@ Timsort implementations.
 
 
 \subsection{Function Documentation}
-\mbox{\Hypertarget{group__Timsort_gae421187852c6c109058362a81539de0f}\label{group__Timsort_gae421187852c6c109058362a81539de0f}} 
+\mbox{\Hypertarget{group__Timsort_ga1c9fca70060e37617156b89b387aa4d3}\label{group__Timsort_ga1c9fca70060e37617156b89b387aa4d3}} 
 \index{Timsorts@{Timsorts}!timsort@{timsort}}
 \index{timsort@{timsort}!Timsorts@{Timsorts}}
 \subsubsection{\texorpdfstring{timsort()}{timsort()}}
-{\footnotesize\ttfamily void timsort (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{nelems,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void timsort (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{nelems,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare }\end{DoxyParamCaption})}
 
 
 
 Sort generic array using Timsort. 
 
-Timsort (developed by Tim Peters) is a hybrid stable sorting algorithm. Timsort uses a combination of insertion sort and merge sort to first organize the array into roughly equal length runs of ascending elements and then merge those runs into a single sorted run. The algorithm proceeds through the following steps\+:
+Timsort (developed by Tim Peters) is a hybrid stable sorting algorithm, combining insertion sort and an optimized merge sort. The algorithm proceeds as follows\+:
 
 
 \begin{DoxyItemize}
 \item If array to sort is shorter than 64 elements\+:
 \begin{DoxyEnumerate}
 \item Defer to insertion sort.
+\begin{DoxyItemize}
+\item When array is this short, minrun will equal the length of the array. As such, timsort offers no benefit over insertion sort in this case.
+\end{DoxyItemize}
 \end{DoxyEnumerate}
 \item Otherwise
 \begin{DoxyEnumerate}
@@ -65,11 +73,15 @@ Timsort (developed by Tim Peters) is a hybrid stable sorting algorithm. Timsort 
 \item Initialize a struct to represent merge state for the duration of the sort.
 \item Find (or create if necessary) runs of at least minrun length. All runs are sorted to be ascending if they aren\textquotesingle{}t already.
 \begin{DoxyItemize}
-\item On finding a run, push it onto the runs stack and check to see if run invariants still hold. Merge runs until they do.
+\item On finding a run, push it onto the runs stack. Once there, check that the run invariants still hold. If they do not, perform specific merge operations until they do. Maintaining run invariants ensures that the runs stack is kept small, that the sort is stable, and that runs are kept at similar sizes for more balanced merges.
 \end{DoxyItemize}
-\item Collapse the remaining runs in the runs stack into a single sorted run.
+\item Merge the remaining runs in the runs stack into a single sorted run.
 \end{DoxyEnumerate}
 \end{DoxyItemize}
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000001}{Todo}]The runs array is much larger than it needs to be. Technically, the number of unmerged runs shouldn\textquotesingle{}t grow larger than log base phi of N, where phi = (1 + sqrt(5))/2 (golden ratio). However, computing this for large N is expensive, and so for the moment I\textquotesingle{}ve opted only to use (N / minrun) + 1. This value is the maximum number of unmerged runs that could exist in the array without merging. \end{DoxyRefDesc}
+
 
 
 \begin{DoxyParams}{Parameters}
@@ -86,67 +98,35 @@ Timsort (developed by Tim Peters) is a hybrid stable sorting algorithm. Timsort 
 Void.
 \end{DoxyReturn}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__Timsort_ga7d1b40d5d91736aa4b5362896cdc68f3}{timsort\+\_\+minrun} 
+\hyperlink{group__Timsort_ga7d1b40d5d91736aa4b5362896cdc68f3}{timsort\+\_\+minrun()} 
 
-\hyperlink{group__Timsort_ga95a12fa41d6574d3350a908cf0fcb63d}{timsort\+\_\+find\+\_\+runs} 
+\hyperlink{group__Timsort_ga17b4bb9f7e1875e9e9e4c250b5b83482}{timsort\+\_\+find\+\_\+runs()} 
 
-\hyperlink{group__Timsort_gac2adf9d2399deb49f6c8bb71ef13829f}{timsort\+\_\+check\+\_\+invariants} 
+\hyperlink{group__Timsort_ga739626860caf26ad6fbe52f9dcb0806c}{timsort\+\_\+check\+\_\+invariants()} 
 
-\hyperlink{group__Timsort_gabbc386bb95547fd09350b3aaf72c8e26}{timsort\+\_\+collapse\+\_\+runs} 
+\hyperlink{group__Timsort_gaf7991b9ef4ee31db5ae9f1fba5c04a15}{timsort\+\_\+collapse\+\_\+runs()} 
+
+\hyperlink{group__InsertionSort_ga53e65861396bb4c67c0142dd41374727}{binary\+\_\+insert\+\_\+sort()} 
 \end{DoxySeeAlso}
-\mbox{\Hypertarget{group__Timsort_gac83afa31d70a068091adc4a017b08602}\label{group__Timsort_gac83afa31d70a068091adc4a017b08602}} 
-\index{Timsorts@{Timsorts}!timsort\+\_\+binary\+\_\+search@{timsort\+\_\+binary\+\_\+search}}
-\index{timsort\+\_\+binary\+\_\+search@{timsort\+\_\+binary\+\_\+search}!Timsorts@{Timsorts}}
-\subsubsection{\texorpdfstring{timsort\+\_\+binary\+\_\+search()}{timsort\_binary\_search()}}
-{\footnotesize\ttfamily int timsort\+\_\+binary\+\_\+search (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{hi,  }\item[{void $\ast$}]{target }\end{DoxyParamCaption})}
-
-
-
-Find position of element within array using binary search. 
-
-Used in Timsort when galloping. When this version of binary search fails to find the element being search for, it just returns \textquotesingle{}l\textquotesingle{}. Comparisons between the target and the value at arr\mbox{[}l\mbox{]} are left to galloping functions.
-
-
-\begin{DoxyParams}{Parameters}
-{\em arr} & Array to be searched. \\
-\hline
-{\em size} & Size of each element in array. \\
-\hline
-{\em compare} & Function for comparing elements. \\
-\hline
-{\em lo} & Lower index bound for searching. \\
-\hline
-{\em hi} & Upper index bound for searching. \\
-\hline
-{\em target} & Element to search for. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Index where element either is, or should be, located in the array.
-\end{DoxyReturn}
-\begin{DoxySeeAlso}{See also}
-\hyperlink{group__Timsort_gae421187852c6c109058362a81539de0f}{timsort} 
-
-\hyperlink{group__Timsort_ga503a8e66f4c150e73b2b37980996cae0}{timsort\+\_\+gallop\+\_\+left} 
-
-\hyperlink{group__Timsort_gaa2295bcc1b001663881a0ad6c20d6d7a}{timsort\+\_\+gallop\+\_\+right} 
-\end{DoxySeeAlso}
-\mbox{\Hypertarget{group__Timsort_gac2adf9d2399deb49f6c8bb71ef13829f}\label{group__Timsort_gac2adf9d2399deb49f6c8bb71ef13829f}} 
+\mbox{\Hypertarget{group__Timsort_ga739626860caf26ad6fbe52f9dcb0806c}\label{group__Timsort_ga739626860caf26ad6fbe52f9dcb0806c}} 
 \index{Timsorts@{Timsorts}!timsort\+\_\+check\+\_\+invariants@{timsort\+\_\+check\+\_\+invariants}}
 \index{timsort\+\_\+check\+\_\+invariants@{timsort\+\_\+check\+\_\+invariants}!Timsorts@{Timsorts}}
 \subsubsection{\texorpdfstring{timsort\+\_\+check\+\_\+invariants()}{timsort\_check\_invariants()}}
-{\footnotesize\ttfamily void timsort\+\_\+check\+\_\+invariants (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare,  }\item[{\hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$}]{merge\+\_\+state }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void timsort\+\_\+check\+\_\+invariants (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare,  }\item[{\hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$}]{ms }\end{DoxyParamCaption})}
 
 
 
-Check that run invariants hold and update runs stack if they do not. 
+Maintain run invariants to ensure stable, balanced merges. 
 
-Suppose the runs stack has at least 3 runs and let X, Y and Z be the top 3 runs, ordered from right to left. Then the following must hold\+:
+Let X, Y and Z be the top 3 runs in the run stack, ordered from left to right. Then the following must hold\+:
 \begin{DoxyEnumerate}
 \item $\vert$\+X$\vert$ $>$ $\vert$\+Y$\vert$ + $\vert$\+Z$\vert$
 \item $\vert$\+Y$\vert$ $>$ $\vert$\+Z$\vert$ If either invariant fails to hold, merge Y with smaller of X and Z and push new merged value onto stack, maintaing order.
 \end{DoxyEnumerate}
 
+\begin{DoxyNote}{Note}
+If the runs stack contains only 2 runs, we still check that the second invariant holds.
+\end{DoxyNote}
 
 \begin{DoxyParams}{Parameters}
 {\em arr} & Array containing runs. \\
@@ -155,22 +135,22 @@ Suppose the runs stack has at least 3 runs and let X, Y and Z be the top 3 runs,
 \hline
 {\em compare} & Function to compare elements. \\
 \hline
-{\em merge\+\_\+state} & Struct containing information about merges and runs. \\
+{\em ms} & Struct containing information about merges and runs. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 Void.
 \end{DoxyReturn}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__Timsort_gae421187852c6c109058362a81539de0f}{timsort} 
+\hyperlink{group__Timsort_ga1c9fca70060e37617156b89b387aa4d3}{timsort()} 
 
-\hyperlink{group__Timsort_gac2adf9d2399deb49f6c8bb71ef13829f}{timsort\+\_\+check\+\_\+invariants} 
+\hyperlink{group__Timsort_ga17b4bb9f7e1875e9e9e4c250b5b83482}{timsort\+\_\+find\+\_\+runs()} 
 \end{DoxySeeAlso}
-\mbox{\Hypertarget{group__Timsort_gabbc386bb95547fd09350b3aaf72c8e26}\label{group__Timsort_gabbc386bb95547fd09350b3aaf72c8e26}} 
+\mbox{\Hypertarget{group__Timsort_gaf7991b9ef4ee31db5ae9f1fba5c04a15}\label{group__Timsort_gaf7991b9ef4ee31db5ae9f1fba5c04a15}} 
 \index{Timsorts@{Timsorts}!timsort\+\_\+collapse\+\_\+runs@{timsort\+\_\+collapse\+\_\+runs}}
 \index{timsort\+\_\+collapse\+\_\+runs@{timsort\+\_\+collapse\+\_\+runs}!Timsorts@{Timsorts}}
 \subsubsection{\texorpdfstring{timsort\+\_\+collapse\+\_\+runs()}{timsort\_collapse\_runs()}}
-{\footnotesize\ttfamily void timsort\+\_\+collapse\+\_\+runs (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare,  }\item[{\hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$}]{merge\+\_\+state }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void timsort\+\_\+collapse\+\_\+runs (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare,  }\item[{\hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$}]{ms }\end{DoxyParamCaption})}
 
 
 
@@ -186,32 +166,34 @@ Once all the runs have been merged, the array will be fully sorted.
 \hline
 {\em compare} & Function to compare elements. \\
 \hline
-{\em merge\+\_\+state} & Struct containing information about merges and runs. \\
+{\em ms} & Struct containing information about merges and runs. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 Void.
 \end{DoxyReturn}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__Timsort_gae421187852c6c109058362a81539de0f}{timsort} 
+\hyperlink{group__Timsort_ga1c9fca70060e37617156b89b387aa4d3}{timsort()} 
 
-\hyperlink{group__Timsort_ga0be2dffcafd8880d305fd0c7d9f87fd7}{timsort\+\_\+merge\+\_\+runs} 
+\hyperlink{group__Timsort_ga08929ad9e29cde3f24660fef3b08191c}{timsort\+\_\+merge\+\_\+runs()} 
 \end{DoxySeeAlso}
-\mbox{\Hypertarget{group__Timsort_ga95a12fa41d6574d3350a908cf0fcb63d}\label{group__Timsort_ga95a12fa41d6574d3350a908cf0fcb63d}} 
+\mbox{\Hypertarget{group__Timsort_ga17b4bb9f7e1875e9e9e4c250b5b83482}\label{group__Timsort_ga17b4bb9f7e1875e9e9e4c250b5b83482}} 
 \index{Timsorts@{Timsorts}!timsort\+\_\+find\+\_\+runs@{timsort\+\_\+find\+\_\+runs}}
 \index{timsort\+\_\+find\+\_\+runs@{timsort\+\_\+find\+\_\+runs}!Timsorts@{Timsorts}}
 \subsubsection{\texorpdfstring{timsort\+\_\+find\+\_\+runs()}{timsort\_find\_runs()}}
-{\footnotesize\ttfamily void timsort\+\_\+find\+\_\+runs (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{nelems,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{minrun,  }\item[{\hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$}]{merge\+\_\+state }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void timsort\+\_\+find\+\_\+runs (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{nelems,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{minrun,  }\item[{\hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$}]{ms }\end{DoxyParamCaption})}
 
 
 
-Find runs of either strictly descending or non-\/descending elements. 
+Find runs of elements in the array. 
+
+A run is a sequence of either either strictly descending or non-\/descending elements. Because for any sequence of elements \{i, i+1\}, either arr\mbox{[}i\mbox{]} $>$ arr\mbox{[}i + 1\mbox{]} or arr\mbox{[}i\mbox{]} $<$= arr\mbox{[}i +1\mbox{]}, a run is always occuring.
 
 Runs must be at least minrun elements long. If a run is shorter than this, it is extended using consecutive elements. There is one exception; the last run may be shorter if there are not enough elements to pad out its length.
 
 Importantly, all runs must be non-\/descending before they can be pushed onto the runs stack -\/ runs which are descending are reveresed before they are pushed.
 
-Once a new run has been found and pushed on the runs stack, the function calls \hyperlink{group__Timsort_gac2adf9d2399deb49f6c8bb71ef13829f}{timsort\+\_\+check\+\_\+invariants()} to ensure that the run invariants still hold.
+Once a new run has been found and pushed on the runs stack, the function calls \hyperlink{group__Timsort_ga739626860caf26ad6fbe52f9dcb0806c}{timsort\+\_\+check\+\_\+invariants()} to ensure that the run invariants still hold.
 
 
 \begin{DoxyParams}{Parameters}
@@ -225,27 +207,38 @@ Once a new run has been found and pushed on the runs stack, the function calls \
 \hline
 {\em minrun} & Minimum acceptable run length. \\
 \hline
-{\em merge\+\_\+state} & Struct containing information about merges and runs. \\
+{\em ms} & Struct containing information about merges and runs. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 Void.
 \end{DoxyReturn}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__Timsort_gae421187852c6c109058362a81539de0f}{timsort} 
+\hyperlink{group__Timsort_ga1c9fca70060e37617156b89b387aa4d3}{timsort()} 
 
-\hyperlink{group__Timsort_gac2adf9d2399deb49f6c8bb71ef13829f}{timsort\+\_\+check\+\_\+invariants} 
+\hyperlink{group__Timsort_ga739626860caf26ad6fbe52f9dcb0806c}{timsort\+\_\+check\+\_\+invariants()} 
 \end{DoxySeeAlso}
-\mbox{\Hypertarget{group__Timsort_ga503a8e66f4c150e73b2b37980996cae0}\label{group__Timsort_ga503a8e66f4c150e73b2b37980996cae0}} 
+\mbox{\Hypertarget{group__Timsort_ga61e102d0fe24f871260f90f9e40ba807}\label{group__Timsort_ga61e102d0fe24f871260f90f9e40ba807}} 
 \index{Timsorts@{Timsorts}!timsort\+\_\+gallop\+\_\+left@{timsort\+\_\+gallop\+\_\+left}}
 \index{timsort\+\_\+gallop\+\_\+left@{timsort\+\_\+gallop\+\_\+left}!Timsorts@{Timsorts}}
 \subsubsection{\texorpdfstring{timsort\+\_\+gallop\+\_\+left()}{timsort\_gallop\_left()}}
-{\footnotesize\ttfamily int timsort\+\_\+gallop\+\_\+left (\begin{DoxyParamCaption}\item[{void $\ast$}]{src,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare,  }\item[{int}]{base,  }\item[{int}]{limit,  }\item[{void $\ast$}]{target }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily size\+\_\+t timsort\+\_\+gallop\+\_\+left (\begin{DoxyParamCaption}\item[{void $\ast$}]{src,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{base,  }\item[{size\+\_\+t}]{limit,  }\item[{void $\ast$}]{target }\end{DoxyParamCaption})}
 
 
 
-Gallop right-\/$>$left to find number of elements in source array greater than target. 
+Gallop right to left to find slice of elements in source array greater than target. 
 
+In order to find this slice, we need to find the number of elements in the source array greater than the target. Given that the source array is sorted and ascending, it suffices to find where the target would be located in the source array.
+
+To determine this location, we perform a pair of searches\+:
+\begin{DoxyEnumerate}
+\item We first perform an exponential search to find the value k such that base -\/ ((2$^\wedge$(k) -\/ 1) $\ast$ size $<$ target $<$= base -\/ ((2$^\wedge$(k-\/1) -\/ 1) $\ast$ size). This condenses the range of values in which the target must lie.
+\item We then perform binary search using this range.
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+The slice is a memory offset corresponding to the total size of these elements.
+\end{DoxyNote}
 
 \begin{DoxyParams}{Parameters}
 {\em src} & Array to gallop over. \\
@@ -254,31 +247,42 @@ Gallop right-\/$>$left to find number of elements in source array greater than t
 \hline
 {\em compare} & Function to compare elements. \\
 \hline
-{\em base} & Index to begin gallop. \\
+{\em base} & Initial offset to begin gallop. \\
 \hline
-{\em limit} & Index limit for galloping. \\
+{\em limit} & Maximum offset for galloping (inclusive). \\
 \hline
 {\em target} & Target element. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Number of elements in souce array greater than target.
+Total size of elements in souce array greater than target.
 \end{DoxyReturn}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__Timsort_gae421187852c6c109058362a81539de0f}{timsort} 
+\hyperlink{group__Timsort_ga1c9fca70060e37617156b89b387aa4d3}{timsort()} 
 
-\hyperlink{group__Timsort_ga82043845fa8abc3c91332008ddbb4b55}{timsort\+\_\+merge\+\_\+runs\+\_\+hi} 
+\hyperlink{group__Timsort_ga5f8c1d718a58791f523430113eb5616e}{timsort\+\_\+merge\+\_\+runs\+\_\+hi()} 
 \end{DoxySeeAlso}
-\mbox{\Hypertarget{group__Timsort_gaa2295bcc1b001663881a0ad6c20d6d7a}\label{group__Timsort_gaa2295bcc1b001663881a0ad6c20d6d7a}} 
+\mbox{\Hypertarget{group__Timsort_gaf272b7c7b32279bc6aa2010330e7d980}\label{group__Timsort_gaf272b7c7b32279bc6aa2010330e7d980}} 
 \index{Timsorts@{Timsorts}!timsort\+\_\+gallop\+\_\+right@{timsort\+\_\+gallop\+\_\+right}}
 \index{timsort\+\_\+gallop\+\_\+right@{timsort\+\_\+gallop\+\_\+right}!Timsorts@{Timsorts}}
 \subsubsection{\texorpdfstring{timsort\+\_\+gallop\+\_\+right()}{timsort\_gallop\_right()}}
-{\footnotesize\ttfamily int timsort\+\_\+gallop\+\_\+right (\begin{DoxyParamCaption}\item[{void $\ast$}]{src,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare,  }\item[{int}]{base,  }\item[{int}]{limit,  }\item[{void $\ast$}]{target }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily size\+\_\+t timsort\+\_\+gallop\+\_\+right (\begin{DoxyParamCaption}\item[{void $\ast$}]{src,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{base,  }\item[{size\+\_\+t}]{limit,  }\item[{void $\ast$}]{target }\end{DoxyParamCaption})}
 
 
 
-Gallop left-\/$>$right to find number of elements in source array less than target. 
+Gallop left to right to find slice of elements in source array less than target. 
 
+In order to find this slice, we need to find the number of elements in the source array smaller than the target. Given that the source array is sorted and ascendingr, it suffices to find where the target would be located in the source array.
+
+To determine this location, we perform a pair of searches\+:
+\begin{DoxyEnumerate}
+\item We first perform an exponential search to find the value k such that base + ((2$^\wedge$(k-\/1) -\/ 1) $\ast$ size $<$ target $<$= base + ((2$^\wedge$k -\/ 1) $\ast$ size). This condenses the range of values in which the target must lie.
+\item We then perform binary search using this range.
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+The slice is a memory offset corresponding to the total size of these elements.
+\end{DoxyNote}
 
 \begin{DoxyParams}{Parameters}
 {\em src} & Array to gallop over. \\
@@ -287,30 +291,32 @@ Gallop left-\/$>$right to find number of elements in source array less than targ
 \hline
 {\em compare} & Function to compare elements. \\
 \hline
-{\em base} & Index to begin gallop. \\
+{\em base} & Initial offset to begin gallop. \\
 \hline
-{\em limit} & Index limit for galloping. \\
+{\em limit} & Maximum offset for galloping (inclusive). \\
 \hline
 {\em target} & Target element. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Number of elements in source array less than target.
+Total size of elements in source array less than target.
 \end{DoxyReturn}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__Timsort_gae421187852c6c109058362a81539de0f}{timsort} 
+\hyperlink{group__Timsort_ga1c9fca70060e37617156b89b387aa4d3}{timsort()} 
 
-\hyperlink{group__Timsort_ga18534dcb0fb5689af44c3309a44a4968}{timsort\+\_\+merge\+\_\+runs\+\_\+lo} 
+\hyperlink{group__Timsort_ga9ed838122eff00630e9551003d73a56f}{timsort\+\_\+merge\+\_\+runs\+\_\+lo()} 
 \end{DoxySeeAlso}
-\mbox{\Hypertarget{group__Timsort_ga0be2dffcafd8880d305fd0c7d9f87fd7}\label{group__Timsort_ga0be2dffcafd8880d305fd0c7d9f87fd7}} 
+\mbox{\Hypertarget{group__Timsort_ga08929ad9e29cde3f24660fef3b08191c}\label{group__Timsort_ga08929ad9e29cde3f24660fef3b08191c}} 
 \index{Timsorts@{Timsorts}!timsort\+\_\+merge\+\_\+runs@{timsort\+\_\+merge\+\_\+runs}}
 \index{timsort\+\_\+merge\+\_\+runs@{timsort\+\_\+merge\+\_\+runs}!Timsorts@{Timsorts}}
 \subsubsection{\texorpdfstring{timsort\+\_\+merge\+\_\+runs()}{timsort\_merge\_runs()}}
-{\footnotesize\ttfamily \hyperlink{structTimsortRun}{Timsort\+Run}$\ast$ timsort\+\_\+merge\+\_\+runs (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare,  }\item[{\hyperlink{structTimsortRun}{Timsort\+Run} $\ast$}]{frst,  }\item[{\hyperlink{structTimsortRun}{Timsort\+Run} $\ast$}]{scnd,  }\item[{\hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$}]{merge\+\_\+state }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void timsort\+\_\+merge\+\_\+runs (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare,  }\item[{\hyperlink{structTimsortRun}{Timsort\+Run} $\ast$}]{left,  }\item[{\hyperlink{structTimsortRun}{Timsort\+Run} $\ast$}]{right,  }\item[{\hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$}]{ms }\end{DoxyParamCaption})}
 
 
 
-Merge 2 consecutive runs. 
+Merge two consecutive runs. 
+
+To optimize merges, the function first finds the locations of right\mbox{[}0\mbox{]} in left\mbox{[}\mbox{]} (lo), and left\mbox{[}max\mbox{]} in right\mbox{[}\mbox{]} (hi). As runs are increasing, all values in left\mbox{[}\mbox{]} before \textquotesingle{}lo\textquotesingle{} are smaller than all value in right\mbox{[}\mbox{]}, and likewise all values in right above \textquotesingle{}hi\textquotesingle{} are greater than all values in left\mbox{[}\mbox{]}. These values can be ignored during the merge.
 
 
 \begin{DoxyParams}{Parameters}
@@ -320,38 +326,52 @@ Merge 2 consecutive runs.
 \hline
 {\em compare} & Function to compare elements. \\
 \hline
-{\em frst} & Leftmost run. \\
+{\em left} & Leftmost run. \\
 \hline
-{\em scnd} & Rightmost run. \\
+{\em right} & Rightmost run. \\
 \hline
-{\em merge\+\_\+state} & Struct containing information about merges and runs. \\
+{\em ms} & Struct containing information about merges and runs. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Pointer to first run, now with length updated to include second\textquotesingle{}s.
+Pointer to left run, now with length updated to include right\textquotesingle{}s.
 \end{DoxyReturn}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__Timsort_gae421187852c6c109058362a81539de0f}{timsort} 
+\hyperlink{group__Timsort_ga1c9fca70060e37617156b89b387aa4d3}{timsort()} 
 
-\hyperlink{group__Timsort_gac2adf9d2399deb49f6c8bb71ef13829f}{timsort\+\_\+check\+\_\+invariants} 
+\hyperlink{group__Timsort_ga739626860caf26ad6fbe52f9dcb0806c}{timsort\+\_\+check\+\_\+invariants()} 
 
-\hyperlink{group__Timsort_gabbc386bb95547fd09350b3aaf72c8e26}{timsort\+\_\+collapse\+\_\+runs} 
+\hyperlink{group__Timsort_gaf7991b9ef4ee31db5ae9f1fba5c04a15}{timsort\+\_\+collapse\+\_\+runs()} 
 
-\hyperlink{group__Timsort_ga18534dcb0fb5689af44c3309a44a4968}{timsort\+\_\+merge\+\_\+runs\+\_\+lo} 
+\hyperlink{group__Timsort_ga9ed838122eff00630e9551003d73a56f}{timsort\+\_\+merge\+\_\+runs\+\_\+lo()} 
 
-\hyperlink{group__Timsort_ga82043845fa8abc3c91332008ddbb4b55}{timsort\+\_\+merge\+\_\+runs\+\_\+hi} 
+\hyperlink{group__Timsort_ga5f8c1d718a58791f523430113eb5616e}{timsort\+\_\+merge\+\_\+runs\+\_\+hi()} 
+
+\hyperlink{group__SortingHelper_ga347d3eac5748d59424afd8566181fc27}{bin\+\_\+search\+\_\+loc()} 
 \end{DoxySeeAlso}
-\mbox{\Hypertarget{group__Timsort_ga82043845fa8abc3c91332008ddbb4b55}\label{group__Timsort_ga82043845fa8abc3c91332008ddbb4b55}} 
+\mbox{\Hypertarget{group__Timsort_ga5f8c1d718a58791f523430113eb5616e}\label{group__Timsort_ga5f8c1d718a58791f523430113eb5616e}} 
 \index{Timsorts@{Timsorts}!timsort\+\_\+merge\+\_\+runs\+\_\+hi@{timsort\+\_\+merge\+\_\+runs\+\_\+hi}}
 \index{timsort\+\_\+merge\+\_\+runs\+\_\+hi@{timsort\+\_\+merge\+\_\+runs\+\_\+hi}!Timsorts@{Timsorts}}
 \subsubsection{\texorpdfstring{timsort\+\_\+merge\+\_\+runs\+\_\+hi()}{timsort\_merge\_runs\_hi()}}
-{\footnotesize\ttfamily void timsort\+\_\+merge\+\_\+runs\+\_\+hi (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{lo\+\_\+len,  }\item[{size\+\_\+t}]{hi,  }\item[{size\+\_\+t}]{hi\+\_\+len,  }\item[{\hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$}]{merge\+\_\+state }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void timsort\+\_\+merge\+\_\+runs\+\_\+hi (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{lo\+\_\+len,  }\item[{size\+\_\+t}]{hi,  }\item[{size\+\_\+t}]{hi\+\_\+len,  }\item[{\hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$}]{ms }\end{DoxyParamCaption})}
 
 
 
-Merge runs from right to left. 
+Merge two consecutive runs from right to left. 
 
-Called when the rightmost run is smaller than the leftmost run.
+This function is called when the rightmost run is smaller than the leftmost run. There are two modes in which merges can be performed\+:
+
+Standard mode\+: Standard merge sort where elements are compared one-\/to-\/one. During this mode, we keep track of the \char`\"{}winning\char`\"{} array. If an array has \char`\"{}won\char`\"{} more than the ms-\/$>$min\+\_\+gallop, we enter galloping mode.
+
+Galloping Mode (galloping left)\+: In galloping mode, merges are performed as a pair of operations\+:
+\begin{DoxyEnumerate}
+\item Find the location of right\mbox{[}max\mbox{]} in left\mbox{[}\mbox{]}. Merge all values (slice1) in left\mbox{[}\mbox{]} down to this point and then merge right\mbox{[}max\mbox{]}.
+\item Find the location of left\mbox{[}max\mbox{]} in right\mbox{[}\mbox{]}. Merge all values (slice2) in right\mbox{[}\mbox{]} down to this point and then merge left\mbox{[}max\mbox{]}. Note\+: The runs left\mbox{[}\mbox{]} and right\mbox{[}\mbox{]} are altered between these operations.
+\end{DoxyEnumerate}
+
+Galloping mode lets us take advantage of subruns in data, and by performing merges in bulk, can be quite efficient for certain types of data. However, galloping is not always effective. In particular, it is not at all efficient with random data.
+
+To account for this, we check after the above operations that slice1 and slice2 are both sufficiently large -\/ at least as large as ms-\/$>$min\+\_\+gallop $\ast$ element\+\_\+size. If this is the case, then galloping mode was effective and we decrement ms-\/$>$min\+\_\+gallop to make subsequent returns to galloping mode easier. If this wasn\textquotesingle{}t the case, we exit galloping mode and increment ms-\/$>$min\+\_\+gallop to make entering galloping mode harder. In this way, the algorithm quickly reacts to data for which galloping is ill-\/suited and limits its effect on performance.
 
 
 \begin{DoxyParams}{Parameters}
@@ -369,34 +389,42 @@ Called when the rightmost run is smaller than the leftmost run.
 \hline
 {\em hi\+\_\+len} & Length of smaller rightmost run. \\
 \hline
-{\em merge\+\_\+state} & Struct containing information about merges and runs. \\
+{\em ms} & Struct containing information about merges and runs. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 Void.
 \end{DoxyReturn}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__Timsort_gae421187852c6c109058362a81539de0f}{timsort} 
+\hyperlink{group__Timsort_ga1c9fca70060e37617156b89b387aa4d3}{timsort()} 
 
-\hyperlink{group__Timsort_ga0be2dffcafd8880d305fd0c7d9f87fd7}{timsort\+\_\+merge\+\_\+runs} 
+\hyperlink{group__Timsort_ga08929ad9e29cde3f24660fef3b08191c}{timsort\+\_\+merge\+\_\+runs()} 
 
-\hyperlink{group__Timsort_ga503a8e66f4c150e73b2b37980996cae0}{timsort\+\_\+gallop\+\_\+left} 
+\hyperlink{group__Timsort_ga61e102d0fe24f871260f90f9e40ba807}{timsort\+\_\+gallop\+\_\+left()} 
 \end{DoxySeeAlso}
-\mbox{\Hypertarget{group__Timsort_ga18534dcb0fb5689af44c3309a44a4968}\label{group__Timsort_ga18534dcb0fb5689af44c3309a44a4968}} 
+\mbox{\Hypertarget{group__Timsort_ga9ed838122eff00630e9551003d73a56f}\label{group__Timsort_ga9ed838122eff00630e9551003d73a56f}} 
 \index{Timsorts@{Timsorts}!timsort\+\_\+merge\+\_\+runs\+\_\+lo@{timsort\+\_\+merge\+\_\+runs\+\_\+lo}}
 \index{timsort\+\_\+merge\+\_\+runs\+\_\+lo@{timsort\+\_\+merge\+\_\+runs\+\_\+lo}!Timsorts@{Timsorts}}
 \subsubsection{\texorpdfstring{timsort\+\_\+merge\+\_\+runs\+\_\+lo()}{timsort\_merge\_runs\_lo()}}
-{\footnotesize\ttfamily void timsort\+\_\+merge\+\_\+runs\+\_\+lo (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(void $\ast$, void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{lo\+\_\+len,  }\item[{size\+\_\+t}]{hi,  }\item[{size\+\_\+t}]{hi\+\_\+len,  }\item[{\hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$}]{merge\+\_\+state }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void timsort\+\_\+merge\+\_\+runs\+\_\+lo (\begin{DoxyParamCaption}\item[{void $\ast$}]{arr,  }\item[{size\+\_\+t}]{size,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare,  }\item[{size\+\_\+t}]{lo,  }\item[{size\+\_\+t}]{lo\+\_\+len,  }\item[{size\+\_\+t}]{hi,  }\item[{size\+\_\+t}]{hi\+\_\+len,  }\item[{\hyperlink{structTimsortMergeState}{Timsort\+Merge\+State} $\ast$}]{ms }\end{DoxyParamCaption})}
 
 
 
-Merge runs from left to right. 
+Merge two consecutive runs from left to right. 
 
-Called when the leftmost run is smaller than the rightmost run. There are two modes in which merges can be performed\+:
+This function is called when the leftmost run is smaller than the rightmost run. There are two modes in which merges can be performed\+:
 
-Standard mode\+: Standard merge sort where elements are compared one-\/to-\/one. During this mode, we keep track of the \char`\"{}winning\char`\"{} array. If an array has \char`\"{}won\char`\"{} more than the merge\+\_\+state-\/$>$min\+\_\+gallop, we enter galloping mode.
+Standard mode\+: Standard merge sort where elements are compared one-\/to-\/one. During this mode, we keep track of the \char`\"{}winning\char`\"{} array. If an array has \char`\"{}won\char`\"{} more than the ms-\/$>$min\+\_\+gallop, we enter galloping mode.
 
-Galloping Mode\+: Let A and B be two runs, A the smaller run. Let k be the index to merge into in the main array, l be the initial index of A, and r the initial index of B. We first find the location of A\mbox{[}l\mbox{]} in B. We then merge values from B up to this index into the main array (the number of elements is slice1). We then merge A\mbox{[}l\mbox{]}. We then increment k, l, and r to account for the merged elements. Next, we find the location of B\mbox{[}r\mbox{]} in A and perform a similar operation (number of elements from A is slice2). Again, we increment k, l and r to account for the merged elements. After all of this, we check that slice1 and slice2 are both $>$= merge\+\_\+state-\/$>$min\+\_\+run. If so, we decrement merge\+\_\+state-\/$>$min\+\_\+run to make entering into galloping mode easier. If not, we increment merge\+\_\+state-\/$>$min\+\_\+run to make entering galloping mode harder and we exit out of galloping mode.
+Galloping Mode (galloping right)\+: In galloping mode, merges are performed as a pair of operations\+:
+\begin{DoxyEnumerate}
+\item Find the location of left\mbox{[}0\mbox{]} in right\mbox{[}\mbox{]}. Merge all values (slice1) in right\mbox{[}\mbox{]} up to this point and then merge left\mbox{[}0\mbox{]}.
+\item Find the location of right\mbox{[}0\mbox{]} in left\mbox{[}\mbox{]}. Merge all values (slice2) in left\mbox{[}\mbox{]} up to this point and then merge right\mbox{[}0\mbox{]}. Note\+: The runs left\mbox{[}\mbox{]} and right\mbox{[}\mbox{]} are altered between these operations.
+\end{DoxyEnumerate}
+
+Galloping mode lets us take advantage of subruns in data, and by performing merges in bulk, can be quite efficient for certain types of data. However, galloping is not always effective. In particular, it is not at all efficient with random data.
+
+To account for this, we check after the above operations that slice1 and slice2 are both sufficiently large -\/ at least as large as ms-\/$>$min\+\_\+gallop $\ast$ element\+\_\+size. If this is the case, then galloping mode was effective and we decrement ms-\/$>$min\+\_\+gallop to make subsequent returns to galloping mode easier. If this wasn\textquotesingle{}t the case, we exit galloping mode and increment ms-\/$>$min\+\_\+gallop to make entering galloping mode harder. In this way, the algorithm quickly reacts to data for which galloping is ill-\/suited and limits its effect on performance.
 
 
 \begin{DoxyParams}{Parameters}
@@ -406,26 +434,26 @@ Galloping Mode\+: Let A and B be two runs, A the smaller run. Let k be the index
 \hline
 {\em compare} & Function to compare elements. \\
 \hline
-{\em lo} & Lower index bound of merge (inclusive). \\
+{\em lo} & Lower bound of merge (inclusive). \\
 \hline
 {\em lo\+\_\+len} & Length of smaller leftmost run. \\
 \hline
-{\em hi} & Upper index bound of merge (inclusive). \\
+{\em hi} & Upper bound of merge (inclusive). \\
 \hline
 {\em hi\+\_\+len} & Length of larger rightmost run. \\
 \hline
-{\em merge\+\_\+state} & Struct containing information about merges and runs. \\
+{\em ms} & Struct containing information about merges and runs. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 Void.
 \end{DoxyReturn}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__Timsort_gae421187852c6c109058362a81539de0f}{timsort} 
+\hyperlink{group__Timsort_ga1c9fca70060e37617156b89b387aa4d3}{timsort()} 
 
-\hyperlink{group__Timsort_ga0be2dffcafd8880d305fd0c7d9f87fd7}{timsort\+\_\+merge\+\_\+runs} 
+\hyperlink{group__Timsort_ga08929ad9e29cde3f24660fef3b08191c}{timsort\+\_\+merge\+\_\+runs()} 
 
-\hyperlink{group__Timsort_gaa2295bcc1b001663881a0ad6c20d6d7a}{timsort\+\_\+gallop\+\_\+right} 
+\hyperlink{group__Timsort_gaf272b7c7b32279bc6aa2010330e7d980}{timsort\+\_\+gallop\+\_\+right()} 
 \end{DoxySeeAlso}
 \mbox{\Hypertarget{group__Timsort_ga7d1b40d5d91736aa4b5362896cdc68f3}\label{group__Timsort_ga7d1b40d5d91736aa4b5362896cdc68f3}} 
 \index{Timsorts@{Timsorts}!timsort\+\_\+minrun@{timsort\+\_\+minrun}}
@@ -448,5 +476,5 @@ The minimum run size is given by the 6 most significant bits of the array\textqu
 Size of minimum run.
 \end{DoxyReturn}
 \begin{DoxySeeAlso}{See also}
-\hyperlink{group__Timsort_gae421187852c6c109058362a81539de0f}{timsort} 
+\hyperlink{group__Timsort_ga1c9fca70060e37617156b89b387aa4d3}{timsort()} 
 \end{DoxySeeAlso}

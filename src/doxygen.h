@@ -11,6 +11,7 @@
 
 /** @} */
 
+
 /**
  * @defgroup SortingAlgorithm Sorting Algorithms
  * @brief Sorting algorithm implementations.
@@ -33,7 +34,7 @@
      * @brief Selection sort implementations.
      */
 
-  /** @} */
+  /** @} END SimpleSort */
 
   /**
    * @defgroup EfficientSort Efficient Sorts
@@ -51,7 +52,8 @@
      * @brief Quicksort implementations.
      */
   
-  /** @} */
+  /** @} END EfficientSort */
+
 
   /**
    * @defgroup BubbleSort Bubble Sorts
@@ -64,7 +66,7 @@
      * @brief Comb sort implementations.
      */
 
-  /** @} */
+  /** @} END BubbleSort */
 
   /**
    * @defgroup HybridSort Hybrid Sorts
@@ -77,12 +79,12 @@
      * @brief Timsort implementations.
      */
 
-  /** @} */
+  /** @} END HybridSort */
 
   /**
    * @defgroup SortingHelper Helper Functions
    * @brief Helpers for sorting algorithms.
    */
 
-/** @} */
+/** @} END SortingAlgorithm */
 
